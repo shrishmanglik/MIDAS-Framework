@@ -1,0 +1,9 @@
+{
+  "name": "midas-core",
+  "description": "The orchestration brain of Million Dollar AI Studio. Provides foundational intelligence: three-tier cost routing, quality gate protocols, knowledge accumulation, agent handoff standards, and decision frameworks that all MIDAS Studios inherit.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Million Dollar AI Studio",
+    "url": "https://milliondollarstudio.co"
+  }
+}

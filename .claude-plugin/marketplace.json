@@ -1,0 +1,18 @@
+{
+  "name": "midas-marketplace",
+  "owner": {
+    "name": "Million Dollar AI Studio"
+  },
+  "plugins": [
+    {
+      "name": "midas-core",
+      "source": "./midas-core",
+      "description": "MIDAS Core — The orchestration brain of MDS. Provides three-tier routing, quality gates, knowledge accumulation, and cross-studio coordination."
+    },
+    {
+      "name": "midas-dev-studio",
+      "source": "./midas-dev-studio",
+      "description": "MIDAS Dev Studio — Full-stack development department. 7 specialized agents, 10+ skills, 5-phase build pipeline from brief to deployment."
+    }
+  ]
+}

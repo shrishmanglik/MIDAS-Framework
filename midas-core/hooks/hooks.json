@@ -1,0 +1,16 @@
+{
+  "hooks": [
+    {
+      "type": "PostToolUse",
+      "matcher": {
+        "tool_name": "write_file"
+      },
+      "hooks": [
+        {
+          "type": "command",
+          "command": "echo '✓ File written — remember to run quality gates before handoff'"
+        }
+      ]
+    }
+  ]
+}
