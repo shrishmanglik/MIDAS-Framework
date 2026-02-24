@@ -1,0 +1,9 @@
+{
+  "name": "midas-dev-studio",
+  "description": "MIDAS Development Studio — Full-stack development department with 7 specialized agents (PM, Architect, DB Engineer, Backend Dev, Frontend Dev, QA Engineer, DevOps). Builds complete FastAPI + React applications from a plain-text brief through a 5-phase pipeline: Init → Plan → Build → Test → Deploy.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Million Dollar AI Studio",
+    "url": "https://milliondollarstudio.co"
+  }
+}
