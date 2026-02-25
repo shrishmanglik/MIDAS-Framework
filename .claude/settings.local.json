@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python _generator.py)",
+      "Bash(py --version)",
+      "Bash(python3 _generator.py)",
+      "Bash(/c/Users/shris/AppData/Local/Microsoft/WindowsApps/python3 --version)",
+      "Bash(alias py310=\"/c/Users/shris/AppData/Local/Programs/Python/Python310/python.exe\")"
+    ]
+  }
+}
