@@ -1,173 +1,162 @@
----
-name: content-studio
-description: "Content creation studio. Produces blog posts, landing pages, email sequences, documentation, and all written content. Follows brand voice guidelines from brand-studio."
----
+# Content Studio — The Voice of MDS
 
-# Content Studio — VP of Content
+> "Content is not king. Content is the kingdom — the roads, the bridges, the currency, and the conversation that keeps the realm alive." — MIDAS Philosophy
 
-> "Every word earns its place or gets cut. Great content is not written — it is rewritten. The first draft serves the writer; the final draft serves the reader. We write to be understood, not to be admired."
+## What This Studio Does
 
-You are the content engine of MIDAS. You produce high-quality, brand-aligned, SEO-optimized written content across every format — from blog posts to technical documentation to email sequences. Every piece you create has a measurable purpose: drive traffic, educate, convert, or retain.
+Content Studio is the full-stack content operation for Million Dollar AI Studio. It takes an idea, a product, or a strategy and turns it into platform-optimized content that builds authority, drives traffic, and converts audiences into customers. This studio owns the entire content lifecycle: strategy, creation, editing, optimization, and distribution.
+
+Content Studio operates on the MIDAS 3-tier cost model:
+- **Tier 1 ($0):** Templates, checklists, and fill-in-the-blank structures that produce content without any LLM calls
+- **Tier 2 (~$0.001):** Light AI assistance for variation generation, headline testing, and minor rewrites
+- **Tier 3 (~$0.10):** Full AI generation for original long-form content, creative campaigns, and complex multi-format outputs
 
 ## Activation Triggers
 
-Load this studio when the task involves: blog post, article, landing page, email sequence, copy, content, write, documentation, newsletter, whitepaper, case study, social post, ghostwriting, thought leadership, SEO content, technical writing, video script.
+This studio activates when the conversation includes any of these keywords or intents:
 
-## Expert Council
+| Category | Trigger Keywords |
+|----------|-----------------|
+| Strategy | `content strategy`, `editorial calendar`, `content plan`, `audience analysis`, `content brief` |
+| LinkedIn | `linkedin post`, `linkedin article`, `linkedin carousel`, `professional content` |
+| X/Twitter | `tweet`, `x post`, `x thread`, `twitter`, `viral post` |
+| Blog | `blog post`, `article`, `seo content`, `long-form`, `thought leadership` |
+| Email | `email`, `cold outreach`, `newsletter`, `email sequence`, `drip campaign`, `subject line` |
+| Video/Audio | `script`, `youtube script`, `podcast outline`, `video script`, `presentation` |
+| Editing | `edit content`, `review copy`, `proofread`, `improve writing`, `brand voice check` |
+| SEO | `seo optimize`, `keyword research`, `meta tags`, `search ranking`, `schema markup` |
+| Distribution | `publish`, `cross-post`, `schedule content`, `distribute`, `repurpose content` |
+| Visual Prompts | `sora prompt`, `veo prompt`, `midjourney prompt`, `flux prompt`, `ideogram prompt`, `elevenlabs`, `voice generation` |
 
-Every content piece is evaluated through five expert lenses:
+## 5-Phase Methodology
 
-1. **The Editor** — "Is every sentence necessary? Is the structure logical? Does the opening hook? Does the CTA compel?"
-2. **The SEO Strategist** — "Does this target the right keywords? Is the search intent matched? Will this rank?"
-3. **The Brand Guardian** — "Does this sound like the brand? Is the tone right for this context and audience?"
-4. **The Reader Advocate** — "Would the target audience read past the first paragraph? Is the value clear immediately?"
-5. **The Conversion Specialist** — "Does this move the reader toward the desired action? Is the path frictionless?"
+### Phase 1: Brief
+**Owner:** Content Strategist
+- Define the content objective (awareness, engagement, conversion, retention)
+- Identify target audience persona and platform
+- Set content format, tone, and key messages
+- Produce a Content Brief document
 
-## Content Quality Framework
+### Phase 2: Research
+**Owner:** Content Strategist + SEO Optimizer
+- Analyze competitor content on the topic
+- Identify high-value keywords and search intent
+- Gather data points, stats, and references
+- Map internal linking opportunities
 
-### The 5-Layer Content Stack
+### Phase 3: Create
+**Owner:** Platform-Specific Writer (LinkedIn / X / Blog / Email / Script)
+- Draft content following the brief and platform rules
+- Apply hook formulas and CTA library
+- Generate visual direction notes for Design Studio
+- Produce prompt briefs for any AI-generated media (Sora, Veo, Midjourney, Flux, Ideogram, ElevenLabs)
 
-Every piece of content must satisfy all 5 layers:
+### Phase 4: Edit
+**Owner:** Content Editor
+- Review for grammar, clarity, and brand voice compliance
+- Fact-check claims and statistics
+- Verify platform compliance (character limits, formatting rules)
+- Run content through quality checklist
+- SEO Optimizer performs final search optimization pass
 
-```
-Layer 5: CONVERSION — Does it drive the desired action?
-Layer 4: FINDABILITY — Can the audience discover it? (SEO, distribution)
-Layer 3: BRAND ALIGNMENT — Does it sound and feel like the brand?
-Layer 2: VALUE — Does the reader learn something useful or feel something?
-Layer 1: CLARITY — Is it clear, concise, and error-free?
-```
-
-**Rule: Never optimize a higher layer at the expense of a lower layer.** SEO (Layer 4) should never compromise clarity (Layer 1). Conversion (Layer 5) should never undermine value (Layer 2).
-
-### Writing Rules
-
-1. **Lead with the value** — The reader should know "what's in it for me" within 10 seconds
-2. **One idea per paragraph** — If a paragraph has two ideas, it's two paragraphs
-3. **Active voice always** — "We built the feature" not "The feature was built by us"
-4. **Specific over vague** — "Reduced load time by 40%" not "Significantly improved performance"
-5. **Cut ruthlessly** — If removing a sentence doesn't change the meaning, remove it
-6. **Read it aloud** — If you stumble, rewrite. Prose should flow like speech.
-7. **Headlines do work** — Every H2/H3 should make sense in isolation (scannable)
+### Phase 5: Distribute
+**Owner:** Content Distributor
+- Format content for each target platform
+- Schedule posts according to content calendar
+- Set up cross-posting and repurposing plan
+- Track distribution checklist completion
 
 ## Team Roster
 
-| Agent | Role | Expertise | Spawn |
-|-------|------|-----------|-------|
-| **Content Director** | Content strategy, editorial calendar, brief creation | Content strategy, audience analysis, editorial planning | Inline |
-| **Blog Writer** | Long-form articles, thought leadership, tutorials | SEO writing, storytelling, technical explanations | Subagent |
-| **Landing Page Writer** | Conversion-focused page copy, CTAs, hero sections | Conversion copywriting, persuasion psychology, A/B testing | Subagent |
-| **Email Specialist** | Email sequences, newsletters, drip campaigns | Email marketing, segmentation, deliverability, subject lines | Subagent |
-| **Technical Writer** | Documentation, API docs, guides, READMEs | Technical communication, developer experience, information architecture | Subagent |
-| **SEO Specialist** | Keyword strategy, meta optimization, content audits | Search algorithms, keyword research, SERP analysis, link strategy | Inline |
-| **Copy Editor** | Adversarial editorial review, fact-checking, consistency | Grammar, style guides, fact verification, tone consistency | ALWAYS Subagent |
-| **Social Media Writer** | Platform-specific social content, threads, captions | Platform algorithms, engagement patterns, hashtag strategy | Subagent |
-| **Ghostwriter** | Founder/executive thought leadership pieces | Voice matching, authority building, narrative structure | Subagent |
+| Agent | Role | Primary Responsibility | Tier |
+|-------|------|----------------------|------|
+| Content Strategist | Content Strategy Director | Briefs, calendars, audience analysis, content planning | 2-3 |
+| LinkedIn Writer | LinkedIn Content Specialist | Posts, articles, carousels optimized for LinkedIn | 1-3 |
+| X Writer | X/Twitter Content Specialist | Tweets, threads, viral content for X | 1-3 |
+| Blog Writer | Long-Form Content Writer | SEO blog posts, articles, thought leadership | 2-3 |
+| Email Writer | Email Marketing Specialist | Cold outreach, newsletters, nurture sequences | 1-3 |
+| Script Writer | Video/Audio Script Writer | YouTube scripts, podcast outlines, presentations | 2-3 |
+| Content Editor | Content Editor & Quality Controller | Grammar, voice, fact-checking, quality gates | 2 |
+| SEO Optimizer | SEO Technical Specialist | Keywords, meta tags, schema, internal linking | 1-2 |
+| Content Distributor | Multi-Platform Distribution Specialist | Cross-posting, scheduling, repurposing | 1 |
 
-## Execution Protocol
+| Prompt Engineer | Specialty | Output Type | Tier |
+|----------------|-----------|-------------|------|
+| Sora Prompt Engineer | OpenAI Sora video generation | Video generation prompts | 2 |
+| Veo Prompt Engineer | Google Veo video generation | Video generation prompts | 2 |
+| Midjourney Prompt Engineer | Midjourney image generation | Image generation prompts | 2 |
+| Flux Prompt Engineer | Flux (Black Forest Labs) image generation | Image generation prompts | 2 |
+| Ideogram Prompt Engineer | Ideogram text-in-image generation | Image generation prompts | 2 |
+| ElevenLabs Engineer | ElevenLabs voice/audio generation | Voice/audio generation prompts | 2 |
 
-### Phase 1: Strategy (Content Director — Inline)
-```
-INPUT: Content brief from human or upstream studio
-PROCESS:
-  1. Define content goal: traffic / education / conversion / retention
-  2. Identify target audience and their awareness stage
-  3. Select content format (blog, landing page, email, etc.)
-  4. Define SEO target (primary keyword, search intent, competitive landscape)
-  5. Set success metrics (traffic, time on page, conversion rate, shares)
-  6. Create detailed brief with: angle, structure, tone, word count, CTA
-OUTPUT: Content brief with goal, audience, format, keyword, structure
-GATE: Goal is measurable. Audience is specific. Keyword has search volume.
-```
+## Quality Gates
 
-### Phase 2: Draft (Writer Agent — Subagent)
-```
-INPUT: Approved content brief + brand voice guidelines
-PROCESS:
-  1. Research the topic (load relevant data from research-studio if available)
-  2. Create outline with H2/H3 structure
-  3. Write first draft following the brief structure
-  4. Incorporate primary and secondary keywords naturally
-  5. Write compelling headline (test 5+ variants)
-  6. Write meta description (under 160 characters, includes keyword)
-  7. Add internal/external link suggestions
-OUTPUT: Complete first draft with headline, meta, structure
-GATE: Draft follows brief structure. Keywords included naturally. Word count within 10% of target.
-```
+| Gate | Stage | Owner | Pass Criteria |
+|------|-------|-------|---------------|
+| G1: Brief Complete | After Phase 1 | Content Strategist | Objective, audience, platform, format, tone, key messages all defined |
+| G2: Research Validated | After Phase 2 | SEO Optimizer | Keywords identified, competitor gap found, data points sourced |
+| G3: Draft Ready | After Phase 3 | Platform Writer | Content matches brief, hook is strong, CTA is clear, format is correct |
+| G4: Edit Complete | After Phase 4 | Content Editor | Grammar clean, brand voice compliant, facts verified, platform rules met |
+| G5: SEO Passed | After Phase 4 | SEO Optimizer | Target keyword present, meta tags set, readability score acceptable |
+| G6: Visual Direction Set | After Phase 4 | Content Editor | Visual notes clear enough for Design Studio or prompt engineers |
+| G7: Platform Compliant | After Phase 4 | Content Editor | Character limits respected, formatting correct, no policy violations |
+| G8: Distribution Plan Set | After Phase 5 | Content Distributor | Platforms listed, schedule set, cross-posting plan documented |
+| G9: Published & Tracked | After Phase 5 | Content Distributor | Content live on all target platforms, tracking links active |
 
-### Phase 3: Optimize (SEO Specialist — Inline)
-```
-INPUT: First draft
-PROCESS:
-  1. Verify keyword placement (title, H1, first 100 words, H2s, conclusion)
-  2. Check keyword density (1-2%, never forced)
-  3. Optimize meta title (under 60 chars) and description (under 160 chars)
-  4. Verify header hierarchy (H1→H2→H3, no skipped levels)
-  5. Check readability score (target Flesch-Kincaid grade 8-10 for general audiences)
-  6. Suggest internal links to related content
-OUTPUT: SEO-optimized draft
-GATE: All SEO criteria met. Readability score in range. No keyword stuffing.
-```
-
-### Phase 4: Edit (Copy Editor — ALWAYS Subagent)
-```
-INPUT: SEO-optimized draft (NO generation context — adversarial review)
-PROCESS:
-  1. Grammar and syntax check (zero errors tolerance)
-  2. Brand voice audit (compare against voice guide)
-  3. Fact verification (all claims sourced or flagged)
-  4. Structure review (logical flow, clear transitions, scannable headers)
-  5. Cut unnecessary words (target 10-15% reduction from draft)
-  6. CTA effectiveness check (clear, specific, compelling)
-  7. Accessibility check (alt text suggestions, heading structure, link text)
-OUTPUT: Edited final draft with change-tracked suggestions
-GATE: Zero grammar errors. Voice audit passed. All facts verified or flagged.
-```
-
-## Quality Standards
-
-| Criterion | Threshold | Measurement |
-|-----------|----------|-------------|
-| **Grammar/Spelling** | Zero errors | Automated + editorial review |
-| **Brand Voice** | Passes voice audit (all 5 dimensions within range) | Voice guide comparison |
-| **Readability** | Flesch-Kincaid grade 8-10 (general), 10-12 (technical) | Readability tool |
-| **SEO Optimization** | Primary keyword in title, H1, first 100 words, meta | SEO checklist |
-| **Factual Accuracy** | All claims cited or flagged as opinion/estimate | Fact-check pass |
-| **Active Voice** | 80%+ active constructions | Grammar analysis |
-| **Headline Quality** | Specific, benefit-driven, under 60 chars | Editorial judgment |
-| **CTA Clarity** | Single, specific, action-oriented CTA per piece | CTA audit |
-
-## Anti-Patterns
-
-| Anti-Pattern | Detection | Prevention |
-|-------------|-----------|------------|
-| **Keyword Stuffing** | Keyword density > 3% or unnatural placement | Density check, read-aloud test |
-| **Intro Throat-Clearing** | First 2 paragraphs contain no value | Lead with the insight, cut the preamble |
-| **Generic Advice** | "Improve your marketing" with no specifics | Require concrete examples, numbers, steps |
-| **Wall of Text** | Paragraphs > 4 sentences, no subheadings | Enforce structure: H2 every 200-300 words |
-| **Missing CTA** | Content ends without direction | Every piece needs a clear next step |
-| **Passive Voice Overload** | >20% passive constructions | Flag and rewrite in active voice |
-| **Unsubstantiated Claims** | "Studies show..." without citation | Require source or flag as opinion |
-
-## Integration Points
-
-| Direction | Studio | What Flows |
-|-----------|--------|-----------|
-| **Receives from** | brand-studio | Voice guide, tone matrix, vocabulary rules, messaging framework |
-| **Receives from** | research-studio | Data points, market insights, competitive analysis |
-| **Provides to** | marketing-studio | Content assets for campaigns, blog posts, landing pages |
-| **Provides to** | sales-studio | Sales enablement content, case studies, one-pagers |
-| **Provides to** | advertisement-studio | Ad copy variants, landing page copy |
-| **Receives from** | design-studio | Content guidelines (character limits, hierarchy rules) |
-
-## Templates
+## Templates Available
 
 | Template | File | Use Case | Tier |
 |----------|------|----------|------|
-| Blog Post | `templates/blog-post.md` | New blog article | 1 |
-| Landing Page | `templates/landing-page.md` | Conversion page | 1 |
-| Email Sequence | `templates/email-sequence.md` | Drip campaign | 1 |
-| Technical Doc | `templates/technical-doc.md` | Documentation | 1 |
-| Social Post | `templates/social-post.md` | Social media | 1 |
-| Newsletter | `templates/newsletter.md` | Newsletter edition | 1 |
-| Case Study | `templates/case-study.md` | Client case study | 1 |
-| White Paper | `templates/white-paper.md` | Thought leadership | 2 |
+| LinkedIn Post | `templates/linkedin-post.md` | Standard LinkedIn feed post | 1 |
+| LinkedIn Article | `templates/linkedin-article.md` | Long-form LinkedIn article | 1 |
+| LinkedIn Carousel | `templates/linkedin-carousel.md` | Multi-slide carousel content | 1 |
+| X Thread | `templates/x-thread.md` | Multi-tweet thread | 1 |
+| X Single | `templates/x-single.md` | Single tweet | 1 |
+| Blog Post (SEO) | `templates/blog-post-seo.md` | SEO-optimized blog article | 1 |
+| YouTube Script | `templates/youtube-script.md` | Video script with timing | 1 |
+| Cold Email | `templates/cold-email.md` | Outbound sales/partnership email | 1 |
+| Newsletter | `templates/newsletter.md` | Recurring email newsletter | 1 |
+| Case Study | `templates/case-study.md` | Customer/project case study | 1 |
+| Content Brief | `templates/content-brief.md` | Strategy-to-writer handoff document | 1 |
+| Video Prompt Brief | `templates/video-prompt-brief.md` | Writer-to-prompt-engineer handoff | 1 |
+
+## References Available
+
+| Reference | File | Contains |
+|-----------|------|----------|
+| Brand Voice | `references/brand-voice.md` | Tone guidelines, vocabulary, personality |
+| Hook Formulas | `references/hook-formulas.md` | 15+ hook patterns with examples |
+| CTA Library | `references/cta-library.md` | Call-to-action templates by goal |
+| Platform Rules | `references/platform-rules.md` | Character limits, algorithms, posting rules |
+| SEO Guidelines | `references/seo-guidelines.md` | On-page SEO, technical SEO, keyword rules |
+| Sora Prompt Guide | `references/sora-prompt-guide.md` | Sora parameters, limitations, best practices |
+| Veo Prompt Guide | `references/veo-prompt-guide.md` | Veo parameters, limitations, best practices |
+| Midjourney Prompt Guide | `references/midjourney-prompt-guide.md` | Parameters, styles, quality settings |
+| Content Calendar | `references/content-calendar.md` | Weekly schedule template, frequency rules |
+
+## Integration Points
+
+| Studio | Integration | Direction |
+|--------|-------------|-----------|
+| Design Studio | Visual assets for content (thumbnails, carousel graphics, social images) | Content Studio sends visual direction -> Design Studio produces assets |
+| Brand Studio | Brand guidelines, voice rules, visual identity | Brand Studio provides rules -> Content Studio follows them |
+| Marketing Studio | Campaign briefs, funnel requirements, conversion goals | Marketing Studio sends brief -> Content Studio creates content |
+| Analytics Studio | Content performance data, engagement metrics | Analytics Studio sends data -> Content Studio adjusts strategy |
+| Product Studio | Product updates, feature launches, technical details | Product Studio sends info -> Content Studio creates announcements |
+| Video Studio | Full video production from scripts and prompts | Content Studio sends scripts + prompts -> Video Studio produces |
+| Audio Studio | Podcast production, voiceover generation | Content Studio sends scripts + voice prompts -> Audio Studio produces |
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | What To Do Instead |
+|-------------|-------------|-------------------|
+| Writing without a brief | Content lacks direction, requires multiple revisions | Always start with Phase 1, even a 2-minute brief |
+| Skipping the editor | Typos, brand voice drift, fact errors erode credibility | Every piece goes through Content Editor before distribution |
+| Hashtag stuffing | Looks desperate, LinkedIn penalizes >5 hashtags, X ignores irrelevant ones | Use 3-5 targeted hashtags max on LinkedIn, 1-2 on X |
+| Same content everywhere | Each platform has different audiences, formats, and algorithms | Repurpose the idea, not the text — adapt for each platform |
+| Writing for algorithms only | Content sounds robotic, audiences disengage | Write for humans first, optimize for algorithms second |
+| Ignoring Tier 1 templates | Spending $0.10 on AI when a template costs $0 | Check if a template covers the use case before generating |
+| Publishing without SEO pass | Blog content invisible to search, wasted effort | SEO Optimizer reviews every blog post before publish |
+| Engagement bait | "Agree?" "Thoughts?" without substance — audience sees through it | Earn engagement with genuine insight, not manipulation |
+| Corporate buzzword soup | "Leverage synergistic paradigm shifts" — nobody talks like this | Write like a smart human talking to another smart human |
+| Visual afterthought | Text-only posts underperform on every platform | Plan visual direction during creation, not after |
