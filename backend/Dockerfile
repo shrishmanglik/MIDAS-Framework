@@ -62,4 +62,7 @@ USER appuser
 
 EXPOSE 8004
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8004", "--workers", "4"]
+# Railway injects PORT env var; default to 8004
+ENV PORT=8004
+
+CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --workers 4
