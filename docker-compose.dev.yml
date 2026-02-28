@@ -1,0 +1,30 @@
+version: "3.9"
+
+# Development overrides — usage: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+services:
+  backend:
+    build:
+      target: development
+    volumes:
+      - ./backend/app:/app/app
+      - ./backend/tests:/app/tests
+      - ./backend/scripts:/app/scripts
+    environment:
+      DEBUG: "true"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8004 --reload
+
+  frontend:
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    environment:
+      NODE_ENV: development
+    command: npm run dev
+
+  atlas:
+    volumes:
+      - ./atlas/src:/app/src
+      - ./atlas/public:/app/public
+    environment:
+      NODE_ENV: development
+    command: npm run dev
