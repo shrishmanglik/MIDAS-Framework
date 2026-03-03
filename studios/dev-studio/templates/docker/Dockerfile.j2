@@ -1,0 +1,59 @@
+{#---
+id: docker-dockerfile
+tags: [docker, dockerfile, deployment, backend, python, container]
+category: docker
+description: "Multi-stage Dockerfile with security best practices for Python/FastAPI"
+vars:
+  required: [python_version, app_port]
+  optional: [package_manager, extra_system_deps]
+---#}
+# ============================================================
+# Stage 1: Dependencies
+# ============================================================
+FROM python:{{ python_version }}-slim AS dependencies
+
+WORKDIR /app
+
+{% if package_manager | default('poetry') == 'poetry' %}
+COPY pyproject.toml poetry.lock* ./
+RUN pip install --no-cache-dir poetry \
+    && poetry config virtualenvs.create false \
+    && poetry install --no-interaction --no-ansi --only main
+{% else %}
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+{% endif %}
+
+# ============================================================
+# Stage 2: Production
+# ============================================================
+FROM python:{{ python_version }}-slim AS production
+
+{% if extra_system_deps is defined %}
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    {% for dep in extra_system_deps %}
+    {{ dep }} \
+    {% endfor %}
+    && rm -rf /var/lib/apt/lists/*
+{% endif %}
+
+# Security: run as non-root user
+RUN groupadd -r appuser && useradd -r -g appuser -d /app -s /sbin/nologin appuser
+
+WORKDIR /app
+
+COPY --from=dependencies /usr/local/lib/python{{ python_version }}/site-packages /usr/local/lib/python{{ python_version }}/site-packages
+COPY --from=dependencies /usr/local/bin /usr/local/bin
+COPY . .
+
+# Remove any potential secret files
+RUN rm -rf .env* .git tests/ docs/
+
+USER appuser
+
+EXPOSE {{ app_port }}
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:{{ app_port }}/health')" || exit 1
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "{{ app_port }}"]

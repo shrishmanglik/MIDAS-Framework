@@ -27,6 +27,16 @@ dist/
 build/
 .next/
 out/
+*.egg-info/
+
+# Type checking
+.mypy_cache/
+
+# Linting
+.ruff_cache/
+
+# uv
+uv.lock
 
 # Logs
 *.log

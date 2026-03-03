@@ -1,0 +1,19 @@
+name: deploy
+studio: dev-studio
+version: "1.0"
+default_budget: 0.50
+steps:
+  - name: generate-deployment
+    agent: devops-engineer
+    step_type: llm_required
+    model_preference: sonnet
+    depends_on: []
+    budget: 0.05
+    outputs:
+      - dockerfile
+      - docker-compose
+      - ci-pipeline
+      - env-template
+    description: "Generate Dockerfile, docker-compose, GitHub Actions CI/CD pipelines, nginx config, and environment variable templates for deployment"
+    timeout_seconds: 300
+    max_retries: 2

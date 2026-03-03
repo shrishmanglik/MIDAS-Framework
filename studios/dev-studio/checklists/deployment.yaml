@@ -1,0 +1,41 @@
+name: deployment
+gates:
+  - name: multi-stage-build
+    description: "Dockerfile uses multi-stage build with minimal production image"
+    severity: critical
+
+  - name: non-root-user
+    description: "Container runs as non-root user"
+    severity: critical
+
+  - name: no-secrets-in-config
+    description: "No secrets or credentials in Dockerfile, docker-compose.yml, or CI configuration"
+    severity: critical
+
+  - name: pinned-base-images
+    description: "Base images pinned to specific versions (not 'latest')"
+    severity: critical
+
+  - name: env-vars-documented
+    description: "All required environment variables documented in .env.example with descriptions"
+    severity: warning
+
+  - name: health-checks-configured
+    description: "docker-compose.yml includes health checks for all services"
+    severity: warning
+
+  - name: ci-pipeline-complete
+    description: "CI pipeline runs lint, test, and build stages -- fails fast on first error"
+    severity: warning
+
+  - name: deploy-on-main-only
+    description: "Deploy pipeline triggers only on main branch merge"
+    severity: warning
+
+  - name: health-check-db-connectivity
+    description: "Health check endpoint verifies database connectivity"
+    severity: info
+
+  - name: restart-policies
+    description: "Restart policies configured for production services (restart: unless-stopped)"
+    severity: info
