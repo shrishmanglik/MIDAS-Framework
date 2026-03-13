@@ -1,0 +1,105 @@
+name: full-build
+studio: dev-studio
+version: "1.0"
+default_budget: 0.50
+steps:
+  # Phase 1: Requirements
+  - name: parse-requirements
+    agent: product-manager
+    step_type: llm_required
+    model_preference: sonnet
+    depends_on: []
+    budget: 0.05
+    outputs:
+      - requirements-document
+    description: "Parse unstructured project brief into structured requirements document with user stories, acceptance criteria, priorities, and scope boundaries"
+    timeout_seconds: 300
+    max_retries: 2
+
+  # Phase 2: Architecture & Schema
+  - name: design-architecture
+    agent: systems-architect
+    step_type: llm_required
+    model_preference: sonnet
+    depends_on:
+      - parse-requirements
+    budget: 0.08
+    outputs:
+      - architecture-spec
+    description: "Design system architecture including component diagrams, technology stack, API contracts, auth model, and ADRs from requirements document"
+    timeout_seconds: 300
+    max_retries: 2
+
+  - name: design-schema
+    agent: database-engineer
+    step_type: llm_required
+    model_preference: sonnet
+    depends_on:
+      - design-architecture
+    budget: 0.05
+    outputs:
+      - database-schema
+    description: "Design normalized database schema with SQLAlchemy models, migrations, indexes, constraints, and seed data from architecture specification"
+    timeout_seconds: 300
+    max_retries: 2
+
+  # Phase 3: Implementation (parallel)
+  - name: generate-backend
+    agent: backend-developer
+    step_type: llm_required
+    model_preference: sonnet
+    depends_on:
+      - design-architecture
+      - design-schema
+    budget: 0.08
+    outputs:
+      - backend-code
+    description: "Generate FastAPI backend with routes, schemas, services, auth middleware, and error handling from architecture specification and database models"
+    timeout_seconds: 300
+    max_retries: 2
+
+  - name: generate-frontend
+    agent: frontend-developer
+    step_type: llm_required
+    model_preference: sonnet
+    depends_on:
+      - design-architecture
+    budget: 0.08
+    outputs:
+      - frontend-code
+    description: "Generate Next.js frontend with pages, components, API client, forms, and responsive layouts from architecture specification and API contracts"
+    timeout_seconds: 300
+    max_retries: 2
+
+  # Phase 4: Testing
+  - name: generate-tests
+    agent: qa-engineer
+    step_type: llm_required
+    model_preference: sonnet
+    depends_on:
+      - generate-backend
+      - generate-frontend
+    budget: 0.08
+    outputs:
+      - test-suite
+      - qa-report
+    description: "Generate comprehensive test suites (unit, integration, security) and perform adversarial code review producing a structured QA report with findings"
+    timeout_seconds: 300
+    max_retries: 2
+
+  # Phase 5: Deployment
+  - name: generate-deployment
+    agent: devops-engineer
+    step_type: llm_required
+    model_preference: sonnet
+    depends_on:
+      - generate-tests
+    budget: 0.05
+    outputs:
+      - dockerfile
+      - docker-compose
+      - ci-pipeline
+      - env-template
+    description: "Generate Dockerfile, docker-compose, GitHub Actions CI/CD pipelines, nginx config, and environment variable templates for deployment"
+    timeout_seconds: 300
+    max_retries: 2

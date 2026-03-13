@@ -1,0 +1,104 @@
+{#---
+id: fastapi-router
+tags: [fastapi, python, backend, router, api, routes]
+category: fastapi
+description: "FastAPI resource router with CRUD endpoints, auth, and pagination"
+vars:
+  required: [entity, entity_plural]
+  optional: [auth_required, include_search]
+---#}
+"""{{ entity | pascal_case }} API routes."""
+
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.dependencies import get_db, get_current_user
+from app.models.user import User
+from app.schemas.{{ entity | snake_case }} import (
+    {{ entity | pascal_case }}Create,
+    {{ entity | pascal_case }}Update,
+    {{ entity | pascal_case }}Response,
+    {{ entity | pascal_case }}ListResponse,
+)
+from app.services.{{ entity | snake_case }}_service import {{ entity | pascal_case }}Service
+
+router = APIRouter(prefix="/{{ entity_plural | kebab_case }}", tags=["{{ entity_plural | kebab_case }}"])
+
+
+@router.post("/", response_model={{ entity | pascal_case }}Response, status_code=status.HTTP_201_CREATED)
+async def create_{{ entity | snake_case }}(
+    payload: {{ entity | pascal_case }}Create,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> {{ entity | pascal_case }}Response:
+    """Create a new {{ entity | snake_case }}. Requires authentication."""
+    service = {{ entity | pascal_case }}Service(db)
+    result = await service.create(payload, owner_id=current_user.id)
+    return result
+
+
+@router.get("/", response_model={{ entity | pascal_case }}ListResponse)
+async def list_{{ entity_plural | snake_case }}(
+    skip: int = Query(default=0, ge=0),
+    limit: int = Query(default=20, ge=1, le=100),
+    db: AsyncSession = Depends(get_db),
+) -> {{ entity | pascal_case }}ListResponse:
+    """List {{ entity_plural | snake_case }} with pagination."""
+    service = {{ entity | pascal_case }}Service(db)
+    items, total = await service.list(skip=skip, limit=limit)
+    return {{ entity | pascal_case }}ListResponse(
+        data=items,
+        meta={"total": total, "skip": skip, "limit": limit},
+    )
+
+
+@router.get("/{item_id}", response_model={{ entity | pascal_case }}Response)
+async def get_{{ entity | snake_case }}(
+    item_id: UUID,
+    db: AsyncSession = Depends(get_db),
+) -> {{ entity | pascal_case }}Response:
+    """Get a single {{ entity | snake_case }} by ID."""
+    service = {{ entity | pascal_case }}Service(db)
+    result = await service.get(item_id)
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="{{ entity | pascal_case }} not found",
+        )
+    return result
+
+
+@router.put("/{item_id}", response_model={{ entity | pascal_case }}Response)
+async def update_{{ entity | snake_case }}(
+    item_id: UUID,
+    payload: {{ entity | pascal_case }}Update,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> {{ entity | pascal_case }}Response:
+    """Update a {{ entity | snake_case }}. Requires authentication and ownership."""
+    service = {{ entity | pascal_case }}Service(db)
+    result = await service.update(item_id, payload, owner_id=current_user.id)
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="{{ entity | pascal_case }} not found",
+        )
+    return result
+
+
+@router.delete("/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_{{ entity | snake_case }}(
+    item_id: UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> None:
+    """Delete a {{ entity | snake_case }}. Requires authentication and ownership."""
+    service = {{ entity | pascal_case }}Service(db)
+    deleted = await service.delete(item_id, owner_id=current_user.id)
+    if not deleted:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="{{ entity | pascal_case }} not found",
+        )

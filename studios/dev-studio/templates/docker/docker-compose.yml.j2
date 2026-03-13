@@ -1,0 +1,85 @@
+{#---
+id: docker-compose
+tags: [docker, docker-compose, deployment, orchestration, postgres, redis]
+category: docker
+description: "docker-compose stack with backend, database, and optional cache service"
+vars:
+  required: [project_name, backend_port, db_name]
+  optional: [include_redis, include_frontend, frontend_port, redis_port]
+---#}
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "{{ backend_port }}:{{ backend_port }}"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/{{ db_name }}
+      - JWT_SECRET=${JWT_SECRET}
+      - CORS_ORIGINS=http://localhost:{{ frontend_port | default(3000) }}
+      {% if include_redis | default(false) %}
+      - REDIS_URL=redis://redis:{{ redis_port | default(6379) }}/0
+      {% endif %}
+    depends_on:
+      db:
+        condition: service_healthy
+      {% if include_redis | default(false) %}
+      redis:
+        condition: service_healthy
+      {% endif %}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:{{ backend_port }}/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+  {% if include_frontend | default(false) %}
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "{{ frontend_port | default(3000) }}:{{ frontend_port | default(3000) }}"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:{{ backend_port }}/api/v1
+    depends_on:
+      - backend
+    restart: unless-stopped
+  {% endif %}
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB={{ db_name }}
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  {% if include_redis | default(false) %}
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "{{ redis_port | default(6379) }}:{{ redis_port | default(6379) }}"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+  {% endif %}
+
+volumes:
+  pgdata:

@@ -1,0 +1,41 @@
+name: requirements
+gates:
+  - name: user-stories-present
+    description: "Every P0 feature has at least one user story in 'As a [role], I want [capability], so that [benefit]' format"
+    severity: critical
+
+  - name: acceptance-criteria-defined
+    description: "Every user story has acceptance criteria in Given/When/Then format"
+    severity: critical
+
+  - name: priorities-assigned
+    description: "P0 / P1 / P2 priorities are assigned to all features"
+    severity: critical
+
+  - name: scope-boundary-defined
+    description: "Out-of-scope section is present and explicit with items that are NOT included"
+    severity: critical
+
+  - name: nfr-measurable
+    description: "Non-functional requirements have measurable targets (not 'fast' but 'p95 < 200ms')"
+    severity: warning
+
+  - name: assumptions-documented
+    description: "All assumptions are documented with impact analysis if wrong"
+    severity: warning
+
+  - name: unknowns-flagged
+    description: "All unknowns are flagged with resolution path and responsible party"
+    severity: warning
+
+  - name: personas-defined
+    description: "User personas are defined with clear goals and descriptions"
+    severity: warning
+
+  - name: no-implementation-details
+    description: "No implementation details leaked into requirements (WHAT not HOW)"
+    severity: info
+
+  - name: dependencies-mapped
+    description: "Feature dependencies are mapped showing build order"
+    severity: info

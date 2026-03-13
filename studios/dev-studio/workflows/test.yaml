@@ -1,0 +1,17 @@
+name: test
+studio: dev-studio
+version: "1.0"
+default_budget: 0.50
+steps:
+  - name: generate-tests
+    agent: qa-engineer
+    step_type: llm_required
+    model_preference: sonnet
+    depends_on: []
+    budget: 0.08
+    outputs:
+      - test-suite
+      - qa-report
+    description: "Generate comprehensive test suites (unit, integration, security) and perform adversarial code review producing a structured QA report with findings"
+    timeout_seconds: 300
+    max_retries: 2
