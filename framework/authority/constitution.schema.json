@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://midas.dev/schemas/constitution.schema.json",
+  "title": "MIDAS Authority Constitution",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "authorityOrder",
+    "conflictPolicy",
+    "protectedInvariants",
+    "verificationPolicy",
+    "escalationRules",
+    "claimPolicy"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "midas.authority.v1"
+    },
+    "authorityOrder": {
+      "type": "array",
+      "minItems": 4,
+      "items": { "type": "string" }
+    },
+    "conflictPolicy": {
+      "type": "object",
+      "required": [
+        "higherAuthorityWins",
+        "liveEvidenceOverridesMemory",
+        "verifiedResultsOverrideSelfReport",
+        "markUnknownWhenUnverified",
+        "doNotInferSecrets"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "higherAuthorityWins": { "type": "boolean" },
+        "liveEvidenceOverridesMemory": { "type": "boolean" },
+        "verifiedResultsOverrideSelfReport": { "type": "boolean" },
+        "markUnknownWhenUnverified": { "type": "boolean" },
+        "doNotInferSecrets": { "type": "boolean" }
+      }
+    },
+    "protectedInvariants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "statement", "owner", "verification"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "statement": { "type": "string" },
+          "owner": { "type": "string" },
+          "verification": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "verificationPolicy": {
+      "type": "object",
+      "required": ["beforeClaimingDone", "requiresFailedCheckRepairPacket", "claimRequiresEvidence"],
+      "additionalProperties": false,
+      "properties": {
+        "beforeClaimingDone": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "requiresFailedCheckRepairPacket": { "type": "boolean" },
+        "claimRequiresEvidence": { "type": "boolean" }
+      }
+    },
+    "escalationRules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "trigger", "requiresApproval"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "trigger": { "type": "string" },
+          "requiresApproval": { "type": "boolean" }
+        }
+      }
+    },
+    "claimPolicy": {
+      "type": "object",
+      "required": [
+        "claimCeilings",
+        "publicClaimsRequireApproval",
+        "benchmarkClaimsRequireRawResults",
+        "unknownsStayUnknown"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "claimCeilings": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "publicClaimsRequireApproval": { "type": "boolean" },
+        "benchmarkClaimsRequireRawResults": { "type": "boolean" },
+        "unknownsStayUnknown": { "type": "boolean" }
+      }
+    }
+  }
+}

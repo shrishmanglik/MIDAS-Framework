@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://midas-framework.local/schemas/channel-gateways.schema.json",
+  "title": "MIDAS Channel Gateways",
+  "type": "object",
+  "required": ["schemaVersion", "gateways"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "midas.channel-gateways.v1"
+    },
+    "gateways": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "purpose", "surface", "session", "message", "files", "tools", "approvals", "evidence"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 120
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 24,
+            "maxLength": 500
+          },
+          "surface": {
+            "type": "object"
+          },
+          "session": {
+            "type": "object"
+          },
+          "message": {
+            "type": "object"
+          },
+          "files": {
+            "type": "object"
+          },
+          "tools": {
+            "type": "object"
+          },
+          "approvals": {
+            "type": "object"
+          },
+          "evidence": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

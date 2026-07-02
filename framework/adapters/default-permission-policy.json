@@ -1,0 +1,37 @@
+{
+  "version": "0.1",
+  "default_mode": "bounded project work with explicit approval gates",
+  "approval_required_for": [
+    "destructive file or data operations",
+    "production deploys or release publication",
+    "payment, billing, refund, or money-moving actions",
+    "messages, uploads, submissions, or other actions sent outside the local project",
+    "credential, token, private key, or .env value access"
+  ],
+  "protected_content": [
+    "credentials",
+    "tokens",
+    "private keys",
+    ".env values",
+    "personal data not required for the current task",
+    "customer or client records not required for the current task"
+  ],
+  "evidence_required": [
+    "files changed or reviewed",
+    "commands run",
+    "tests or checks completed",
+    "remaining risks",
+    "next action"
+  ],
+  "adapter_rules": [
+    "keep one active objective",
+    "read project context before changing files",
+    "preserve exact task instructions, names, paths, output text, whitespace, casing, and required trailing newlines",
+    "validate machine-readable tool plans before execution and repair malformed plans before falling back",
+    "keep model-facing context compact for exact-answer or scored evaluation tasks so unrelated metadata does not bury the task",
+    "prefer non-invasive preflight and post-check wrappers for exact-answer evaluations instead of injecting process text into the answer prompt",
+    "prefer the smallest reversible change that satisfies the work order",
+    "record evidence before claiming completion",
+    "turn repeated failures into checks, docs, tests, or backlog items"
+  ]
+}

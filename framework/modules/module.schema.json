@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MIDAS Module Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "status", "purpose"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["alpha", "beta", "stable", "deprecated"]
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workflows": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "commands": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "guardrails": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "controls": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "lanes": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "checks": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "quality": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

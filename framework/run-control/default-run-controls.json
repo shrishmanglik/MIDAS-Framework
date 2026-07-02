@@ -1,0 +1,204 @@
+{
+  "schemaVersion": "midas.run-controls.v1",
+  "profiles": [
+    {
+      "id": "focused-run",
+      "name": "Focused Run",
+      "purpose": "Keeps a single scoped work order bounded to local project files, explicit evidence, and a short feedback loop.",
+      "scope": {
+        "maxIterations": 5,
+        "maxSubtasks": 0,
+        "maxRuntimeMinutes": 60,
+        "requiresObjective": true,
+        "requiresStopCondition": true
+      },
+      "sandbox": {
+        "filesystem": "workspace-write",
+        "network": "off",
+        "externalActions": false,
+        "secretsAllowed": false,
+        "allowedMutation": ["workspace-files", "generated-files", "reports", "run-ledger"],
+        "blockedMutation": [
+          "secrets",
+          "credentials",
+          "payments",
+          "deploys",
+          "destructive",
+          "public-messages",
+          "external-messages"
+        ]
+      },
+      "subagents": {
+        "enabled": false,
+        "maxConcurrent": 0,
+        "requiresInstructionPacket": false,
+        "requiresEvidence": false,
+        "inheritsParentApprovals": false
+      },
+      "messageGateway": {
+        "enabled": false,
+        "allowedChannels": ["local-files", "run-ledger"],
+        "requiresApprovalForExternal": true,
+        "blocksDirectPublicMessages": true,
+        "recordsUserAndThread": true
+      },
+      "approvals": {
+        "default": "maintainer",
+        "requiredFor": [
+          "external-action",
+          "money",
+          "destructive",
+          "deploy",
+          "secret-access",
+          "public-claim"
+        ]
+      },
+      "evidence": {
+        "required": ["objective", "scope", "files-changed", "commands-run", "validation-result", "run-ledger", "risk-summary", "next-action"],
+        "checkpointEverySteps": 3
+      },
+      "closeout": {
+        "requiresRunLedger": true,
+        "requiresNextAction": true,
+        "requiresRiskSummary": true,
+        "requiresStateUpdate": true
+      }
+    },
+    {
+      "id": "long-horizon-run",
+      "name": "Long-Horizon Run",
+      "purpose": "Controls multi-step work that may use delegated subtasks while preserving checkpoints, inherited approvals, and closeout evidence.",
+      "scope": {
+        "maxIterations": 12,
+        "maxSubtasks": 6,
+        "maxRuntimeMinutes": 240,
+        "requiresObjective": true,
+        "requiresStopCondition": true
+      },
+      "sandbox": {
+        "filesystem": "workspace-write",
+        "network": "read-only",
+        "externalActions": false,
+        "secretsAllowed": false,
+        "allowedMutation": ["workspace-files", "generated-files", "reports", "run-ledger", "temporary-files"],
+        "blockedMutation": [
+          "secrets",
+          "credentials",
+          "payments",
+          "deploys",
+          "destructive",
+          "public-messages",
+          "external-messages",
+          "database-migrations",
+          "pricing",
+          "production-data"
+        ]
+      },
+      "subagents": {
+        "enabled": true,
+        "maxConcurrent": 2,
+        "requiresInstructionPacket": true,
+        "requiresEvidence": true,
+        "inheritsParentApprovals": true
+      },
+      "messageGateway": {
+        "enabled": true,
+        "allowedChannels": ["local-files", "user", "run-ledger", "command-center"],
+        "requiresApprovalForExternal": true,
+        "blocksDirectPublicMessages": true,
+        "recordsUserAndThread": true
+      },
+      "approvals": {
+        "default": "owner",
+        "requiredFor": [
+          "external-action",
+          "money",
+          "destructive",
+          "deploy",
+          "secret-access",
+          "public-claim",
+          "product-write"
+        ]
+      },
+      "evidence": {
+        "required": ["objective", "scope", "files-reviewed", "files-changed", "commands-run", "validation-result", "run-ledger", "risk-summary", "next-action"],
+        "checkpointEverySteps": 3
+      },
+      "closeout": {
+        "requiresRunLedger": true,
+        "requiresNextAction": true,
+        "requiresRiskSummary": true,
+        "requiresStateUpdate": true
+      }
+    },
+    {
+      "id": "external-action-review",
+      "name": "External Action Review",
+      "purpose": "Prepares approval packets for external, release, or public-facing actions without performing those actions by default.",
+      "scope": {
+        "maxIterations": 4,
+        "maxSubtasks": 0,
+        "maxRuntimeMinutes": 90,
+        "requiresObjective": true,
+        "requiresStopCondition": true
+      },
+      "sandbox": {
+        "filesystem": "read-only",
+        "network": "read-only",
+        "externalActions": false,
+        "secretsAllowed": false,
+        "allowedMutation": ["reports", "run-ledger"],
+        "blockedMutation": [
+          "secrets",
+          "credentials",
+          "payments",
+          "deploys",
+          "destructive",
+          "public-messages",
+          "external-messages",
+          "database-migrations",
+          "pricing",
+          "auth-policy",
+          "production-data"
+        ]
+      },
+      "subagents": {
+        "enabled": false,
+        "maxConcurrent": 0,
+        "requiresInstructionPacket": false,
+        "requiresEvidence": false,
+        "inheritsParentApprovals": false
+      },
+      "messageGateway": {
+        "enabled": true,
+        "allowedChannels": ["local-files", "user", "run-ledger", "command-center", "issue-tracker"],
+        "requiresApprovalForExternal": true,
+        "blocksDirectPublicMessages": true,
+        "recordsUserAndThread": true
+      },
+      "approvals": {
+        "default": "explicit-human",
+        "requiredFor": [
+          "external-action",
+          "money",
+          "destructive",
+          "deploy",
+          "secret-access",
+          "public-claim",
+          "security-policy",
+          "database-migration"
+        ]
+      },
+      "evidence": {
+        "required": ["objective", "scope", "files-reviewed", "approval-record", "validation-result", "run-ledger", "risk-summary", "next-action"],
+        "checkpointEverySteps": 2
+      },
+      "closeout": {
+        "requiresRunLedger": true,
+        "requiresNextAction": true,
+        "requiresRiskSummary": true,
+        "requiresStateUpdate": true
+      }
+    }
+  ]
+}

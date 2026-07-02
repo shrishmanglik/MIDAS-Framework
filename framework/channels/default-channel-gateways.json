@@ -1,0 +1,167 @@
+{
+  "schemaVersion": "midas.channel-gateways.v1",
+  "gateways": [
+    {
+      "id": "local-console",
+      "name": "Local Console",
+      "purpose": "A local-only channel for direct maintainer interaction during scoped project work.",
+      "surface": {
+        "kind": "local-console",
+        "exposure": "local-only",
+        "requiresAuthentication": false,
+        "allowedOrigins": ["localhost"],
+        "recordsSessionIdentity": true,
+        "supportsCancellation": true
+      },
+      "session": {
+        "isolation": "per-user",
+        "groupMode": "disabled",
+        "requiresTrigger": true,
+        "maxConcurrentSessions": 2,
+        "contextRetention": "bounded",
+        "maxRetainedTurns": 20
+      },
+      "message": {
+        "allowedDirections": ["inbound", "reply", "file-ingress", "file-egress"],
+        "externalSendRequiresApproval": true,
+        "publicMessageRequiresApproval": true,
+        "blocksSecrets": true,
+        "redactsLogs": true
+      },
+      "files": {
+        "uploadsEnabled": true,
+        "downloadsEnabled": true,
+        "allowedRoots": ["workspace", "generated"],
+        "maxUploadMb": 25,
+        "maxDownloadMb": 25,
+        "rejectsPathTraversal": true,
+        "scansBeforeUse": true,
+        "blocksExecutableUploads": true
+      },
+      "tools": {
+        "exposed": ["read", "write", "edit", "web-fetch", "web-search", "memory"],
+        "highRiskRequiresApproval": true,
+        "shellRequiresWorkspaceBound": true,
+        "mcpRequiresAllowlist": true,
+        "browserRequiresDomainAllowlist": true
+      },
+      "approvals": {
+        "default": "maintainer",
+        "requiredFor": ["external-message", "public-message", "file-ingress", "file-egress", "secret-access", "deploy", "destructive", "money"]
+      },
+      "evidence": {
+        "required": ["session-id", "channel-id", "user-or-thread", "tool-calls", "files-received", "files-sent", "cancellation-state", "retention-state"],
+        "retentionDays": 30,
+        "recordsRunLedger": true
+      }
+    },
+    {
+      "id": "private-web-console",
+      "name": "Private Web Console",
+      "purpose": "An authenticated web channel for project work that may receive uploads and stream long-running agent progress.",
+      "surface": {
+        "kind": "web-console",
+        "exposure": "private-network",
+        "requiresAuthentication": true,
+        "allowedOrigins": ["localhost", "private-network"],
+        "recordsSessionIdentity": true,
+        "supportsCancellation": true
+      },
+      "session": {
+        "isolation": "per-user",
+        "groupMode": "disabled",
+        "requiresTrigger": true,
+        "maxConcurrentSessions": 8,
+        "contextRetention": "persistent",
+        "maxRetainedTurns": 40
+      },
+      "message": {
+        "allowedDirections": ["inbound", "reply", "file-ingress", "file-egress"],
+        "externalSendRequiresApproval": true,
+        "publicMessageRequiresApproval": true,
+        "blocksSecrets": true,
+        "redactsLogs": true
+      },
+      "files": {
+        "uploadsEnabled": true,
+        "downloadsEnabled": true,
+        "allowedRoots": ["workspace", "generated", "explicit-allowlist"],
+        "maxUploadMb": 50,
+        "maxDownloadMb": 50,
+        "rejectsPathTraversal": true,
+        "scansBeforeUse": true,
+        "blocksExecutableUploads": true
+      },
+      "tools": {
+        "exposed": ["read", "write", "edit", "web-fetch", "web-search", "memory", "send-file"],
+        "highRiskRequiresApproval": true,
+        "shellRequiresWorkspaceBound": true,
+        "mcpRequiresAllowlist": true,
+        "browserRequiresDomainAllowlist": true
+      },
+      "approvals": {
+        "default": "maintainer",
+        "requiredFor": ["external-message", "public-message", "file-ingress", "file-egress", "secret-access", "deploy", "destructive", "money"]
+      },
+      "evidence": {
+        "required": ["session-id", "channel-id", "user-or-thread", "approval-record", "tool-calls", "files-received", "files-sent", "cancellation-state", "retention-state"],
+        "retentionDays": 30,
+        "recordsRunLedger": true
+      }
+    },
+    {
+      "id": "reviewed-message-bridge",
+      "name": "Reviewed Message Bridge",
+      "purpose": "An approval-gated external messaging channel for receiving project requests and returning reviewed replies.",
+      "surface": {
+        "kind": "messaging",
+        "exposure": "external-inbound",
+        "requiresAuthentication": true,
+        "allowedOrigins": ["approved-workspace"],
+        "recordsSessionIdentity": true,
+        "supportsCancellation": true
+      },
+      "session": {
+        "isolation": "per-thread",
+        "groupMode": "mention-only",
+        "requiresTrigger": true,
+        "maxConcurrentSessions": 10,
+        "contextRetention": "bounded",
+        "maxRetainedTurns": 20
+      },
+      "message": {
+        "allowedDirections": ["inbound", "reply"],
+        "externalSendRequiresApproval": true,
+        "publicMessageRequiresApproval": true,
+        "blocksSecrets": true,
+        "redactsLogs": true
+      },
+      "files": {
+        "uploadsEnabled": false,
+        "downloadsEnabled": false,
+        "allowedRoots": ["workspace"],
+        "maxUploadMb": 0,
+        "maxDownloadMb": 0,
+        "rejectsPathTraversal": true,
+        "scansBeforeUse": true,
+        "blocksExecutableUploads": true
+      },
+      "tools": {
+        "exposed": ["read", "web-search", "memory"],
+        "highRiskRequiresApproval": true,
+        "shellRequiresWorkspaceBound": true,
+        "mcpRequiresAllowlist": true,
+        "browserRequiresDomainAllowlist": true
+      },
+      "approvals": {
+        "default": "explicit-human",
+        "requiredFor": ["external-message", "public-message", "file-egress", "secret-access", "deploy", "destructive", "money"]
+      },
+      "evidence": {
+        "required": ["session-id", "channel-id", "user-or-thread", "approval-record", "tool-calls", "cancellation-state", "retention-state"],
+        "retentionDays": 30,
+        "recordsRunLedger": true
+      }
+    }
+  ]
+}

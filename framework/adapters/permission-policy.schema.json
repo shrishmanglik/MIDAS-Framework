@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MIDAS Adapter Permission Policy",
+  "type": "object",
+  "required": [
+    "version",
+    "default_mode",
+    "approval_required_for",
+    "protected_content",
+    "evidence_required"
+  ],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "default_mode": {
+      "type": "string"
+    },
+    "approval_required_for": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "protected_content": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "evidence_required": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "adapter_rules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

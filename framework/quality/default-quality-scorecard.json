@@ -1,0 +1,202 @@
+{
+  "schemaVersion": "midas.quality-scorecard.v1",
+  "policy": {
+    "scoreScale": "0-100",
+    "minOverallScore": 80,
+    "minComponentScore": 75,
+    "minRequiredDimensionScore": 70,
+    "publicReleaseMinScore": 90,
+    "deterministicOnlyByDefault": true,
+    "llmJudgesRequireExplicitApproval": true,
+    "distributionClaimsRequireEvidence": true,
+    "publicReleaseRequiresApproval": true,
+    "generatedArtifactsAreNotSourceOfTruth": true,
+    "externalComponentsRequireLicenseReview": true,
+    "requiredDimensions": [
+      "trigger-clarity",
+      "scope-calibration",
+      "progressive-disclosure",
+      "harness-portability",
+      "evidence-discipline",
+      "approval-safety",
+      "drift-control"
+    ],
+    "allowedComponentKinds": [
+      "skill-pack",
+      "harness-adapter",
+      "agent-profile",
+      "work-order",
+      "benchmark-receipt",
+      "interface-contract",
+      "knowledge-pack",
+      "run-control",
+      "gateway-contract",
+      "channel-gateway",
+      "release-package"
+    ]
+  },
+  "components": [
+    {
+      "id": "skill-library",
+      "kind": "skill-pack",
+      "artifactPath": ".midas/skills",
+      "purpose": "Validate reusable instruction packs before they are trusted by a project or shared outside the workspace.",
+      "distributionSurface": "workspace",
+      "dimensions": [
+        {
+          "id": "trigger-clarity",
+          "score": 90,
+          "evidence": "Skill descriptions must include trigger-ready language so activation is intentional."
+        },
+        {
+          "id": "scope-calibration",
+          "score": 85,
+          "evidence": "Default skill packs stay narrow and subordinate to work orders, source files, and approval gates."
+        },
+        {
+          "id": "progressive-disclosure",
+          "score": 82,
+          "evidence": "Skill bodies are kept under the framework line budget and can move detail into references when needed."
+        },
+        {
+          "id": "harness-portability",
+          "score": 85,
+          "evidence": "Allowed-tools hints are validated and dangerous pre-approval patterns are rejected."
+        },
+        {
+          "id": "evidence-discipline",
+          "score": 88,
+          "evidence": "Verification-oriented skill guidance requires evidence before completion claims."
+        },
+        {
+          "id": "approval-safety",
+          "score": 90,
+          "evidence": "Suspicious body language that weakens approval, review, or verification is advisory-visible."
+        },
+        {
+          "id": "drift-control",
+          "score": 84,
+          "evidence": "Installed skill packs are validated during workspace and repository checks."
+        }
+      ],
+      "risks": [
+        "Semantic unsafe instructions can still require human review.",
+        "A passing score does not prove prompt-injection resistance."
+      ],
+      "releaseGate": {
+        "claimLevel": "local-validation",
+        "publicReleaseReady": false,
+        "approvalRequired": true,
+        "evidenceRequired": "Run midas skills, midas quality, and midas validate before release review."
+      }
+    },
+    {
+      "id": "harness-adapters",
+      "kind": "harness-adapter",
+      "artifactPath": ".midas/harness-inventory.json",
+      "purpose": "Check generated harness guidance for portability, source-of-truth posture, and drift before operators rely on it.",
+      "distributionSurface": "workspace",
+      "dimensions": [
+        {
+          "id": "trigger-clarity",
+          "score": 82,
+          "evidence": "Adapter guidance begins with explicit load order and active modules."
+        },
+        {
+          "id": "scope-calibration",
+          "score": 86,
+          "evidence": "Generated adapters are framed as project harness guidance, not autonomous authority."
+        },
+        {
+          "id": "progressive-disclosure",
+          "score": 80,
+          "evidence": "Adapter files have size budgets and shared policy rendering instead of duplicating long manuals."
+        },
+        {
+          "id": "harness-portability",
+          "score": 90,
+          "evidence": "Supported harness outputs have adapter contracts and inventory hashes."
+        },
+        {
+          "id": "evidence-discipline",
+          "score": 88,
+          "evidence": "Adapters render shared evidence requirements and workflow closeout expectations."
+        },
+        {
+          "id": "approval-safety",
+          "score": 90,
+          "evidence": "Adapters render shared approval gates and protected-content rules."
+        },
+        {
+          "id": "drift-control",
+          "score": 92,
+          "evidence": "Harness inventory and context snapshots detect missing or changed adapter artifacts."
+        }
+      ],
+      "risks": [
+        "Generated adapter guidance still needs runtime smoke testing in each external harness.",
+        "Harness-specific capability changes can make contracts stale."
+      ],
+      "releaseGate": {
+        "claimLevel": "local-validation",
+        "publicReleaseReady": false,
+        "approvalRequired": true,
+        "evidenceRequired": "Run midas adapters, midas inventory, midas context, and midas validate before release review."
+      }
+    },
+    {
+      "id": "release-claims",
+      "kind": "release-package",
+      "artifactPath": ".midas/quality/scorecard.json",
+      "purpose": "Keep public readiness, benchmark, and distribution claims tied to deterministic evidence instead of narrative confidence.",
+      "distributionSurface": "release-review",
+      "dimensions": [
+        {
+          "id": "trigger-clarity",
+          "score": 84,
+          "evidence": "Claim-bearing records name the specific component and distribution surface being reviewed."
+        },
+        {
+          "id": "scope-calibration",
+          "score": 86,
+          "evidence": "Claim levels are bounded to local-validation unless explicit release review raises them."
+        },
+        {
+          "id": "progressive-disclosure",
+          "score": 80,
+          "evidence": "The scorecard points to other MIDAS evidence catalogs rather than embedding logs."
+        },
+        {
+          "id": "harness-portability",
+          "score": 82,
+          "evidence": "Release review includes adapter, skill, and workspace evidence rather than assuming one harness."
+        },
+        {
+          "id": "evidence-discipline",
+          "score": 92,
+          "evidence": "Benchmark and public-release claims require receipts, hashes, and approval state elsewhere in MIDAS."
+        },
+        {
+          "id": "approval-safety",
+          "score": 94,
+          "evidence": "Public release readiness requires approval even when local scores pass."
+        },
+        {
+          "id": "drift-control",
+          "score": 86,
+          "evidence": "The scorecard itself is installed, inspected, captured in context, and validated."
+        }
+      ],
+      "risks": [
+        "Scores are deterministic readiness signals, not quality badges or public certification.",
+        "Public release claims remain blocked until the full release gate passes."
+      ],
+      "releaseGate": {
+        "claimLevel": "local-validation",
+        "publicReleaseReady": false,
+        "approvalRequired": true,
+        "evidenceRequired": "Run midas quality, midas benchmarks, public leak scan, package smoke, and release review before publication."
+      }
+    }
+  ]
+}

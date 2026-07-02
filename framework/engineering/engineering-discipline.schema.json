@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://midas.dev/schemas/engineering-discipline.schema.json",
+  "title": "MIDAS Engineering Discipline Policy",
+  "type": "object",
+  "required": ["schemaVersion", "policy", "rules"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "midas.engineering-discipline.v1"
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "strictnessDefault",
+        "simpleTaskFastPath",
+        "maxChangedFilesWithoutPlan",
+        "maxNewModulesWithoutApproval",
+        "evidenceBeforeClaims",
+        "preserveUnrelatedCode",
+        "approvalsRequiredFor"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "strictnessDefault": { "type": "string" },
+        "simpleTaskFastPath": { "type": "boolean" },
+        "maxChangedFilesWithoutPlan": { "type": "integer" },
+        "maxNewModulesWithoutApproval": { "type": "integer" },
+        "evidenceBeforeClaims": { "type": "boolean" },
+        "preserveUnrelatedCode": { "type": "boolean" },
+        "approvalsRequiredFor": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "purpose",
+          "appliesTo",
+          "triggers",
+          "preflight",
+          "during",
+          "closeout",
+          "failureModes",
+          "remediation"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "purpose": { "type": "string" },
+          "appliesTo": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "triggers": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "preflight": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "during": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "closeout": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "failureModes": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "remediation": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

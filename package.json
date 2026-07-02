@@ -1,0 +1,40 @@
+{
+  "name": "@midas-framework/alpha",
+  "version": "0.1.0-alpha.0",
+  "private": true,
+  "description": "MIDAS alpha CLI for agent-ready project workspaces, workflow runtime state, validation, and evidence-led delivery.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "keywords": [
+    "agents",
+    "ai",
+    "workflow",
+    "developer-tools",
+    "cli",
+    "validation"
+  ],
+  "bin": {
+    "midas": "./bin/midas.mjs"
+  },
+  "files": [
+    "bin/",
+    "docs/",
+    "framework/",
+    "lib/",
+    "README.md",
+    "LICENSE",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "CODE_OF_CONDUCT.md",
+    "release-plan.md",
+    "package.json"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "validate": "node ./bin/midas.mjs validate .",
+    "doctor": "node ./bin/midas.mjs doctor"
+  },
+  "engines": {
+    "node": ">=20.12.0"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "midas.engineering-discipline.v1",
+  "policy": {
+    "strictnessDefault": "standard",
+    "simpleTaskFastPath": true,
+    "maxChangedFilesWithoutPlan": 6,
+    "maxNewModulesWithoutApproval": 1,
+    "evidenceBeforeClaims": true,
+    "preserveUnrelatedCode": true,
+    "approvalsRequiredFor": [
+      "broad-refactor",
+      "destructive-change",
+      "external-action",
+      "secret-access",
+      "public-claim",
+      "new-runtime-dependency"
+    ]
+  },
+  "rules": [
+    {
+      "id": "assumption-control",
+      "name": "Assumption Control",
+      "purpose": "Surface uncertain requirements before implementation so agents do not silently choose a risky interpretation.",
+      "appliesTo": ["bug-fix", "feature-slice", "refactor", "research", "release"],
+      "triggers": [
+        "The request has multiple plausible interpretations.",
+        "The change touches data, auth, security, public claims, or broad behavior."
+      ],
+      "preflight": ["objective", "assumptions", "ambiguities", "tradeoffs", "clarifying-question"],
+      "during": ["scope-boundary"],
+      "closeout": ["evidence-summary", "risk-summary"],
+      "failureModes": [
+        "Agent implements hidden assumptions as if they were confirmed requirements."
+      ],
+      "remediation": [
+        "Pause, name the ambiguity, and get the missing decision before mutating high-risk files."
+      ]
+    },
+    {
+      "id": "scope-minimization",
+      "name": "Scope Minimization",
+      "purpose": "Keep implementation bounded to the requested outcome and block speculative features or abstractions.",
+      "appliesTo": ["simple-change", "bug-fix", "feature-slice", "refactor", "release"],
+      "triggers": [
+        "The implementation starts adding optional flexibility, new concepts, or unrequested behaviors.",
+        "A single-use helper or new module appears before repeated complexity exists."
+      ],
+      "preflight": ["objective", "scope-boundary", "non-goals"],
+      "during": ["no-speculative-features", "line-justification"],
+      "closeout": ["changed-files", "evidence-summary"],
+      "failureModes": [
+        "Agent ships an overbuilt solution that is harder to test, review, and maintain."
+      ],
+      "remediation": [
+        "Replace speculative structure with the smallest change that satisfies the stated done criteria."
+      ]
+    },
+    {
+      "id": "diff-hygiene",
+      "name": "Diff Hygiene",
+      "purpose": "Preserve unrelated code, comments, formatting, and behavior while cleaning up only artifacts created by the current change.",
+      "appliesTo": ["simple-change", "bug-fix", "feature-slice", "refactor", "release"],
+      "triggers": [
+        "The patch changes nearby formatting, comments, names, or control flow outside the requested scope.",
+        "The patch creates unused imports, variables, files, or helper functions."
+      ],
+      "preflight": ["existing-style", "scope-boundary"],
+      "during": ["changed-files", "line-justification", "orphan-cleanup"],
+      "closeout": ["risk-summary", "rollback-note"],
+      "failureModes": [
+        "Agent introduces review noise or behavior drift through drive-by cleanup."
+      ],
+      "remediation": [
+        "Revert unrelated edits, preserve local style, and remove only unused artifacts introduced by the current patch."
+      ]
+    },
+    {
+      "id": "verification-loop",
+      "name": "Verification Loop",
+      "purpose": "Convert work into success criteria and evidence so completion claims are tied to observed checks.",
+      "appliesTo": ["bug-fix", "feature-slice", "refactor", "research", "release"],
+      "triggers": [
+        "The request has a user-visible or production-facing outcome.",
+        "A bug fix, refactor, or release action needs proof that behavior improved without regression."
+      ],
+      "preflight": ["objective", "precheck", "test-first-when-bug"],
+      "during": ["postcheck", "evidence-summary"],
+      "closeout": ["changed-files", "risk-summary", "rollback-note"],
+      "failureModes": [
+        "Agent declares success from intent rather than a reproducible check or observed evidence."
+      ],
+      "remediation": [
+        "Record the success criteria, run the smallest relevant checks, and report any unverified areas explicitly."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://midas.dev/schemas/flow-components.schema.json",
+  "title": "MIDAS Flow Component Catalog",
+  "type": "object",
+  "required": ["schemaVersion", "components"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "midas.flow-components.v1"
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "purpose",
+          "inputs",
+          "outputs",
+          "permissionClass",
+          "promotionStage",
+          "approvalRequired",
+          "evidence",
+          "failureMode",
+          "rollback",
+          "toolExposure"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "kind": { "type": "string" },
+          "purpose": { "type": "string" },
+          "inputs": { "$ref": "#/$defs/ports" },
+          "outputs": { "$ref": "#/$defs/ports" },
+          "permissionClass": { "type": "string" },
+          "promotionStage": { "type": "string" },
+          "approvalRequired": { "type": "string" },
+          "evidence": { "type": "string" },
+          "failureMode": { "type": "string" },
+          "rollback": { "type": "string" },
+          "toolExposure": {
+            "type": "object",
+            "required": ["enabled", "toolName", "description", "requiresPromotionGate"],
+            "additionalProperties": false,
+            "properties": {
+              "enabled": { "type": "boolean" },
+              "toolName": { "type": ["string", "null"] },
+              "description": { "type": ["string", "null"] },
+              "requiresPromotionGate": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ports": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string" },
+          "required": { "type": "boolean" },
+          "description": { "type": "string" }
+        }
+      }
+    }
+  }
+}

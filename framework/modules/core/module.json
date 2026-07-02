@@ -1,0 +1,27 @@
+{
+  "id": "core",
+  "name": "MIDAS Core",
+  "status": "alpha",
+  "purpose": "Configuration, manifest, validation, next-action routing, and project execution discipline.",
+  "workflows": [
+    "software-delivery",
+    "project-context",
+    "next-action-routing"
+  ],
+  "commands": [
+    "install",
+    "update",
+    "list-tools",
+    "doctor",
+    "validate",
+    "next",
+    "quick",
+    "pack"
+  ],
+  "guardrails": [
+    "no secret values",
+    "no copied external code or prompts without approval",
+    "no destructive or external actions without approval",
+    "generated files are not source of truth"
+  ]
+}

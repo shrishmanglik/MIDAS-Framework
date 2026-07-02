@@ -1,0 +1,21 @@
+{
+  "id": "software-dev",
+  "name": "Software Development",
+  "status": "alpha",
+  "purpose": "Turn a software idea into brief, PRD, architecture, ADRs, stories, implementation checks, review, QA, and retrospective.",
+  "workflows": [
+    "brief",
+    "prd",
+    "architecture",
+    "adr",
+    "story",
+    "implementation",
+    "review",
+    "retrospective"
+  ],
+  "quality": [
+    "focused tests for touched behavior",
+    "build/typecheck where available",
+    "release claims require evidence"
+  ]
+}

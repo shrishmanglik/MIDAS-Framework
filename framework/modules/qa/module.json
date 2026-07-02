@@ -1,0 +1,17 @@
+{
+  "id": "qa",
+  "name": "Quality Assurance",
+  "status": "alpha",
+  "purpose": "Fast QA and risk/launch QA for agentic development.",
+  "lanes": [
+    "fast-qa",
+    "risk-launch-qa"
+  ],
+  "checks": [
+    "unit or focused test",
+    "build/typecheck when available",
+    "public-boundary scan",
+    "approval gate scan",
+    "claim evidence scan"
+  ]
+}

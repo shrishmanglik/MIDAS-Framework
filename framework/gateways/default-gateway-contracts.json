@@ -1,0 +1,203 @@
+{
+  "schemaVersion": "midas.gateway-contracts.v1",
+  "gateways": [
+    {
+      "id": "local-operator-gateway",
+      "name": "Local Operator Gateway",
+      "purpose": "A local control-plane contract for maintainer-driven project work with explicit schema checks and run-ledger evidence.",
+      "transport": {
+        "kind": "cli",
+        "exposure": "local-only",
+        "requiresAuthentication": false,
+        "allowedOrigins": ["localhost"],
+        "requiresHandshake": true,
+        "validatesSchema": true
+      },
+      "identity": {
+        "requiresDeviceIdentity": false,
+        "requiresPairing": false,
+        "recordsOperator": true,
+        "recordsSession": true,
+        "rotatesTokens": false
+      },
+      "protocol": {
+        "schemaValidated": true,
+        "supportsCapabilityDiscovery": true,
+        "requiresIdempotencyForSideEffects": true,
+        "rejectsUnknownMethods": true,
+        "supportsCancellation": true
+      },
+      "events": {
+        "emitsRunEvents": true,
+        "emitsHealthEvents": true,
+        "retention": "bounded",
+        "retentionDays": 30,
+        "gapRecovery": "snapshot-refresh"
+      },
+      "state": {
+        "storesRunState": true,
+        "storesPairingState": false,
+        "redactsSensitiveLogs": true,
+        "blocksSecretEcho": true
+      },
+      "sandbox": {
+        "defaultMode": "off",
+        "nonMainRequiresSandbox": false,
+        "elevatedToolsRequireApproval": true,
+        "bindsRunControlProfile": true
+      },
+      "remote": {
+        "remoteAccess": "disabled",
+        "requiresExplicitEnable": true,
+        "requiresEncryption": false,
+        "requiresApprovedOrigins": true
+      },
+      "diagnostics": {
+        "doctorChecks": ["schema", "auth", "exposure", "events", "sandbox", "state", "remote", "protocol", "approvals"],
+        "fixMode": "advisory-only",
+        "recordsFindings": true
+      },
+      "approvals": {
+        "default": "maintainer",
+        "requiredFor": ["remote-exposure", "public-ingress", "secret-access", "elevated-tool", "destructive", "deploy", "money", "capability-change", "approval-policy-change"]
+      },
+      "evidence": {
+        "required": ["gateway-id", "session-id", "operator-or-device", "schema-check", "event-log", "approval-record", "run-ledger"],
+        "recordsRunLedger": true,
+        "retentionDays": 30
+      }
+    },
+    {
+      "id": "private-control-gateway",
+      "name": "Private Control Gateway",
+      "purpose": "An authenticated private-network control plane for supervised operator sessions, streamed events, and bounded tool access.",
+      "transport": {
+        "kind": "websocket",
+        "exposure": "private-network",
+        "requiresAuthentication": true,
+        "allowedOrigins": ["localhost", "private-network"],
+        "requiresHandshake": true,
+        "validatesSchema": true
+      },
+      "identity": {
+        "requiresDeviceIdentity": true,
+        "requiresPairing": true,
+        "recordsOperator": true,
+        "recordsSession": true,
+        "rotatesTokens": true
+      },
+      "protocol": {
+        "schemaValidated": true,
+        "supportsCapabilityDiscovery": true,
+        "requiresIdempotencyForSideEffects": true,
+        "rejectsUnknownMethods": true,
+        "supportsCancellation": true
+      },
+      "events": {
+        "emitsRunEvents": true,
+        "emitsHealthEvents": true,
+        "retention": "bounded",
+        "retentionDays": 30,
+        "gapRecovery": "event-replay"
+      },
+      "state": {
+        "storesRunState": true,
+        "storesPairingState": true,
+        "redactsSensitiveLogs": true,
+        "blocksSecretEcho": true
+      },
+      "sandbox": {
+        "defaultMode": "non-main",
+        "nonMainRequiresSandbox": true,
+        "elevatedToolsRequireApproval": true,
+        "bindsRunControlProfile": true
+      },
+      "remote": {
+        "remoteAccess": "private-network",
+        "requiresExplicitEnable": true,
+        "requiresEncryption": true,
+        "requiresApprovedOrigins": true
+      },
+      "diagnostics": {
+        "doctorChecks": ["schema", "auth", "exposure", "events", "sandbox", "state", "remote", "identity", "protocol", "approvals"],
+        "fixMode": "advisory-only",
+        "recordsFindings": true
+      },
+      "approvals": {
+        "default": "maintainer",
+        "requiredFor": ["remote-exposure", "public-ingress", "secret-access", "elevated-tool", "destructive", "deploy", "money", "external-message", "file-egress", "capability-change", "approval-policy-change"]
+      },
+      "evidence": {
+        "required": ["gateway-id", "session-id", "operator-or-device", "schema-check", "event-log", "approval-record", "remote-origin", "run-ledger", "diagnostic-report"],
+        "recordsRunLedger": true,
+        "retentionDays": 30
+      }
+    },
+    {
+      "id": "reviewed-automation-gateway",
+      "name": "Reviewed Automation Gateway",
+      "purpose": "An external automation ingress contract for scheduled or webhook-driven runs that require approved origins and human-reviewed high-risk actions.",
+      "transport": {
+        "kind": "webhook",
+        "exposure": "external-inbound",
+        "requiresAuthentication": true,
+        "allowedOrigins": ["approved-domain", "approved-ip-range"],
+        "requiresHandshake": true,
+        "validatesSchema": true
+      },
+      "identity": {
+        "requiresDeviceIdentity": true,
+        "requiresPairing": true,
+        "recordsOperator": true,
+        "recordsSession": true,
+        "rotatesTokens": true
+      },
+      "protocol": {
+        "schemaValidated": true,
+        "supportsCapabilityDiscovery": true,
+        "requiresIdempotencyForSideEffects": true,
+        "rejectsUnknownMethods": true,
+        "supportsCancellation": true
+      },
+      "events": {
+        "emitsRunEvents": true,
+        "emitsHealthEvents": true,
+        "retention": "bounded",
+        "retentionDays": 30,
+        "gapRecovery": "snapshot-refresh"
+      },
+      "state": {
+        "storesRunState": true,
+        "storesPairingState": true,
+        "redactsSensitiveLogs": true,
+        "blocksSecretEcho": true
+      },
+      "sandbox": {
+        "defaultMode": "all",
+        "nonMainRequiresSandbox": true,
+        "elevatedToolsRequireApproval": true,
+        "bindsRunControlProfile": true
+      },
+      "remote": {
+        "remoteAccess": "public",
+        "requiresExplicitEnable": true,
+        "requiresEncryption": true,
+        "requiresApprovedOrigins": true
+      },
+      "diagnostics": {
+        "doctorChecks": ["schema", "auth", "exposure", "events", "sandbox", "state", "remote", "identity", "protocol", "approvals"],
+        "fixMode": "advisory-only",
+        "recordsFindings": true
+      },
+      "approvals": {
+        "default": "explicit-human",
+        "requiredFor": ["remote-exposure", "public-ingress", "secret-access", "elevated-tool", "destructive", "deploy", "money", "external-message", "file-egress", "capability-change", "approval-policy-change"]
+      },
+      "evidence": {
+        "required": ["gateway-id", "session-id", "operator-or-device", "schema-check", "event-log", "approval-record", "remote-origin", "run-ledger", "diagnostic-report"],
+        "recordsRunLedger": true,
+        "retentionDays": 30
+      }
+    }
+  ]
+}

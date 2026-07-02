@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://midas.dev/schemas/run-controls.schema.json",
+  "title": "MIDAS Run-Control Policy",
+  "type": "object",
+  "required": ["schemaVersion", "profiles"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "midas.run-controls.v1"
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "purpose",
+          "scope",
+          "sandbox",
+          "subagents",
+          "messageGateway",
+          "approvals",
+          "evidence",
+          "closeout"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "purpose": { "type": "string" },
+          "scope": {
+            "type": "object",
+            "required": ["maxIterations", "maxSubtasks", "maxRuntimeMinutes", "requiresObjective", "requiresStopCondition"],
+            "additionalProperties": false,
+            "properties": {
+              "maxIterations": { "type": "integer" },
+              "maxSubtasks": { "type": "integer" },
+              "maxRuntimeMinutes": { "type": "integer" },
+              "requiresObjective": { "type": "boolean" },
+              "requiresStopCondition": { "type": "boolean" }
+            }
+          },
+          "sandbox": {
+            "type": "object",
+            "required": ["filesystem", "network", "externalActions", "secretsAllowed", "allowedMutation", "blockedMutation"],
+            "additionalProperties": false,
+            "properties": {
+              "filesystem": { "type": "string" },
+              "network": { "type": "string" },
+              "externalActions": { "type": "boolean" },
+              "secretsAllowed": { "type": "boolean" },
+              "allowedMutation": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string" }
+              },
+              "blockedMutation": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string" }
+              }
+            }
+          },
+          "subagents": {
+            "type": "object",
+            "required": ["enabled", "maxConcurrent", "requiresInstructionPacket", "requiresEvidence", "inheritsParentApprovals"],
+            "additionalProperties": false,
+            "properties": {
+              "enabled": { "type": "boolean" },
+              "maxConcurrent": { "type": "integer" },
+              "requiresInstructionPacket": { "type": "boolean" },
+              "requiresEvidence": { "type": "boolean" },
+              "inheritsParentApprovals": { "type": "boolean" }
+            }
+          },
+          "messageGateway": {
+            "type": "object",
+            "required": ["enabled", "allowedChannels", "requiresApprovalForExternal", "blocksDirectPublicMessages", "recordsUserAndThread"],
+            "additionalProperties": false,
+            "properties": {
+              "enabled": { "type": "boolean" },
+              "allowedChannels": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "requiresApprovalForExternal": { "type": "boolean" },
+              "blocksDirectPublicMessages": { "type": "boolean" },
+              "recordsUserAndThread": { "type": "boolean" }
+            }
+          },
+          "approvals": {
+            "type": "object",
+            "required": ["default", "requiredFor"],
+            "additionalProperties": false,
+            "properties": {
+              "default": { "type": "string" },
+              "requiredFor": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string" }
+              }
+            }
+          },
+          "evidence": {
+            "type": "object",
+            "required": ["required", "checkpointEverySteps"],
+            "additionalProperties": false,
+            "properties": {
+              "required": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string" }
+              },
+              "checkpointEverySteps": { "type": "integer" }
+            }
+          },
+          "closeout": {
+            "type": "object",
+            "required": ["requiresRunLedger", "requiresNextAction", "requiresRiskSummary", "requiresStateUpdate"],
+            "additionalProperties": false,
+            "properties": {
+              "requiresRunLedger": { "type": "boolean" },
+              "requiresNextAction": { "type": "boolean" },
+              "requiresRiskSummary": { "type": "boolean" },
+              "requiresStateUpdate": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

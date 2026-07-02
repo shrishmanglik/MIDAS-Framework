@@ -1,0 +1,13 @@
+{
+  "id": "operator-runtime",
+  "name": "Operator Runtime",
+  "status": "alpha",
+  "purpose": "Supervised long-horizon work with permission boundaries, recovery rules, ledgers, and closeout evidence.",
+  "controls": [
+    "one active objective",
+    "bounded tool permissions",
+    "human approval for external, destructive, or money-moving actions",
+    "run ledger",
+    "retrospective memory promotion"
+  ]
+}

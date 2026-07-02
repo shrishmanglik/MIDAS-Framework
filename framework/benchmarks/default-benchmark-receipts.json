@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "midas.benchmark-receipts.v1",
+  "policy": {
+    "claimCeilings": [
+      "local-validation",
+      "private-benchmark",
+      "public-benchmark",
+      "release-ready"
+    ],
+    "publicClaimsRequireApproval": true,
+    "benchmarkClaimsRequireRawResults": true,
+    "requireScorerVersion": true,
+    "requireModelRoute": true,
+    "requireRerunPolicy": true,
+    "requireTaskManifest": true,
+    "requireItemLevelResults": true,
+    "requireEvidenceHashes": true,
+    "requireInferenceParameters": true,
+    "allowedRoutes": [
+      "official-harness",
+      "official-instance-image",
+      "representative-micro-eval",
+      "local-validation",
+      "manual-replay"
+    ]
+  },
+  "receipts": []
+}

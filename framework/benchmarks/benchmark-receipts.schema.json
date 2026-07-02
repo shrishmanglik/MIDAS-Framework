@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://midas-framework.dev/schemas/benchmark-receipts.schema.json",
+  "title": "MIDAS Benchmark Receipts",
+  "type": "object",
+  "required": ["schemaVersion", "policy", "receipts"],
+  "properties": {
+    "schemaVersion": { "const": "midas.benchmark-receipts.v1" },
+    "policy": {
+      "type": "object",
+      "required": [
+        "claimCeilings",
+        "publicClaimsRequireApproval",
+        "benchmarkClaimsRequireRawResults",
+        "requireScorerVersion",
+        "requireModelRoute",
+        "requireRerunPolicy",
+        "requireTaskManifest",
+        "requireItemLevelResults",
+        "requireEvidenceHashes",
+        "requireInferenceParameters",
+        "allowedRoutes"
+      ],
+      "properties": {
+        "claimCeilings": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 4
+        },
+        "publicClaimsRequireApproval": { "type": "boolean" },
+        "benchmarkClaimsRequireRawResults": { "type": "boolean" },
+        "requireScorerVersion": { "type": "boolean" },
+        "requireModelRoute": { "type": "boolean" },
+        "requireRerunPolicy": { "type": "boolean" },
+        "requireTaskManifest": { "type": "boolean" },
+        "requireItemLevelResults": { "type": "boolean" },
+        "requireEvidenceHashes": { "type": "boolean" },
+        "requireInferenceParameters": { "type": "boolean" },
+        "allowedRoutes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "receipts": {
+      "type": "array",
+      "items": { "type": "object" }
+    }
+  },
+  "additionalProperties": false
+}

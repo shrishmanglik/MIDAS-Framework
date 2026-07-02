@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://midas-framework.dev/schemas/interface-quality.schema.json",
+  "title": "MIDAS Interface Quality",
+  "type": "object",
+  "required": ["schemaVersion", "policy", "surfaces"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "midas.interface-quality.v1"
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "requiredEvidence",
+        "allowedSurfaceTypes",
+        "allowedCheckTypes",
+        "waiversRequireReason",
+        "designSystemDriftRequiresReview",
+        "hookFindingsAreAdvisory",
+        "liveIterationRequiresApproval"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "requiredEvidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "allowedSurfaceTypes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "allowedCheckTypes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "waiversRequireReason": { "type": "boolean" },
+        "designSystemDriftRequiresReview": { "type": "boolean" },
+        "hookFindingsAreAdvisory": { "type": "boolean" },
+        "liveIterationRequiresApproval": { "type": "boolean" }
+      }
+    },
+    "surfaces": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "surfaceType",
+          "purpose",
+          "designContext",
+          "qualityGates",
+          "runtime",
+          "failureMode",
+          "rollback"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "surfaceType": { "type": "string" },
+          "purpose": { "type": "string" },
+          "designContext": { "type": "object" },
+          "qualityGates": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "object" }
+          },
+          "runtime": { "type": "object" },
+          "failureMode": { "type": "string" },
+          "rollback": { "type": "string" }
+        }
+      }
+    }
+  }
+}

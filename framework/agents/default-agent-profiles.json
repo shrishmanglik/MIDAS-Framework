@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "midas.agent-profiles.v1",
+  "profiles": [
+    {
+      "id": "planner",
+      "mode": "primary",
+      "description": "Analyze scope, risks, and implementation sequence before changes.",
+      "maxSteps": 8,
+      "permissions": {
+        "read": "allow",
+        "search": "allow",
+        "edit": "deny",
+        "shell": "ask",
+        "web": "ask",
+        "task": "deny"
+      }
+    },
+    {
+      "id": "builder",
+      "mode": "primary",
+      "description": "Implement scoped work orders with approval-aware edits and verification.",
+      "maxSteps": 24,
+      "permissions": {
+        "read": "allow",
+        "search": "allow",
+        "edit": "ask",
+        "shell": "ask",
+        "web": "ask",
+        "task": "ask"
+      }
+    },
+    {
+      "id": "reviewer",
+      "mode": "subagent",
+      "description": "Review code, docs, and release evidence without making changes.",
+      "maxSteps": 12,
+      "permissions": {
+        "read": "allow",
+        "search": "allow",
+        "edit": "deny",
+        "shell": "ask",
+        "web": "deny",
+        "task": "deny"
+      }
+    },
+    {
+      "id": "researcher",
+      "mode": "subagent",
+      "description": "Gather bounded external or dependency context without workspace mutation.",
+      "maxSteps": 10,
+      "permissions": {
+        "read": "allow",
+        "search": "allow",
+        "edit": "deny",
+        "shell": "deny",
+        "web": "ask",
+        "task": "deny"
+      }
+    }
+  ]
+}

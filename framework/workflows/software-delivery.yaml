@@ -1,0 +1,29 @@
+id: software-delivery
+name: Software Delivery Workflow
+status: alpha
+purpose: Move one scoped software objective from context to implementation evidence.
+steps:
+  - id: context
+    name: Load project context
+    output: confirmed objective and constraints
+  - id: work-order
+    name: Create or select work order
+    output: scoped work order
+  - id: design
+    name: Define acceptance criteria
+    output: behavior-level criteria plus exact output and format constraints
+  - id: implementation
+    name: Implement the smallest complete slice
+    output: code or documentation changes
+  - id: verification
+    name: Verify the slice
+    output: test/build/manual evidence
+  - id: closeout
+    name: Record evidence and next action
+    output: run ledger entry
+rules:
+  - one active objective
+  - exact task instructions override generic process guidance
+  - evidence before claims
+  - approval required for destructive, external, money-moving, or production actions
+  - generated files are not source of truth

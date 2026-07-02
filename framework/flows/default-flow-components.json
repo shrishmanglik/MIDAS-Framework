@@ -1,0 +1,188 @@
+{
+  "schemaVersion": "midas.flow-components.v1",
+  "components": [
+    {
+      "id": "project-context-source",
+      "name": "Project Context Source",
+      "kind": "source",
+      "purpose": "Collects the project objective, constraints, current workspace context, and available verification commands before work begins.",
+      "inputs": [
+        {
+          "id": "objective",
+          "type": "text",
+          "required": true,
+          "description": "The scoped outcome the operator is trying to achieve."
+        },
+        {
+          "id": "constraints",
+          "type": "json",
+          "required": false,
+          "description": "Known guardrails, approvals, or files that shape the work."
+        }
+      ],
+      "outputs": [
+        {
+          "id": "scoped-context",
+          "type": "json",
+          "description": "A compact context packet for planning the next work order."
+        }
+      ],
+      "permissionClass": "read-only",
+      "promotionStage": "component-proof",
+      "approvalRequired": "none",
+      "evidence": "The generated project context and manifest are present and pass validation.",
+      "failureMode": "The work can start from stale or incomplete project context.",
+      "rollback": "Refresh the project context snapshot or regenerate the workspace before continuing.",
+      "toolExposure": {
+        "enabled": false,
+        "toolName": null,
+        "description": null,
+        "requiresPromotionGate": true
+      }
+    },
+    {
+      "id": "work-order-planner",
+      "name": "Work Order Planner",
+      "kind": "transform",
+      "purpose": "Turns a scoped context packet into a concrete work order with objective, constraints, evidence, and done criteria.",
+      "inputs": [
+        {
+          "id": "scoped-context",
+          "type": "json",
+          "required": true,
+          "description": "The project context and operator intent for the current slice."
+        }
+      ],
+      "outputs": [
+        {
+          "id": "work-order",
+          "type": "markdown",
+          "description": "A work order suitable for one focused implementation or review slice."
+        }
+      ],
+      "permissionClass": "internal-write",
+      "promotionStage": "component-proof",
+      "approvalRequired": "maintainer",
+      "evidence": "A generated work order records scope, constraints, expected evidence, and next action.",
+      "failureMode": "The operator can start with vague scope or missing acceptance evidence.",
+      "rollback": "Archive the generated work order and create a replacement with a narrower objective.",
+      "toolExposure": {
+        "enabled": false,
+        "toolName": null,
+        "description": null,
+        "requiresPromotionGate": true
+      }
+    },
+    {
+      "id": "verification-checkpoint",
+      "name": "Verification Checkpoint",
+      "kind": "evidence",
+      "purpose": "Records the checks that prove a work order is complete before the run is closed or handed off.",
+      "inputs": [
+        {
+          "id": "work-order",
+          "type": "markdown",
+          "required": true,
+          "description": "The active work order with acceptance criteria."
+        },
+        {
+          "id": "check-results",
+          "type": "report",
+          "required": true,
+          "description": "Summarized local verification output or an explicit reason verification could not run."
+        }
+      ],
+      "outputs": [
+        {
+          "id": "verification-summary",
+          "type": "report",
+          "description": "A concise evidence packet for closeout."
+        }
+      ],
+      "permissionClass": "read-only",
+      "promotionStage": "component-proof",
+      "approvalRequired": "none",
+      "evidence": "Validation output or skipped-verification rationale is attached to the run closeout.",
+      "failureMode": "A change can be marked complete without reproducible proof.",
+      "rollback": "Reopen the work order and run the declared checks before closing it again.",
+      "toolExposure": {
+        "enabled": false,
+        "toolName": null,
+        "description": null,
+        "requiresPromotionGate": true
+      }
+    },
+    {
+      "id": "approval-gate",
+      "name": "Approval Gate",
+      "kind": "approval",
+      "purpose": "Blocks higher-risk actions until the required human approval and evidence are present.",
+      "inputs": [
+        {
+          "id": "request",
+          "type": "json",
+          "required": true,
+          "description": "The requested action, affected surface, risk class, and stop plan."
+        }
+      ],
+      "outputs": [
+        {
+          "id": "approval-record",
+          "type": "approval",
+          "description": "The approval status and any remaining conditions."
+        }
+      ],
+      "permissionClass": "external-action",
+      "promotionStage": "review-ready",
+      "approvalRequired": "explicit-human",
+      "evidence": "The approval record names the action, evidence, risk class, and required approver.",
+      "failureMode": "A workflow can perform external, destructive, or irreversible work without a human gate.",
+      "rollback": "Disable the action path and return the request to draft status.",
+      "toolExposure": {
+        "enabled": false,
+        "toolName": null,
+        "description": null,
+        "requiresPromotionGate": true
+      }
+    },
+    {
+      "id": "run-ledger-closeout",
+      "name": "Run Ledger Closeout",
+      "kind": "output",
+      "purpose": "Writes the final run status, evidence, risks, and next action after a work order finishes.",
+      "inputs": [
+        {
+          "id": "verification-summary",
+          "type": "report",
+          "required": true,
+          "description": "The evidence packet for the completed work."
+        },
+        {
+          "id": "next-action",
+          "type": "text",
+          "required": true,
+          "description": "The next scoped action or handoff."
+        }
+      ],
+      "outputs": [
+        {
+          "id": "ledger-entry",
+          "type": "state-update",
+          "description": "A closeout entry that future operators can inspect."
+        }
+      ],
+      "permissionClass": "internal-write",
+      "promotionStage": "component-proof",
+      "approvalRequired": "maintainer",
+      "evidence": "The run ledger includes status, evidence, risks, and next action.",
+      "failureMode": "Future operators lose the result, proof, or next action for the run.",
+      "rollback": "Correct the ledger entry with a new closeout entry that preserves the audit trail.",
+      "toolExposure": {
+        "enabled": false,
+        "toolName": null,
+        "description": null,
+        "requiresPromotionGate": true
+      }
+    }
+  ]
+}

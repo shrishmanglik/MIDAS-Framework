@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://midas-framework.local/schemas/gateway-contracts.schema.json",
+  "title": "MIDAS Gateway Contracts",
+  "type": "object",
+  "required": ["schemaVersion", "gateways"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "midas.gateway-contracts.v1"
+    },
+    "gateways": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "purpose",
+          "transport",
+          "identity",
+          "protocol",
+          "events",
+          "state",
+          "sandbox",
+          "remote",
+          "diagnostics",
+          "approvals",
+          "evidence"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 120
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 24,
+            "maxLength": 500
+          },
+          "transport": {
+            "type": "object"
+          },
+          "identity": {
+            "type": "object"
+          },
+          "protocol": {
+            "type": "object"
+          },
+          "events": {
+            "type": "object"
+          },
+          "state": {
+            "type": "object"
+          },
+          "sandbox": {
+            "type": "object"
+          },
+          "remote": {
+            "type": "object"
+          },
+          "diagnostics": {
+            "type": "object"
+          },
+          "approvals": {
+            "type": "object"
+          },
+          "evidence": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

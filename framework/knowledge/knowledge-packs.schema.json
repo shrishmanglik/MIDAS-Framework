@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://midas.dev/schemas/knowledge-packs.schema.json",
+  "title": "MIDAS Knowledge Pack Catalog",
+  "type": "object",
+  "required": ["schemaVersion", "packs"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "midas.knowledge-packs.v1"
+    },
+    "packs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "purpose",
+          "sourcePolicy",
+          "retrievalPolicy",
+          "qualityGates",
+          "feedbackLoop",
+          "appExposure"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "purpose": { "type": "string" },
+          "sourcePolicy": {
+            "type": "object",
+            "required": [
+              "allowedSourceTypes",
+              "citationRequired",
+              "licenseReviewRequired",
+              "secretsAllowed",
+              "piiAllowed",
+              "sourceRetention"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "allowedSourceTypes": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string" }
+              },
+              "citationRequired": { "type": "boolean" },
+              "licenseReviewRequired": { "type": "boolean" },
+              "secretsAllowed": { "type": "boolean" },
+              "piiAllowed": { "type": "boolean" },
+              "sourceRetention": { "type": "string" }
+            }
+          },
+          "retrievalPolicy": {
+            "type": "object",
+            "required": ["chunkStrategy", "metadataFields", "retrievalTests", "staleAfterDays"],
+            "additionalProperties": false,
+            "properties": {
+              "chunkStrategy": { "type": "string" },
+              "metadataFields": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string" }
+              },
+              "retrievalTests": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": ["id", "query", "expectedEvidence"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": { "type": "string" },
+                    "query": { "type": "string" },
+                    "expectedEvidence": { "type": "string" }
+                  }
+                }
+              },
+              "staleAfterDays": { "type": "integer" }
+            }
+          },
+          "qualityGates": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "feedbackLoop": { "type": "string" },
+          "appExposure": {
+            "type": "object",
+            "required": ["enabled", "appName", "description", "requiresPublicationGate", "approvalRequired"],
+            "additionalProperties": false,
+            "properties": {
+              "enabled": { "type": "boolean" },
+              "appName": { "type": ["string", "null"] },
+              "description": { "type": ["string", "null"] },
+              "requiresPublicationGate": { "type": "boolean" },
+              "approvalRequired": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

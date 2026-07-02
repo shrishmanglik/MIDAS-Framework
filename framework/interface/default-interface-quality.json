@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "midas.interface-quality.v1",
+  "policy": {
+    "requiredEvidence": [
+      "design-context",
+      "contrast-check",
+      "responsive-check",
+      "overflow-check",
+      "motion-review",
+      "keyboard-a11y-check",
+      "visual-regression-or-screenshot",
+      "human-review"
+    ],
+    "allowedSurfaceTypes": [
+      "product-ui",
+      "marketing-site",
+      "documentation",
+      "component-library",
+      "admin-tool",
+      "dashboard"
+    ],
+    "allowedCheckTypes": [
+      "manual-review",
+      "automated-scan",
+      "browser-smoke",
+      "screenshot-review",
+      "accessibility-audit",
+      "performance-check",
+      "copy-review"
+    ],
+    "waiversRequireReason": true,
+    "designSystemDriftRequiresReview": true,
+    "hookFindingsAreAdvisory": true,
+    "liveIterationRequiresApproval": true
+  },
+  "surfaces": [
+    {
+      "id": "product-interface",
+      "name": "Product interface",
+      "surfaceType": "product-ui",
+      "purpose": "User-facing product screens must carry explicit design context and verification evidence before release claims are made.",
+      "designContext": {
+        "required": true,
+        "register": "product",
+        "audience": "primary product users",
+        "files": [
+          "PRODUCT.md",
+          "DESIGN.md"
+        ]
+      },
+      "qualityGates": [
+        {
+          "id": "design-context",
+          "type": "manual-review",
+          "required": true,
+          "evidence": "Reviewed product, audience, brand, and interaction context before changing the interface.",
+          "waiverAllowed": false
+        },
+        {
+          "id": "contrast-check",
+          "type": "accessibility-audit",
+          "required": true,
+          "evidence": "Foreground, background, focus, and disabled states were checked for readable contrast.",
+          "waiverAllowed": false
+        },
+        {
+          "id": "responsive-check",
+          "type": "browser-smoke",
+          "required": true,
+          "evidence": "Core screens were checked at mobile, tablet, and desktop widths.",
+          "waiverAllowed": false
+        },
+        {
+          "id": "overflow-check",
+          "type": "browser-smoke",
+          "required": true,
+          "evidence": "Long labels, empty states, errors, and dense content were checked for clipping and overlap.",
+          "waiverAllowed": false
+        },
+        {
+          "id": "motion-review",
+          "type": "manual-review",
+          "required": true,
+          "evidence": "Animations and transitions were checked for purpose, timing, and reduced-motion behavior.",
+          "waiverAllowed": true
+        },
+        {
+          "id": "keyboard-a11y-check",
+          "type": "accessibility-audit",
+          "required": true,
+          "evidence": "Interactive controls were checked for keyboard reachability, focus order, and visible focus.",
+          "waiverAllowed": false
+        },
+        {
+          "id": "visual-regression-or-screenshot",
+          "type": "screenshot-review",
+          "required": true,
+          "evidence": "Representative screenshots or visual-regression evidence were captured for changed surfaces.",
+          "waiverAllowed": true
+        },
+        {
+          "id": "human-review",
+          "type": "manual-review",
+          "required": true,
+          "evidence": "A human reviewer accepted the interface evidence or recorded a bounded follow-up.",
+          "waiverAllowed": false
+        }
+      ],
+      "runtime": {
+        "browserEvidenceRequired": true,
+        "hookMode": "advisory",
+        "liveIteration": "approval-required",
+        "externalNetworkAllowed": false
+      },
+      "failureMode": "Block release claims until missing interface evidence is captured or an approved waiver is recorded.",
+      "rollback": "Revert the changed surface or ship behind a non-public review path when required evidence is missing."
+    },
+    {
+      "id": "public-page",
+      "name": "Public page",
+      "surfaceType": "marketing-site",
+      "purpose": "Public-facing pages must prove readability, layout resilience, accessibility, and review evidence before publication.",
+      "designContext": {
+        "required": true,
+        "register": "mixed",
+        "audience": "public visitors and evaluators",
+        "files": [
+          "PRODUCT.md",
+          "DESIGN.md"
+        ]
+      },
+      "qualityGates": [
+        {
+          "id": "design-context",
+          "type": "manual-review",
+          "required": true,
+          "evidence": "Reviewed page objective, audience, offer, trust constraints, and brand direction before changes.",
+          "waiverAllowed": false
+        },
+        {
+          "id": "contrast-check",
+          "type": "accessibility-audit",
+          "required": true,
+          "evidence": "Text, controls, links, and focus states were checked for readable contrast.",
+          "waiverAllowed": false
+        },
+        {
+          "id": "responsive-check",
+          "type": "browser-smoke",
+          "required": true,
+          "evidence": "The page was checked at narrow, medium, wide, and content-heavy viewport states.",
+          "waiverAllowed": false
+        },
+        {
+          "id": "overflow-check",
+          "type": "browser-smoke",
+          "required": true,
+          "evidence": "Headlines, calls to action, cards, forms, and navigation were checked for overlap and clipping.",
+          "waiverAllowed": false
+        },
+        {
+          "id": "motion-review",
+          "type": "manual-review",
+          "required": true,
+          "evidence": "Motion was checked for purpose, performance, reduced-motion behavior, and non-blocking content access.",
+          "waiverAllowed": true
+        },
+        {
+          "id": "keyboard-a11y-check",
+          "type": "accessibility-audit",
+          "required": true,
+          "evidence": "Links, navigation, forms, and dialogs were checked for keyboard access and visible focus.",
+          "waiverAllowed": false
+        },
+        {
+          "id": "visual-regression-or-screenshot",
+          "type": "screenshot-review",
+          "required": true,
+          "evidence": "Before/after screenshots or comparable visual evidence were captured for changed public sections.",
+          "waiverAllowed": true
+        },
+        {
+          "id": "human-review",
+          "type": "manual-review",
+          "required": true,
+          "evidence": "A human reviewer accepted the page evidence or recorded a bounded follow-up.",
+          "waiverAllowed": false
+        }
+      ],
+      "runtime": {
+        "browserEvidenceRequired": true,
+        "hookMode": "advisory",
+        "liveIteration": "approval-required",
+        "externalNetworkAllowed": false
+      },
+      "failureMode": "Block publication claims until missing page evidence is captured or an approved waiver is recorded.",
+      "rollback": "Keep the previous published page, hide the changed section, or ship behind a reviewed preview path."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "builder",
+  "name": "Builder Strategy",
+  "status": "alpha",
+  "purpose": "Product strategy, positioning, scope control, launch readiness, and operator decision artifacts.",
+  "workflows": [
+    "opportunity-brief",
+    "positioning",
+    "scope-cut",
+    "launch-readiness",
+    "decision-packet"
+  ]
+}

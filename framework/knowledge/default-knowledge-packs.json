@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "midas.knowledge-packs.v1",
+  "packs": [
+    {
+      "id": "project-docs",
+      "name": "Project Docs",
+      "purpose": "Keeps project documentation available as a reviewed, source-cited knowledge pack for planning and implementation work.",
+      "sourcePolicy": {
+        "allowedSourceTypes": ["project-doc", "public-doc", "source-code-metadata"],
+        "citationRequired": true,
+        "licenseReviewRequired": true,
+        "secretsAllowed": false,
+        "piiAllowed": false,
+        "sourceRetention": "Keep source references and remove stale or disallowed entries during workspace review."
+      },
+      "retrievalPolicy": {
+        "chunkStrategy": "section",
+        "metadataFields": ["source-path", "title", "owner", "updated-at"],
+        "retrievalTests": [
+          {
+            "id": "project-purpose",
+            "query": "What is this project trying to accomplish?",
+            "expectedEvidence": "Answer must cite the project context or a reviewed project document."
+          }
+        ],
+        "staleAfterDays": 90
+      },
+      "qualityGates": [
+        "source-license-review",
+        "citation-check",
+        "retrieval-test",
+        "stale-source-review",
+        "feedback-loop"
+      ],
+      "feedbackLoop": "Incorrect or stale answers should create a reviewed work order before the pack is refreshed.",
+      "appExposure": {
+        "enabled": false,
+        "appName": null,
+        "description": null,
+        "requiresPublicationGate": true,
+        "approvalRequired": "maintainer"
+      }
+    },
+    {
+      "id": "release-evidence",
+      "name": "Release Evidence",
+      "purpose": "Groups release notes, validation summaries, and run evidence so closeouts can be checked against reviewed proof.",
+      "sourcePolicy": {
+        "allowedSourceTypes": ["release-evidence", "run-ledger", "work-order"],
+        "citationRequired": true,
+        "licenseReviewRequired": true,
+        "secretsAllowed": false,
+        "piiAllowed": false,
+        "sourceRetention": "Keep evidence paths and remove entries that contain private, secret, or unreviewed source material."
+      },
+      "retrievalPolicy": {
+        "chunkStrategy": "record",
+        "metadataFields": ["evidence-path", "run-id", "status", "updated-at"],
+        "retrievalTests": [
+          {
+            "id": "latest-closeout",
+            "query": "What evidence proves the latest completed run?",
+            "expectedEvidence": "Answer must cite a run ledger entry, release note, or validation summary."
+          }
+        ],
+        "staleAfterDays": 180
+      },
+      "qualityGates": [
+        "source-license-review",
+        "citation-check",
+        "retrieval-test",
+        "stale-source-review",
+        "feedback-loop"
+      ],
+      "feedbackLoop": "Missing or contradictory evidence should reopen the run closeout before the pack is refreshed.",
+      "appExposure": {
+        "enabled": false,
+        "appName": null,
+        "description": null,
+        "requiresPublicationGate": true,
+        "approvalRequired": "maintainer"
+      }
+    },
+    {
+      "id": "support-knowledge",
+      "name": "Support Knowledge",
+      "purpose": "Defines a safe intake shape for reviewed support answers, issue notes, and user-provided material without secret or PII storage.",
+      "sourcePolicy": {
+        "allowedSourceTypes": ["issue-tracker", "user-provided", "public-doc", "generated-output"],
+        "citationRequired": true,
+        "licenseReviewRequired": true,
+        "secretsAllowed": false,
+        "piiAllowed": false,
+        "sourceRetention": "Keep only reviewed non-sensitive support context and remove user-provided material on request."
+      },
+      "retrievalPolicy": {
+        "chunkStrategy": "qa-pair",
+        "metadataFields": ["source-path", "question-id", "review-status", "updated-at"],
+        "retrievalTests": [
+          {
+            "id": "support-source-check",
+            "query": "Which reviewed source supports this support answer?",
+            "expectedEvidence": "Answer must cite a reviewed support note, issue, or public documentation source."
+          }
+        ],
+        "staleAfterDays": 120
+      },
+      "qualityGates": [
+        "source-license-review",
+        "citation-check",
+        "retrieval-test",
+        "privacy-review",
+        "publication-gate"
+      ],
+      "feedbackLoop": "Support corrections should be reviewed, cited, and re-tested before becoming reusable knowledge.",
+      "appExposure": {
+        "enabled": false,
+        "appName": null,
+        "description": null,
+        "requiresPublicationGate": true,
+        "approvalRequired": "owner"
+      }
+    }
+  ]
+}
