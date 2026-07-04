@@ -1,0 +1,24 @@
+{"framework":"midas","id":"cli-help","status":"pass","durationMs":174,"exitCode":0,"note":""}
+{"framework":"midas","id":"install-noninteractive","status":"pass","durationMs":465,"exitCode":0,"note":""}
+{"framework":"midas","id":"workspace-validate","status":"pass","durationMs":420,"exitCode":0,"note":""}
+{"framework":"midas","id":"skill-library-strict","status":"pass","durationMs":235,"exitCode":0,"note":""}
+{"framework":"midas","id":"verification-gap-detects-missing","status":"pass","durationMs":409,"exitCode":1,"note":""}
+{"framework":"midas","id":"verification-gap-passes-implemented","status":"pass","durationMs":594,"exitCode":0,"note":""}
+{"framework":"midas","id":"ux-spine-detects-unmapped","status":"pass","durationMs":386,"exitCode":1,"note":""}
+{"framework":"midas","id":"ux-spine-passes-mapped","status":"pass","durationMs":214,"exitCode":0,"note":""}
+{"framework":"midas","id":"docs-staleness-detects-source-only","status":"pass","durationMs":207,"exitCode":1,"note":""}
+{"framework":"midas","id":"docs-staleness-passes-with-docs","status":"pass","durationMs":417,"exitCode":0,"note":""}
+{"framework":"midas","id":"runtime-repair-record","status":"pass","durationMs":215,"exitCode":0,"note":""}
+{"framework":"midas","id":"runtime-repair-packet","status":"pass","durationMs":202,"exitCode":0,"note":""}
+{"framework":"bmad","id":"cli-help","status":"pass","durationMs":934,"exitCode":0,"note":""}
+{"framework":"bmad","id":"install-noninteractive","status":"fail","durationMs":946,"exitCode":1,"note":""}
+{"framework":"bmad","id":"workspace-validate","status":"fail","durationMs":0,"exitCode":null,"note":"Skipped because BMAD noninteractive install did not complete."}
+{"framework":"bmad","id":"skill-library-strict","status":"fail","durationMs":223,"exitCode":1,"note":""}
+{"framework":"bmad","id":"verification-gap-detects-missing","status":"fail","durationMs":0,"exitCode":null,"note":"No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."}
+{"framework":"bmad","id":"verification-gap-passes-implemented","status":"fail","durationMs":0,"exitCode":null,"note":"No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."}
+{"framework":"bmad","id":"ux-spine-detects-unmapped","status":"fail","durationMs":0,"exitCode":null,"note":"No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."}
+{"framework":"bmad","id":"ux-spine-passes-mapped","status":"fail","durationMs":0,"exitCode":null,"note":"No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."}
+{"framework":"bmad","id":"docs-staleness-detects-source-only","status":"fail","durationMs":0,"exitCode":null,"note":"No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."}
+{"framework":"bmad","id":"docs-staleness-passes-with-docs","status":"fail","durationMs":0,"exitCode":null,"note":"No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."}
+{"framework":"bmad","id":"runtime-repair-record","status":"fail","durationMs":0,"exitCode":null,"note":"No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."}
+{"framework":"bmad","id":"runtime-repair-packet","status":"fail","durationMs":0,"exitCode":null,"note":"No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."}

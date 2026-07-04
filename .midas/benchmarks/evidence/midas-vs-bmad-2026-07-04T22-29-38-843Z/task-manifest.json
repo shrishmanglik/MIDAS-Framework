@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "midas.framework-comparison-benchmark.v1",
+  "benchmark": "MIDAS vs BMAD local executable controls",
+  "cases": [
+    {
+      "framework": "midas",
+      "id": "cli-help",
+      "label": "CLI boots and prints command surface",
+      "expectation": "exit-zero"
+    },
+    {
+      "framework": "midas",
+      "id": "install-noninteractive",
+      "label": "Noninteractive install creates a project harness",
+      "expectation": "exit-zero"
+    },
+    {
+      "framework": "midas",
+      "id": "workspace-validate",
+      "label": "Installed workspace validates",
+      "expectation": "exit-zero"
+    },
+    {
+      "framework": "midas",
+      "id": "skill-library-strict",
+      "label": "Native skill library passes strict validation",
+      "expectation": "exit-zero"
+    },
+    {
+      "framework": "midas",
+      "id": "verification-gap-detects-missing",
+      "label": "Verification-gap gate catches an omitted requirement",
+      "expectation": "exit-nonzero"
+    },
+    {
+      "framework": "midas",
+      "id": "verification-gap-passes-implemented",
+      "label": "Verification-gap gate passes after evidence exists",
+      "expectation": "exit-zero"
+    },
+    {
+      "framework": "midas",
+      "id": "ux-spine-detects-unmapped",
+      "label": "UX spine gate catches an unmapped design component",
+      "expectation": "exit-nonzero"
+    },
+    {
+      "framework": "midas",
+      "id": "ux-spine-passes-mapped",
+      "label": "UX spine gate passes after design maps to experience",
+      "expectation": "exit-zero"
+    },
+    {
+      "framework": "midas",
+      "id": "docs-staleness-detects-source-only",
+      "label": "Docs staleness gate catches source changes without docs",
+      "expectation": "exit-nonzero"
+    },
+    {
+      "framework": "midas",
+      "id": "docs-staleness-passes-with-docs",
+      "label": "Docs staleness gate passes when docs accompany source",
+      "expectation": "exit-zero"
+    },
+    {
+      "framework": "midas",
+      "id": "runtime-repair-record",
+      "label": "Runtime workflow records repair evidence after a failed check",
+      "expectation": "exit-zero"
+    },
+    {
+      "framework": "midas",
+      "id": "runtime-repair-packet",
+      "label": "Runtime observation creates a bounded repair packet",
+      "expectation": "exit-zero"
+    },
+    {
+      "framework": "bmad",
+      "id": "cli-help",
+      "label": "CLI boots and prints command surface",
+      "expectation": "exit-zero"
+    },
+    {
+      "framework": "bmad",
+      "id": "install-noninteractive",
+      "label": "Noninteractive install creates a project harness",
+      "expectation": "exit-zero"
+    },
+    {
+      "framework": "bmad",
+      "id": "workspace-validate",
+      "label": "Installed workspace validates",
+      "expectation": "previous-step-required"
+    },
+    {
+      "framework": "bmad",
+      "id": "skill-library-strict",
+      "label": "Native skill library passes strict validation",
+      "expectation": "exit-zero"
+    },
+    {
+      "framework": "bmad",
+      "id": "verification-gap-detects-missing",
+      "label": "Verification-gap gate catches an omitted requirement",
+      "expectation": "deterministic-local-cli-capability"
+    },
+    {
+      "framework": "bmad",
+      "id": "verification-gap-passes-implemented",
+      "label": "Verification-gap gate passes after evidence exists",
+      "expectation": "deterministic-local-cli-capability"
+    },
+    {
+      "framework": "bmad",
+      "id": "ux-spine-detects-unmapped",
+      "label": "UX spine gate catches an unmapped design component",
+      "expectation": "deterministic-local-cli-capability"
+    },
+    {
+      "framework": "bmad",
+      "id": "ux-spine-passes-mapped",
+      "label": "UX spine gate passes after design maps to experience",
+      "expectation": "deterministic-local-cli-capability"
+    },
+    {
+      "framework": "bmad",
+      "id": "docs-staleness-detects-source-only",
+      "label": "Docs staleness gate catches source changes without docs",
+      "expectation": "deterministic-local-cli-capability"
+    },
+    {
+      "framework": "bmad",
+      "id": "docs-staleness-passes-with-docs",
+      "label": "Docs staleness gate passes when docs accompany source",
+      "expectation": "deterministic-local-cli-capability"
+    },
+    {
+      "framework": "bmad",
+      "id": "runtime-repair-record",
+      "label": "Runtime workflow records repair evidence after a failed check",
+      "expectation": "deterministic-local-cli-capability"
+    },
+    {
+      "framework": "bmad",
+      "id": "runtime-repair-packet",
+      "label": "Runtime observation creates a bounded repair packet",
+      "expectation": "deterministic-local-cli-capability"
+    }
+  ],
+  "limitations": [
+    "Private local validation only.",
+    "No public leaderboard claim.",
+    "No product adoption, community, web bundle, or prompt corpus score."
+  ]
+}

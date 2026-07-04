@@ -42,6 +42,7 @@ node ./bin/midas.mjs install --directory ./tmp/example --modules core,software-d
 node ./bin/midas.mjs agents --directory ./tmp/example
 node ./bin/midas.mjs authority --directory ./tmp/example
 node ./bin/midas.mjs benchmarks --directory ./tmp/example
+node ./bin/midas.mjs benchmark-bmad --directory . --bmad-directory ../BMAD-METHOD
 node ./bin/midas.mjs skills --directory ./tmp/example
 node ./bin/midas.mjs interface --directory ./tmp/example
 node ./bin/midas.mjs quality --directory ./tmp/example
@@ -132,6 +133,7 @@ midas list-tools   Print supported harness adapters.
 midas agents       Inspect MIDAS agent profiles and semantic permission boundaries.
 midas authority    Inspect authority order, protected invariants, evidence rules, and claim ceilings.
 midas benchmarks   Inspect benchmark receipts, scorer evidence, model routes, item-level evidence, and claim boundaries.
+midas benchmark-bmad Run a private local executable-controls comparison against a pinned BMAD checkout.
 midas skills       Inspect MIDAS skill packs and SKILL.md metadata.
 midas interface    Inspect MIDAS interface quality contracts, UI evidence gates, and review posture.
 midas quality      Inspect MIDAS component quality scorecards and release/distribution readiness gates.
@@ -187,9 +189,22 @@ lib/verification-gap.mjs      requirement-to-evidence traceability receipts
 lib/ux-spine.mjs              DESIGN.md to EXPERIENCE.md alignment checks
 lib/planning-suite.mjs        local-first planning packet generation
 lib/docs-staleness.mjs        source-to-docs drift checks
+lib/framework-comparison-benchmark.mjs private local MIDAS-vs-BMAD executable-controls benchmark
 docs/                        public docs, capability map, backlog, release boundary
 test/                        node:test coverage
 ```
+
+## Local BMAD Comparison
+
+`midas benchmark-bmad` runs a private local executable-controls suite against a pinned BMAD checkout. It writes raw results, item-level results, a task manifest, a run log, and a markdown report under `.midas/benchmarks/evidence/`.
+
+The command is intentionally claim-bounded. A passing run can support this claim only:
+
+```text
+MIDAS outscored the pinned local BMAD checkout on this private local executable controls suite.
+```
+
+It does not prove that MIDAS is globally better than BMAD, more adopted, more complete, stronger on public benchmarks, or better for every planning workflow.
 
 ## Release Posture
 
