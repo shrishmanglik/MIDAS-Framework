@@ -54,3 +54,34 @@ tmp/
 
 # Old skills backup (not needed in repo)
 .claude/skills_old_backup/
+
+# Local MIDAS self-install outputs from running this package against its own checkout.
+.claude/skills/midas/
+.codex/skills/midas/
+.cursor/rules/midas/
+.gemini/midas/
+.github/copilot/midas/
+.opencode/midas/
+.midas/_config/
+.midas/agent-profiles.json
+.midas/authority/
+.midas/benchmarks/receipts.json
+.midas/channels/
+.midas/checks.json
+.midas/context-snapshot.json
+.midas/engineering/
+.midas/flows/
+.midas/gateways/
+.midas/harness-inventory.json
+.midas/interface/
+.midas/knowledge/
+.midas/planning/
+.midas/project-context.md
+.midas/quality/
+.midas/reports/
+.midas/run-control/
+.midas/run-ledger/
+.midas/runtime/
+.midas/skills/
+.midas/sprint-status.yaml
+.midas/workorders/
