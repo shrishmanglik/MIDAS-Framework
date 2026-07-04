@@ -8,7 +8,7 @@ test('module registry loads all public module manifests', async () => {
   assert.equal(result.status, 'pass', JSON.stringify(result.failures, null, 2));
   assert.deepEqual(
     result.modules.map((module) => module.id),
-    ['builder', 'core', 'operator-runtime', 'qa', 'software-dev']
+    ['agentic-agile', 'builder', 'core', 'operator-runtime', 'qa', 'software-dev']
   );
 });
 
