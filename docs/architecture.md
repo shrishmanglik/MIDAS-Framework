@@ -12,7 +12,7 @@ CLI -> workspace generator -> module registry -> workflow runner -> runtime runn
 
 The CLI creates and validates project workspaces. It is dependency-free in the alpha so installation and inspection stay simple.
 
-Current executable commands include install/update, module listing, workflow run creation, runtime status, runtime step updates, observation-driven repair packets, workflow closeout, next-action routing, quick work-order creation, bundle generation, agent profile inspection, authority inspection, benchmark receipt inspection, skill-library inspection, interface-quality inspection, quality-scorecard inspection, flow component inspection, gateway-contract inspection, knowledge-pack inspection, run-control inspection, adapter contract inspection, context inspection, and validation.
+Current executable commands include install/update, module listing, workflow run creation, runtime status, runtime step updates, observation-driven repair packets, workflow closeout, next-action routing, quick work-order creation, bundle generation, local planning packet creation, verification-gap receipts, UX-spine alignment, docs-staleness checks, strict skill-pack validation, agent profile inspection, authority inspection, benchmark receipt inspection, skill-library inspection, interface-quality inspection, quality-scorecard inspection, flow component inspection, gateway-contract inspection, knowledge-pack inspection, run-control inspection, adapter contract inspection, context inspection, and validation.
 
 ## Workspace
 
@@ -31,7 +31,9 @@ The generated `.midas/` folder contains:
 - `flows/components.json`
 - `gateways/contracts.json`
 - `knowledge/packs.json`
+- `planning/`
 - `run-control/policy.json`
+- `reports/`
 - `runtime/runs/`
 - `channels/gateways.json`
 - `skills/`
@@ -46,11 +48,24 @@ Modules describe the major capability groups MIDAS can install into a project:
 
 - `core`
 - `software-dev`
+- `agentic-agile`
 - `builder`
 - `qa`
 - `operator-runtime`
 
 Each module has a `module.json` manifest validated against `framework/modules/module.schema.json`.
+
+## Agentic Agile
+
+The `agentic-agile` module adds deterministic gates before completion claims:
+
+- `midas plan` creates local PRD, DESIGN, EXPERIENCE, and handoff files before broad implementation.
+- `midas ux-spine` checks that components in DESIGN.md map to flows in EXPERIENCE.md.
+- `midas verify` writes a verification-gap receipt that compares auditable requirements against implementation evidence.
+- `midas docs-staleness` flags source/framework changes without matching documentation review.
+- `midas validate-pack` validates a single SKILL.md or a skill library before runtime use.
+
+These gates improve omission detection and handoff quality, but they remain bounded checks. They do not prove runtime correctness, UI polish, accessibility, provider readiness, or public release state without separate evidence.
 
 ## Authority Contracts
 

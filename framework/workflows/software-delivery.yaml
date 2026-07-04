@@ -6,23 +6,35 @@ steps:
   - id: context
     name: Load project context
     output: confirmed objective and constraints
+  - id: planning
+    name: Create local planning packet
+    output: PRD.md, DESIGN.md, EXPERIENCE.md, and local planning handoff
   - id: work-order
     name: Create or select work order
     output: scoped work order
   - id: design
-    name: Define acceptance criteria
-    output: behavior-level criteria plus exact output and format constraints
+    name: Align UX spine and acceptance criteria
+    output: mapped DESIGN.md and EXPERIENCE.md plus exact output and format constraints
   - id: implementation
     name: Implement the smallest complete slice
     output: code or documentation changes
+  - id: verification-gap
+    name: Compare requirements against implementation evidence
+    output: verification-gap receipt with gaps or traceability proof
   - id: verification
     name: Verify the slice
     output: test/build/manual evidence
+  - id: docs-staleness
+    name: Check source-to-docs drift
+    output: docs-staleness pass or required documentation follow-up
   - id: closeout
     name: Record evidence and next action
     output: run ledger entry
 rules:
   - one active objective
+  - local planning before broad implementation
+  - design components map to experience flows before UI build claims
+  - verification-gap receipt before completion claims
   - exact task instructions override generic process guidance
   - evidence before claims
   - approval required for destructive, external, money-moving, or production actions

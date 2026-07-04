@@ -1,0 +1,39 @@
+{
+  "id": "agentic-agile",
+  "name": "Agentic Agile",
+  "status": "alpha",
+  "purpose": "Coordinate scale-adaptive planning, UX spine alignment, verification-gap review, docs drift checks, and direct implementation handoffs for agentic software delivery.",
+  "workflows": [
+    "local-planning",
+    "ux-spine",
+    "software-delivery",
+    "verification-gap",
+    "docs-staleness",
+    "closeout-learning"
+  ],
+  "commands": [
+    "midas plan",
+    "midas ux-spine",
+    "midas verify",
+    "midas docs-staleness",
+    "midas validate-pack"
+  ],
+  "guardrails": [
+    "requirements must be auditable before implementation",
+    "design components must map to experience flows",
+    "completion claims require verification-gap receipts",
+    "source or framework changes require matching documentation review",
+    "planning packets are research and scoping evidence, not implementation proof"
+  ],
+  "checks": [
+    "verification-gap",
+    "ux-spine-alignment",
+    "docs-staleness",
+    "skill-pack-validation"
+  ],
+  "quality": [
+    "requirement omission rate tracked before completion",
+    "claim ceiling preserved in every receipt",
+    "human approval required for high-risk transitions"
+  ]
+}

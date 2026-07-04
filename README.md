@@ -42,6 +42,7 @@ node ./bin/midas.mjs install --directory ./tmp/example --modules core,software-d
 node ./bin/midas.mjs agents --directory ./tmp/example
 node ./bin/midas.mjs authority --directory ./tmp/example
 node ./bin/midas.mjs benchmarks --directory ./tmp/example
+node ./bin/midas.mjs benchmark-bmad --directory . --bmad-directory ../BMAD-METHOD
 node ./bin/midas.mjs skills --directory ./tmp/example
 node ./bin/midas.mjs interface --directory ./tmp/example
 node ./bin/midas.mjs quality --directory ./tmp/example
@@ -54,6 +55,11 @@ node ./bin/midas.mjs adapters --directory ./tmp/example
 node ./bin/midas.mjs inventory --directory ./tmp/example
 node ./bin/midas.mjs context --directory ./tmp/example
 node ./bin/midas.mjs context --directory ./tmp/example --write
+node ./bin/midas.mjs plan --directory ./tmp/example --work-order demo "Ship one verified slice"
+node ./bin/midas.mjs ux-spine --directory ./tmp/example --design .midas/planning/demo/DESIGN.md --experience .midas/planning/demo/EXPERIENCE.md
+node ./bin/midas.mjs verify --directory ./tmp/example --spec .midas/planning/demo/PRD.md
+node ./bin/midas.mjs docs-staleness --directory . --files "lib/cli.mjs,docs/architecture.md"
+node ./bin/midas.mjs validate-pack ./framework/skills/verification-gap --strict
 node ./bin/midas.mjs run-workflow software-delivery --directory ./tmp/example --objective "Ship one verified slice"
 node ./bin/midas.mjs run-status --directory ./tmp/example
 node ./bin/midas.mjs step --directory ./tmp/example --step context --status completed --evidence "context loaded" --handoff planner
@@ -79,6 +85,10 @@ The installer creates a local `.midas/` workspace in the target project. It does
 | Authority contract | A machine-readable constitution for authority order, protected invariants, conflict handling, escalation rules, evidence-before-claim discipline, and claim ceilings. |
 | Benchmark receipt | A machine-readable evidence record for benchmark claims, including scorer, model route, inference parameters, task manifest and item-level evidence paths, evidence hashes, rerun policy, paired comparison proof for uplift claims, claim level, and public-approval state. |
 | Skill pack | A reusable `SKILL.md` instruction package with validated metadata, trigger description, license, compatibility, safe allowed-tools hints, and advisory body-language warnings. |
+| Planning packet | A local-first PRD, DESIGN, EXPERIENCE, and README scaffold generated before expensive implementation loops. |
+| UX spine | A synchronized DESIGN.md and EXPERIENCE.md pair where structural components must map to user-flow transitions. |
+| Verification-gap receipt | A deterministic traceability report comparing auditable requirements against implementation evidence before completion claims. |
+| Docs-staleness check | A source-to-docs drift guard that flags code/framework changes without matching documentation review. |
 | Interface quality contract | A machine-readable policy for UI-facing surfaces, including design context, contrast, responsiveness, overflow, motion, keyboard accessibility, screenshot evidence, human review, runtime posture, and waiver discipline. |
 | Quality scorecard | A deterministic component-readiness record for skills, adapters, release packages, and other MIDAS primitives, including scores, evidence, risks, drift posture, approval gates, and public-release claim boundaries. |
 | Flow component | A machine-readable workflow node contract with typed ports, permission class, promotion stage, evidence, rollback, approval, and tool-exposure gate metadata. |
@@ -123,6 +133,7 @@ midas list-tools   Print supported harness adapters.
 midas agents       Inspect MIDAS agent profiles and semantic permission boundaries.
 midas authority    Inspect authority order, protected invariants, evidence rules, and claim ceilings.
 midas benchmarks   Inspect benchmark receipts, scorer evidence, model routes, item-level evidence, and claim boundaries.
+midas benchmark-bmad Run a private local executable-controls comparison against a pinned BMAD checkout.
 midas skills       Inspect MIDAS skill packs and SKILL.md metadata.
 midas interface    Inspect MIDAS interface quality contracts, UI evidence gates, and review posture.
 midas quality      Inspect MIDAS component quality scorecards and release/distribution readiness gates.
@@ -137,6 +148,11 @@ midas context      Inspect or refresh project context snapshot and drift.
 midas modules      Print available MIDAS modules.
 midas doctor       Validate CLI/runtime readiness.
 midas validate     Validate a MIDAS repo or installed workspace.
+midas validate-pack Validate a single SKILL.md or skill library.
+midas plan         Create local-first PRD, DESIGN, EXPERIENCE, and handoff files.
+midas verify       Run a verification-gap traceability check from spec to evidence.
+midas ux-spine     Validate DESIGN.md component structure against EXPERIENCE.md flows.
+midas docs-staleness Detect source/framework changes without matching docs changes.
 midas next         Recommend the next MIDAS action for a workspace.
 midas quick        Create a quick work order.
 midas run-workflow Create a workflow work order, ledger entry, and runtime run state.
@@ -169,9 +185,26 @@ framework/channels/          default channel gateway contracts and schema
 framework/adapters/          adapter permission policy and schema
 framework/templates/         public work-order and context templates
 framework/workflows/         portable workflow definitions
+lib/verification-gap.mjs      requirement-to-evidence traceability receipts
+lib/ux-spine.mjs              DESIGN.md to EXPERIENCE.md alignment checks
+lib/planning-suite.mjs        local-first planning packet generation
+lib/docs-staleness.mjs        source-to-docs drift checks
+lib/framework-comparison-benchmark.mjs private local MIDAS-vs-BMAD executable-controls benchmark
 docs/                        public docs, capability map, backlog, release boundary
 test/                        node:test coverage
 ```
+
+## Local BMAD Comparison
+
+`midas benchmark-bmad` runs a private local executable-controls suite against a pinned BMAD checkout. It writes raw results, item-level results, a task manifest, a run log, and a markdown report under `.midas/benchmarks/evidence/`.
+
+The command is intentionally claim-bounded. A passing run can support this claim only:
+
+```text
+MIDAS outscored the pinned local BMAD checkout on this private local executable controls suite.
+```
+
+It does not prove that MIDAS is globally better than BMAD, more adopted, more complete, stronger on public benchmarks, or better for every planning workflow.
 
 ## Release Posture
 

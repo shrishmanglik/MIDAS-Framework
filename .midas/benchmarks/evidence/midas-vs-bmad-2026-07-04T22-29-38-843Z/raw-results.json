@@ -1,0 +1,927 @@
+{
+  "schemaVersion": "midas.framework-comparison-benchmark.v1",
+  "generatedAt": "2026-07-04T22:29:38.843Z",
+  "claimLevel": "private-local-validation",
+  "midasDirectory": "D:\\Million Dollar AI Studio\\open-source\\midas-framework",
+  "bmadDirectory": "D:\\Million Dollar AI Studio\\_tmp\\framework-audit-bmad\\BMAD-METHOD",
+  "tempDirectories": {
+    "midas": "C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq",
+    "bmad": "C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-bmad-Ijswpd"
+  },
+  "summary": {
+    "frameworks": [
+      {
+        "framework": "midas",
+        "passed": 12,
+        "total": 12,
+        "durationMs": 3938,
+        "failures": [],
+        "score": 1
+      },
+      {
+        "framework": "bmad",
+        "passed": 1,
+        "total": 12,
+        "durationMs": 2103,
+        "failures": [
+          {
+            "id": "install-noninteractive",
+            "label": "Noninteractive install creates a project harness",
+            "note": "clack.box is not a function\n"
+          },
+          {
+            "id": "workspace-validate",
+            "label": "Installed workspace validates",
+            "note": "Skipped because BMAD noninteractive install did not complete."
+          },
+          {
+            "id": "skill-library-strict",
+            "label": "Native skill library passes strict validation",
+            "note": "Case did not meet the benchmark expectation."
+          },
+          {
+            "id": "verification-gap-detects-missing",
+            "label": "Verification-gap gate catches an omitted requirement",
+            "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."
+          },
+          {
+            "id": "verification-gap-passes-implemented",
+            "label": "Verification-gap gate passes after evidence exists",
+            "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."
+          },
+          {
+            "id": "ux-spine-detects-unmapped",
+            "label": "UX spine gate catches an unmapped design component",
+            "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."
+          },
+          {
+            "id": "ux-spine-passes-mapped",
+            "label": "UX spine gate passes after design maps to experience",
+            "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."
+          },
+          {
+            "id": "docs-staleness-detects-source-only",
+            "label": "Docs staleness gate catches source changes without docs",
+            "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."
+          },
+          {
+            "id": "docs-staleness-passes-with-docs",
+            "label": "Docs staleness gate passes when docs accompany source",
+            "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."
+          },
+          {
+            "id": "runtime-repair-record",
+            "label": "Runtime workflow records repair evidence after a failed check",
+            "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."
+          },
+          {
+            "id": "runtime-repair-packet",
+            "label": "Runtime observation creates a bounded repair packet",
+            "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate."
+          }
+        ],
+        "score": 0.0833
+      }
+    ],
+    "winner": "midas",
+    "tie": false
+  },
+  "items": [
+    {
+      "framework": "midas",
+      "id": "cli-help",
+      "label": "CLI boots and prints command surface",
+      "status": "pass",
+      "expectation": "exit-zero",
+      "command": "node \"D:\\Million Dollar AI Studio\\open-source\\midas-framework\\bin\\midas.mjs\" --help",
+      "cwd": "D:/Million Dollar AI Studio/open-source/midas-framework",
+      "durationMs": 174,
+      "exitCode": 0,
+      "timedOut": false,
+      "note": "",
+      "parsed": null,
+      "stdout": "MIDAS alpha CLI\n\nCommands:\n  install      Create or refresh a .midas workspace.\n  update       Alias for install.\n  list-tools   Print supported harness adapters.\n  agents       Inspect MIDAS agent profiles and semantic permission boundaries.\n  authority    Inspect MIDAS authority order, protected invariants, evidence rules, and claim ceilings.\n  benchmarks   Inspect MIDAS benchmark receipts, scorer evidence, model routes, and claim boundaries.\n  benchmark-bmad Run the local executable MIDAS-vs-BMAD benchmark and write evidence.\n  skills       Inspect MIDAS skill packs and SKILL.md metadata.\n  discipline   Inspect MIDAS engineering discipline rules for assumptions, scope, diff hygiene, and verification.\n  interface    Inspect MIDAS interface quality contracts, UI evidence gates, and review posture.\n  flows        Inspect MIDAS flow component contracts and tool-promotion gates.\n  gateways     Inspect MIDAS gateway contracts, control-plane auth, protocol, events, remote posture, and evidence.\n  knowledge    Inspect MIDAS knowledge packs, source policies, retrieval tests, and app publication gates.\n  quality      Inspect MIDAS component quality scorecards and release/distribution readiness gates.\n  run-controls Inspect MIDAS run-control profiles, approval gates, sandboxes, and message gateways.\n  channels     Inspect MIDAS channel gateways, ingress rules, file handling, and tool exposure.\n  adapters     Inspect generated harness adapters against adapter contracts.\n  inventory    Inspect generated harness adapters and inventory drift.\n  context      Inspect or refresh project context snapshot and drift.\n  modules      Print available MIDAS modules.\n  doctor       Validate local CLI readiness.\n  validate     Validate a MIDAS repo or installed workspace.\n  validate-pack Validate a single SKILL.md or skill library.\n  plan         Create local-first planning artifacts for a work order.\n  verify       Run verification-gap traceability from spec to implementation evidence.\n  ux-spine     Validate DESIGN.md component structure against EXPERIENCE.md flows.\n  docs-staleness Detect source/framework changes without matching docs changes.\n  next         Recommend the next MIDAS action.\n  quick        Create a quick work order.\n  run-workflow Create a workflow work order and ledger entry.\n  run-status   Inspect the latest runtime run state.\n  step         Update one runtime workflow step with evidence and optional handoff.\n  observe      Record a check observation and create a bounded repair packet when needed.\n  repair       Alias for observe.\n  closeout     Close the latest workflow ledger entry with evidence.\n  pack         Create portable bundle files.\n\nExamples:\n  midas install --directory ./my-project --modules core,software-dev,qa --tools codex,claude-code --yes\n  midas validate ./my-project\n  midas quick --directory ./my-project \"Review the next repo\"\n  midas run-workflow software-delivery --directory ./my-project --objective \"Ship one verified slice\"\n  midas run-status --directory ./my-project\n  midas step --directory ./my-project --step verification --status completed --evidence \"tests passed\" --handoff reviewer\n  midas observe --directory ./my-project --step verification --check unit-tests --status failed --summary \"expected output mismatch\"\n  midas closeout --directory ./my-project --status completed --evidence \"tests passed\" --next-action \"Pick next work order\"\n  midas agents --directory ./my-project\n  midas authority --directory ./my-project\n  midas benchmarks --directory ./my-project\n  midas benchmark-bmad --directory . --bmad-directory ../BMAD-METHOD\n  midas skills --directory ./my-project\n  midas discipline --directory ./my-project\n  midas interface --directory ./my-project\n  midas flows --directory ./my-project\n  midas gateways --directory ./my-project\n  midas knowledge --directory ./my-project\n  midas quality --directory ./my-project\n  midas run-controls --directory ./my-project\n  midas channels --directory ./my-project\n  mi\n...[truncated]",
+      "stderr": ""
+    },
+    {
+      "framework": "midas",
+      "id": "install-noninteractive",
+      "label": "Noninteractive install creates a project harness",
+      "status": "pass",
+      "expectation": "exit-zero",
+      "command": "node \"D:\\Million Dollar AI Studio\\open-source\\midas-framework\\bin\\midas.mjs\" install --directory C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq --modules core,software-dev,qa,agentic-agile --tools codex --yes",
+      "cwd": "D:/Million Dollar AI Studio/open-source/midas-framework",
+      "durationMs": 465,
+      "exitCode": 0,
+      "timedOut": false,
+      "note": "",
+      "parsed": {
+        "status": "installed",
+        "generated": 26,
+        "modules": [
+          "core",
+          "software-dev",
+          "qa",
+          "agentic-agile"
+        ],
+        "tools": [
+          "codex"
+        ]
+      },
+      "stdout": "{\n  \"status\": \"installed\",\n  \"target\": \"C:\\\\Users\\\\Shris\\\\AppData\\\\Local\\\\Temp\\\\midas-bmad-bench-midas-KxSTkq\",\n  \"modules\": [\n    \"core\",\n    \"software-dev\",\n    \"qa\",\n    \"agentic-agile\"\n  ],\n  \"tools\": [\n    \"codex\"\n  ],\n  \"generated\": [\n    \".midas/_config/manifest.yaml\",\n    \".midas/project-context.md\",\n    \".midas/sprint-status.yaml\",\n    \".midas/checks.json\",\n    \".midas/planning\",\n    \".midas/reports\",\n    \".midas/agent-profiles.json\",\n    \".midas/authority/constitution.json\",\n    \".midas/benchmarks/receipts.json\",\n    \".midas/engineering/discipline.json\",\n    \".midas/flows/components.json\",\n    \".midas/gateways/contracts.json\",\n    \".midas/interface/quality.json\",\n    \".midas/knowledge/packs.json\",\n    \".midas/quality/scorecard.json\",\n    \".midas/run-control/policy.json\",\n    \".midas/channels/gateways.json\",\n    \".midas/skills/local-planning/SKILL.md\",\n    \".midas/skills/spine-ux/SKILL.md\",\n    \".midas/skills/terminal-repair/SKILL.md\",\n    \".midas/skills/verification/SKILL.md\",\n    \".midas/skills/verification-gap/SKILL.md\",\n    \".midas/skills/work-order/SKILL.md\",\n    \".codex/skills/midas/MIDAS.md\",\n    \".midas/harness-inventory.json\",\n    \".midas/context-snapshot.json\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "framework": "midas",
+      "id": "workspace-validate",
+      "label": "Installed workspace validates",
+      "status": "pass",
+      "expectation": "exit-zero",
+      "command": "node \"D:\\Million Dollar AI Studio\\open-source\\midas-framework\\bin\\midas.mjs\" validate C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq",
+      "cwd": "D:/Million Dollar AI Studio/open-source/midas-framework",
+      "durationMs": 420,
+      "exitCode": 0,
+      "timedOut": false,
+      "note": "",
+      "parsed": {
+        "status": "pass",
+        "target": "C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq",
+        "checks": [
+          {
+            "id": "workspace:.midas/_config/manifest.yaml",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/project-context.md",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/sprint-status.yaml",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/checks.json",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/agent-profiles.json",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/authority/constitution.json",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/benchmarks/receipts.json",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/channels/gateways.json",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/engineering/discipline.json",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/flows/components.json",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/gateways/contracts.json",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/interface/quality.json",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/knowledge/packs.json",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/planning",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/quality/scorecard.json",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/reports",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/run-control/policy.json",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/runtime/runs",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/skills",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/harness-inventory.json",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/context-snapshot.json",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/workorders",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:.midas/run-ledger",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:project-checks-config",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:harness-inventory",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:agent-profiles",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:skills",
+            "status": "pass",
+            "warnings": 0,
+            "remediation": ""
+          },
+          {
+            "id": "workspace:authority",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:benchmark-receipts",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:engineering-discipline",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:interface-quality",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:flow-components",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:gateway-contracts",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:knowledge-packs",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:run-controls",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:quality-scorecard",
+            "status": "pass",
+            "warnings": 3,
+            "remediation": ""
+          },
+          {
+            "id": "workspace:runtime-runs",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:channel-gateways",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:adapter-contracts",
+            "status": "pass",
+            "remediation": ""
+          },
+          {
+            "id": "workspace:context-health",
+            "status": "pass",
+            "warnings": 0,
+            "remediation": ""
+          }
+        ],
+        "failures": []
+      },
+      "stdout": "{\n  \"status\": \"pass\",\n  \"target\": \"C:\\\\Users\\\\Shris\\\\AppData\\\\Local\\\\Temp\\\\midas-bmad-bench-midas-KxSTkq\",\n  \"checks\": [\n    {\n      \"id\": \"workspace:.midas/_config/manifest.yaml\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/project-context.md\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/sprint-status.yaml\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/checks.json\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/agent-profiles.json\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/authority/constitution.json\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/benchmarks/receipts.json\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/channels/gateways.json\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/engineering/discipline.json\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/flows/components.json\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/gateways/contracts.json\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/interface/quality.json\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/knowledge/packs.json\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/planning\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/quality/scorecard.json\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/reports\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/run-control/policy.json\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/runtime/runs\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/skills\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/harness-inventory.json\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/context-snapshot.json\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/workorders\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:.midas/run-ledger\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:project-checks-config\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:harness-inventory\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:agent-profiles\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:skills\",\n      \"status\": \"pass\",\n      \"warnings\": 0,\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:authority\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:benchmark-receipts\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:engineering-discipline\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:interface-quality\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:flow-components\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:gateway-contracts\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:knowledge-packs\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:run-controls\",\n      \"status\": \"pass\",\n      \"remediation\": \"\"\n    },\n    {\n      \"id\": \"workspace:quality-scorecard\",\n      \n...[truncated]",
+      "stderr": ""
+    },
+    {
+      "framework": "midas",
+      "id": "skill-library-strict",
+      "label": "Native skill library passes strict validation",
+      "status": "pass",
+      "expectation": "exit-zero",
+      "command": "node \"D:\\Million Dollar AI Studio\\open-source\\midas-framework\\bin\\midas.mjs\" validate-pack framework/skills --strict",
+      "cwd": "D:/Million Dollar AI Studio/open-source/midas-framework",
+      "durationMs": 235,
+      "exitCode": 0,
+      "timedOut": false,
+      "note": "",
+      "parsed": {
+        "status": "pass",
+        "schemaVersion": "midas.skill-library.v1",
+        "target": "D:\\Million Dollar AI Studio\\open-source\\midas-framework\\framework\\skills",
+        "root": ".",
+        "skills": [
+          {
+            "id": "local-planning",
+            "file": "local-planning/SKILL.md",
+            "descriptionChars": 134,
+            "hasLicense": true,
+            "compatibility": "MIDAS alpha planning and work-order workflow",
+            "allowedTools": null,
+            "bodyLines": 26
+          },
+          {
+            "id": "spine-ux",
+            "file": "spine-ux/SKILL.md",
+            "descriptionChars": 134,
+            "hasLicense": true,
+            "compatibility": "MIDAS alpha interface-quality and software-delivery workflow",
+            "allowedTools": null,
+            "bodyLines": 30
+          },
+          {
+            "id": "terminal-repair",
+            "file": "terminal-repair/SKILL.md",
+            "descriptionChars": 200,
+            "hasLicense": true,
+            "compatibility": "MIDAS-compatible agent harnesses",
+            "allowedTools": "Read",
+            "bodyLines": 26
+          },
+          {
+            "id": "verification",
+            "file": "verification/SKILL.md",
+            "descriptionChars": 137,
+            "hasLicense": true,
+            "compatibility": "MIDAS-compatible agent harnesses",
+            "allowedTools": "Read",
+            "bodyLines": 22
+          },
+          {
+            "id": "verification-gap",
+            "file": "verification-gap/SKILL.md",
+            "descriptionChars": 161,
+            "hasLicense": true,
+            "compatibility": "MIDAS alpha work-order and verification workflow",
+            "allowedTools": null,
+            "bodyLines": 32
+          },
+          {
+            "id": "work-order",
+            "file": "work-order/SKILL.md",
+            "descriptionChars": 140,
+            "hasLicense": true,
+            "compatibility": "MIDAS-compatible agent harnesses",
+            "allowedTools": "Read",
+            "bodyLines": 19
+          }
+        ],
+        "warnings": [],
+        "failures": [],
+        "mode": "skill-library",
+        "strict": true
+      },
+      "stdout": "{\n  \"status\": \"pass\",\n  \"schemaVersion\": \"midas.skill-library.v1\",\n  \"target\": \"D:\\\\Million Dollar AI Studio\\\\open-source\\\\midas-framework\\\\framework\\\\skills\",\n  \"root\": \".\",\n  \"skills\": [\n    {\n      \"id\": \"local-planning\",\n      \"file\": \"local-planning/SKILL.md\",\n      \"descriptionChars\": 134,\n      \"hasLicense\": true,\n      \"compatibility\": \"MIDAS alpha planning and work-order workflow\",\n      \"allowedTools\": null,\n      \"bodyLines\": 26\n    },\n    {\n      \"id\": \"spine-ux\",\n      \"file\": \"spine-ux/SKILL.md\",\n      \"descriptionChars\": 134,\n      \"hasLicense\": true,\n      \"compatibility\": \"MIDAS alpha interface-quality and software-delivery workflow\",\n      \"allowedTools\": null,\n      \"bodyLines\": 30\n    },\n    {\n      \"id\": \"terminal-repair\",\n      \"file\": \"terminal-repair/SKILL.md\",\n      \"descriptionChars\": 200,\n      \"hasLicense\": true,\n      \"compatibility\": \"MIDAS-compatible agent harnesses\",\n      \"allowedTools\": \"Read\",\n      \"bodyLines\": 26\n    },\n    {\n      \"id\": \"verification\",\n      \"file\": \"verification/SKILL.md\",\n      \"descriptionChars\": 137,\n      \"hasLicense\": true,\n      \"compatibility\": \"MIDAS-compatible agent harnesses\",\n      \"allowedTools\": \"Read\",\n      \"bodyLines\": 22\n    },\n    {\n      \"id\": \"verification-gap\",\n      \"file\": \"verification-gap/SKILL.md\",\n      \"descriptionChars\": 161,\n      \"hasLicense\": true,\n      \"compatibility\": \"MIDAS alpha work-order and verification workflow\",\n      \"allowedTools\": null,\n      \"bodyLines\": 32\n    },\n    {\n      \"id\": \"work-order\",\n      \"file\": \"work-order/SKILL.md\",\n      \"descriptionChars\": 140,\n      \"hasLicense\": true,\n      \"compatibility\": \"MIDAS-compatible agent harnesses\",\n      \"allowedTools\": \"Read\",\n      \"bodyLines\": 19\n    }\n  ],\n  \"warnings\": [],\n  \"failures\": [],\n  \"mode\": \"skill-library\",\n  \"strict\": true\n}\n",
+      "stderr": ""
+    },
+    {
+      "framework": "midas",
+      "id": "verification-gap-detects-missing",
+      "label": "Verification-gap gate catches an omitted requirement",
+      "status": "pass",
+      "expectation": "exit-nonzero",
+      "command": "node \"D:\\Million Dollar AI Studio\\open-source\\midas-framework\\bin\\midas.mjs\" verify --directory C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq --spec PRD.md",
+      "cwd": "D:/Million Dollar AI Studio/open-source/midas-framework",
+      "durationMs": 409,
+      "exitCode": 1,
+      "timedOut": false,
+      "note": "",
+      "parsed": {
+        "status": "fail",
+        "generatedAt": "2026-07-04T22:29:40.470Z",
+        "target": "C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq",
+        "spec": "PRD.md",
+        "evidenceFiles": 2,
+        "requirements": [
+          {
+            "id": "REQ-001",
+            "line": 1,
+            "text": "Render evidence panel receipt trace",
+            "status": "gap",
+            "matchedTokens": [
+              "evidence",
+              "panel"
+            ],
+            "files": [
+              ".codex/skills/midas/MIDAS.md",
+              "src/app.ts"
+            ]
+          }
+        ],
+        "gaps": [
+          {
+            "id": "REQ-001",
+            "text": "Render evidence panel receipt trace",
+            "line": 1
+          }
+        ],
+        "receipt": ".midas/reports/verification-gap-receipt.md"
+      },
+      "stdout": "{\n  \"status\": \"fail\",\n  \"generatedAt\": \"2026-07-04T22:29:40.470Z\",\n  \"target\": \"C:\\\\Users\\\\Shris\\\\AppData\\\\Local\\\\Temp\\\\midas-bmad-bench-midas-KxSTkq\",\n  \"spec\": \"PRD.md\",\n  \"evidenceFiles\": 2,\n  \"requirements\": [\n    {\n      \"id\": \"REQ-001\",\n      \"line\": 1,\n      \"text\": \"Render evidence panel receipt trace\",\n      \"status\": \"gap\",\n      \"matchedTokens\": [\n        \"evidence\",\n        \"panel\"\n      ],\n      \"files\": [\n        \".codex/skills/midas/MIDAS.md\",\n        \"src/app.ts\"\n      ]\n    }\n  ],\n  \"gaps\": [\n    {\n      \"id\": \"REQ-001\",\n      \"text\": \"Render evidence panel receipt trace\",\n      \"line\": 1\n    }\n  ],\n  \"receipt\": \".midas/reports/verification-gap-receipt.md\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "framework": "midas",
+      "id": "verification-gap-passes-implemented",
+      "label": "Verification-gap gate passes after evidence exists",
+      "status": "pass",
+      "expectation": "exit-zero",
+      "command": "node \"D:\\Million Dollar AI Studio\\open-source\\midas-framework\\bin\\midas.mjs\" verify --directory C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq --spec PRD.md",
+      "cwd": "D:/Million Dollar AI Studio/open-source/midas-framework",
+      "durationMs": 594,
+      "exitCode": 0,
+      "timedOut": false,
+      "note": "",
+      "parsed": {
+        "status": "pass",
+        "generatedAt": "2026-07-04T22:29:41.097Z",
+        "target": "C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq",
+        "spec": "PRD.md",
+        "evidenceFiles": 2,
+        "requirements": [
+          {
+            "id": "REQ-001",
+            "line": 1,
+            "text": "Render evidence panel receipt trace",
+            "status": "traced",
+            "matchedTokens": [
+              "evidence",
+              "panel",
+              "receipt",
+              "trace"
+            ],
+            "files": [
+              "src/app.ts",
+              ".codex/skills/midas/MIDAS.md"
+            ]
+          }
+        ],
+        "gaps": [],
+        "receipt": ".midas/reports/verification-gap-receipt.md"
+      },
+      "stdout": "{\n  \"status\": \"pass\",\n  \"generatedAt\": \"2026-07-04T22:29:41.097Z\",\n  \"target\": \"C:\\\\Users\\\\Shris\\\\AppData\\\\Local\\\\Temp\\\\midas-bmad-bench-midas-KxSTkq\",\n  \"spec\": \"PRD.md\",\n  \"evidenceFiles\": 2,\n  \"requirements\": [\n    {\n      \"id\": \"REQ-001\",\n      \"line\": 1,\n      \"text\": \"Render evidence panel receipt trace\",\n      \"status\": \"traced\",\n      \"matchedTokens\": [\n        \"evidence\",\n        \"panel\",\n        \"receipt\",\n        \"trace\"\n      ],\n      \"files\": [\n        \"src/app.ts\",\n        \".codex/skills/midas/MIDAS.md\"\n      ]\n    }\n  ],\n  \"gaps\": [],\n  \"receipt\": \".midas/reports/verification-gap-receipt.md\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "framework": "midas",
+      "id": "ux-spine-detects-unmapped",
+      "label": "UX spine gate catches an unmapped design component",
+      "status": "pass",
+      "expectation": "exit-nonzero",
+      "command": "node \"D:\\Million Dollar AI Studio\\open-source\\midas-framework\\bin\\midas.mjs\" ux-spine --directory C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq --design DESIGN.md --experience EXPERIENCE.md",
+      "cwd": "D:/Million Dollar AI Studio/open-source/midas-framework",
+      "durationMs": 386,
+      "exitCode": 1,
+      "timedOut": false,
+      "note": "",
+      "parsed": {
+        "status": "fail",
+        "generatedAt": "2026-07-04T22:29:41.490Z",
+        "target": "C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq",
+        "design": "DESIGN.md",
+        "experience": "EXPERIENCE.md",
+        "components": [
+          {
+            "name": "Evidence Panel",
+            "line": 1,
+            "status": "mapped"
+          },
+          {
+            "name": "Review Drawer",
+            "line": 2,
+            "status": "unmapped"
+          }
+        ],
+        "unmapped": [
+          {
+            "name": "Review Drawer",
+            "line": 2,
+            "status": "unmapped"
+          }
+        ],
+        "report": ".midas/reports/ux-spine-report.md"
+      },
+      "stdout": "{\n  \"status\": \"fail\",\n  \"generatedAt\": \"2026-07-04T22:29:41.490Z\",\n  \"target\": \"C:\\\\Users\\\\Shris\\\\AppData\\\\Local\\\\Temp\\\\midas-bmad-bench-midas-KxSTkq\",\n  \"design\": \"DESIGN.md\",\n  \"experience\": \"EXPERIENCE.md\",\n  \"components\": [\n    {\n      \"name\": \"Evidence Panel\",\n      \"line\": 1,\n      \"status\": \"mapped\"\n    },\n    {\n      \"name\": \"Review Drawer\",\n      \"line\": 2,\n      \"status\": \"unmapped\"\n    }\n  ],\n  \"unmapped\": [\n    {\n      \"name\": \"Review Drawer\",\n      \"line\": 2,\n      \"status\": \"unmapped\"\n    }\n  ],\n  \"report\": \".midas/reports/ux-spine-report.md\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "framework": "midas",
+      "id": "ux-spine-passes-mapped",
+      "label": "UX spine gate passes after design maps to experience",
+      "status": "pass",
+      "expectation": "exit-zero",
+      "command": "node \"D:\\Million Dollar AI Studio\\open-source\\midas-framework\\bin\\midas.mjs\" ux-spine --directory C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq --design DESIGN.md --experience EXPERIENCE.md",
+      "cwd": "D:/Million Dollar AI Studio/open-source/midas-framework",
+      "durationMs": 214,
+      "exitCode": 0,
+      "timedOut": false,
+      "note": "",
+      "parsed": {
+        "status": "pass",
+        "generatedAt": "2026-07-04T22:29:41.694Z",
+        "target": "C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq",
+        "design": "DESIGN.md",
+        "experience": "EXPERIENCE.md",
+        "components": [
+          {
+            "name": "Evidence Panel",
+            "line": 1,
+            "status": "mapped"
+          },
+          {
+            "name": "Review Drawer",
+            "line": 2,
+            "status": "mapped"
+          }
+        ],
+        "unmapped": [],
+        "report": ".midas/reports/ux-spine-report.md"
+      },
+      "stdout": "{\n  \"status\": \"pass\",\n  \"generatedAt\": \"2026-07-04T22:29:41.694Z\",\n  \"target\": \"C:\\\\Users\\\\Shris\\\\AppData\\\\Local\\\\Temp\\\\midas-bmad-bench-midas-KxSTkq\",\n  \"design\": \"DESIGN.md\",\n  \"experience\": \"EXPERIENCE.md\",\n  \"components\": [\n    {\n      \"name\": \"Evidence Panel\",\n      \"line\": 1,\n      \"status\": \"mapped\"\n    },\n    {\n      \"name\": \"Review Drawer\",\n      \"line\": 2,\n      \"status\": \"mapped\"\n    }\n  ],\n  \"unmapped\": [],\n  \"report\": \".midas/reports/ux-spine-report.md\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "framework": "midas",
+      "id": "docs-staleness-detects-source-only",
+      "label": "Docs staleness gate catches source changes without docs",
+      "status": "pass",
+      "expectation": "exit-nonzero",
+      "command": "node \"D:\\Million Dollar AI Studio\\open-source\\midas-framework\\bin\\midas.mjs\" docs-staleness --directory C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq --files lib/new-feature.mjs",
+      "cwd": "D:/Million Dollar AI Studio/open-source/midas-framework",
+      "durationMs": 207,
+      "exitCode": 1,
+      "timedOut": false,
+      "note": "",
+      "parsed": {
+        "status": "fail",
+        "target": "C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq",
+        "files": [
+          "lib/new-feature.mjs"
+        ],
+        "sourceChanges": [
+          "lib/new-feature.mjs"
+        ],
+        "docsChanges": [],
+        "requiresDocs": true,
+        "remediation": "Source/framework files changed without matching docs, README, contribution, or release-plan updates."
+      },
+      "stdout": "{\n  \"status\": \"fail\",\n  \"target\": \"C:\\\\Users\\\\Shris\\\\AppData\\\\Local\\\\Temp\\\\midas-bmad-bench-midas-KxSTkq\",\n  \"files\": [\n    \"lib/new-feature.mjs\"\n  ],\n  \"sourceChanges\": [\n    \"lib/new-feature.mjs\"\n  ],\n  \"docsChanges\": [],\n  \"requiresDocs\": true,\n  \"remediation\": \"Source/framework files changed without matching docs, README, contribution, or release-plan updates.\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "framework": "midas",
+      "id": "docs-staleness-passes-with-docs",
+      "label": "Docs staleness gate passes when docs accompany source",
+      "status": "pass",
+      "expectation": "exit-zero",
+      "command": "node \"D:\\Million Dollar AI Studio\\open-source\\midas-framework\\bin\\midas.mjs\" docs-staleness --directory C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq --files lib/new-feature.mjs,docs/new-feature.md",
+      "cwd": "D:/Million Dollar AI Studio/open-source/midas-framework",
+      "durationMs": 417,
+      "exitCode": 0,
+      "timedOut": false,
+      "note": "",
+      "parsed": {
+        "status": "pass",
+        "target": "C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq",
+        "files": [
+          "lib/new-feature.mjs",
+          "docs/new-feature.md"
+        ],
+        "sourceChanges": [
+          "lib/new-feature.mjs"
+        ],
+        "docsChanges": [
+          "docs/new-feature.md"
+        ],
+        "requiresDocs": true,
+        "remediation": ""
+      },
+      "stdout": "{\n  \"status\": \"pass\",\n  \"target\": \"C:\\\\Users\\\\Shris\\\\AppData\\\\Local\\\\Temp\\\\midas-bmad-bench-midas-KxSTkq\",\n  \"files\": [\n    \"lib/new-feature.mjs\",\n    \"docs/new-feature.md\"\n  ],\n  \"sourceChanges\": [\n    \"lib/new-feature.mjs\"\n  ],\n  \"docsChanges\": [\n    \"docs/new-feature.md\"\n  ],\n  \"requiresDocs\": true,\n  \"remediation\": \"\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "framework": "midas",
+      "id": "runtime-repair-record",
+      "label": "Runtime workflow records repair evidence after a failed check",
+      "status": "pass",
+      "expectation": "exit-zero",
+      "command": "node \"D:\\Million Dollar AI Studio\\open-source\\midas-framework\\bin\\midas.mjs\" run-workflow software-delivery --directory C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq --objective \"Benchmark repair capture\"",
+      "cwd": "D:/Million Dollar AI Studio/open-source/midas-framework",
+      "durationMs": 215,
+      "exitCode": 0,
+      "timedOut": false,
+      "note": "",
+      "parsed": {
+        "status": "created",
+        "target": "C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq",
+        "workflow": "software-delivery",
+        "runControl": "focused-run",
+        "runtime": {
+          "runId": "2026-07-04T22-29-42-536Z-software-delivery",
+          "runControl": "focused-run",
+          "file": ".midas/runtime/runs/2026-07-04T22-29-42-536Z-software-delivery/run.json",
+          "events": ".midas/runtime/runs/2026-07-04T22-29-42-536Z-software-delivery/events.jsonl"
+        },
+        "files": [
+          ".midas/workorders/2026-07-04T22-29-42-533Z-software-delivery.md",
+          ".midas/run-ledger/2026-07-04T22-29-42-533Z-software-delivery.md",
+          ".midas/runtime/runs/2026-07-04T22-29-42-536Z-software-delivery/run.json",
+          ".midas/runtime/runs/2026-07-04T22-29-42-536Z-software-delivery/events.jsonl"
+        ]
+      },
+      "stdout": "{\n  \"status\": \"created\",\n  \"target\": \"C:\\\\Users\\\\Shris\\\\AppData\\\\Local\\\\Temp\\\\midas-bmad-bench-midas-KxSTkq\",\n  \"workflow\": \"software-delivery\",\n  \"runControl\": \"focused-run\",\n  \"runtime\": {\n    \"runId\": \"2026-07-04T22-29-42-536Z-software-delivery\",\n    \"runControl\": \"focused-run\",\n    \"file\": \".midas/runtime/runs/2026-07-04T22-29-42-536Z-software-delivery/run.json\",\n    \"events\": \".midas/runtime/runs/2026-07-04T22-29-42-536Z-software-delivery/events.jsonl\"\n  },\n  \"files\": [\n    \".midas/workorders/2026-07-04T22-29-42-533Z-software-delivery.md\",\n    \".midas/run-ledger/2026-07-04T22-29-42-533Z-software-delivery.md\",\n    \".midas/runtime/runs/2026-07-04T22-29-42-536Z-software-delivery/run.json\",\n    \".midas/runtime/runs/2026-07-04T22-29-42-536Z-software-delivery/events.jsonl\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "framework": "midas",
+      "id": "runtime-repair-packet",
+      "label": "Runtime observation creates a bounded repair packet",
+      "status": "pass",
+      "expectation": "exit-zero",
+      "command": "node \"D:\\Million Dollar AI Studio\\open-source\\midas-framework\\bin\\midas.mjs\" observe --directory C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq --step verification --check unit-tests --status failed --summary \"expected output mismatch\" --evidence \"AssertionError expected evidence panel receipt trace\" --max-attempts 2",
+      "cwd": "D:/Million Dollar AI Studio/open-source/midas-framework",
+      "durationMs": 202,
+      "exitCode": 0,
+      "timedOut": false,
+      "note": "",
+      "parsed": {
+        "status": "recorded",
+        "target": "C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-midas-KxSTkq",
+        "runId": "2026-07-04T22-29-42-536Z-software-delivery",
+        "step": "verification",
+        "check": "unit-tests",
+        "observationStatus": "failed",
+        "repairPacket": ".midas/runtime/runs/2026-07-04T22-29-42-536Z-software-delivery/repairs/2026-07-04T22-29-42-744Z-unit-tests.md",
+        "focus": [
+          "exact output, whitespace, casing, and trailing newline requirements",
+          "failing test assertions and the smallest reproducible check"
+        ],
+        "recommendation": "Use the repair packet for the next bounded attempt, then record the new verification result.",
+        "file": ".midas/runtime/runs/2026-07-04T22-29-42-536Z-software-delivery/run.json"
+      },
+      "stdout": "{\n  \"status\": \"recorded\",\n  \"target\": \"C:\\\\Users\\\\Shris\\\\AppData\\\\Local\\\\Temp\\\\midas-bmad-bench-midas-KxSTkq\",\n  \"runId\": \"2026-07-04T22-29-42-536Z-software-delivery\",\n  \"step\": \"verification\",\n  \"check\": \"unit-tests\",\n  \"observationStatus\": \"failed\",\n  \"repairPacket\": \".midas/runtime/runs/2026-07-04T22-29-42-536Z-software-delivery/repairs/2026-07-04T22-29-42-744Z-unit-tests.md\",\n  \"focus\": [\n    \"exact output, whitespace, casing, and trailing newline requirements\",\n    \"failing test assertions and the smallest reproducible check\"\n  ],\n  \"recommendation\": \"Use the repair packet for the next bounded attempt, then record the new verification result.\",\n  \"file\": \".midas/runtime/runs/2026-07-04T22-29-42-536Z-software-delivery/run.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "framework": "bmad",
+      "id": "cli-help",
+      "label": "CLI boots and prints command surface",
+      "status": "pass",
+      "expectation": "exit-zero",
+      "command": "node \"D:\\Million Dollar AI Studio\\_tmp\\framework-audit-bmad\\BMAD-METHOD\\tools\\installer\\bmad-cli.js\" --help",
+      "cwd": "D:/Million Dollar AI Studio/_tmp/framework-audit-bmad/BMAD-METHOD",
+      "durationMs": 934,
+      "exitCode": 0,
+      "timedOut": false,
+      "note": "",
+      "parsed": null,
+      "stdout": "Usage: bmad-cli [options] [command]\n\nBMAD Core CLI - Universal AI agent framework\n\nOptions:\n  -V, --version        output the version number\n  -h, --help           display help for command\n\nCommands:\n  install [options]    Install BMAD Core agents and tools\n  status               Display BMAD installation status and module versions\n  uninstall [options]  Remove BMAD installation from the current project\n  help [command]       display help for command\n",
+      "stderr": ""
+    },
+    {
+      "framework": "bmad",
+      "id": "install-noninteractive",
+      "label": "Noninteractive install creates a project harness",
+      "status": "fail",
+      "expectation": "exit-zero",
+      "command": "node \"D:\\Million Dollar AI Studio\\_tmp\\framework-audit-bmad\\BMAD-METHOD\\tools\\installer\\bmad-cli.js\" install --directory C:\\Users\\Shris\\AppData\\Local\\Temp\\midas-bmad-bench-bmad-Ijswpd --modules bmm --tools codex --yes --user-name benchmark",
+      "cwd": "D:/Million Dollar AI Studio/_tmp/framework-audit-bmad/BMAD-METHOD",
+      "durationMs": 946,
+      "exitCode": 1,
+      "timedOut": false,
+      "note": "",
+      "parsed": null,
+      "stdout": "",
+      "stderr": "clack.box is not a function\n"
+    },
+    {
+      "framework": "bmad",
+      "id": "workspace-validate",
+      "label": "Installed workspace validates",
+      "status": "fail",
+      "expectation": "previous-step-required",
+      "command": "BLOCKED",
+      "cwd": "",
+      "durationMs": 0,
+      "exitCode": null,
+      "timedOut": false,
+      "note": "Skipped because BMAD noninteractive install did not complete.",
+      "parsed": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "framework": "bmad",
+      "id": "skill-library-strict",
+      "label": "Native skill library passes strict validation",
+      "status": "fail",
+      "expectation": "exit-zero",
+      "command": "node \"D:\\Million Dollar AI Studio\\_tmp\\framework-audit-bmad\\BMAD-METHOD\\tools\\validate-skills.js\" --strict --json",
+      "cwd": "D:/Million Dollar AI Studio/_tmp/framework-audit-bmad/BMAD-METHOD",
+      "durationMs": 223,
+      "exitCode": 1,
+      "timedOut": false,
+      "note": "",
+      "parsed": {
+        "status": "fail",
+        "skills": null,
+        "totalFindings": null,
+        "critical": null,
+        "high": null
+      },
+      "stdout": "[\n  {\n    \"skill\": \"src\\\\bmm-skills\\\\1-analysis\\\\bmad-agent-analyst\",\n    \"rule\": \"SKILL-02\",\n    \"title\": \"SKILL.md Must Have name in Frontmatter\",\n    \"severity\": \"CRITICAL\",\n    \"file\": \"SKILL.md\",\n    \"line\": null,\n    \"detail\": \"Frontmatter is missing the `name` field.\",\n    \"fix\": \"Add `name: <skill-name>` to the frontmatter.\"\n  },\n  {\n    \"skill\": \"src\\\\bmm-skills\\\\1-analysis\\\\bmad-agent-analyst\",\n    \"rule\": \"SKILL-03\",\n    \"title\": \"SKILL.md Must Have description in Frontmatter\",\n    \"severity\": \"CRITICAL\",\n    \"file\": \"SKILL.md\",\n    \"line\": null,\n    \"detail\": \"Frontmatter is missing the `description` field.\",\n    \"fix\": \"Add `description: <what it does and when to use it>` to the frontmatter.\"\n  },\n  {\n    \"skill\": \"src\\\\bmm-skills\\\\1-analysis\\\\bmad-agent-tech-writer\",\n    \"rule\": \"SKILL-02\",\n    \"title\": \"SKILL.md Must Have name in Frontmatter\",\n    \"severity\": \"CRITICAL\",\n    \"file\": \"SKILL.md\",\n    \"line\": null,\n    \"detail\": \"Frontmatter is missing the `name` field.\",\n    \"fix\": \"Add `name: <skill-name>` to the frontmatter.\"\n  },\n  {\n    \"skill\": \"src\\\\bmm-skills\\\\1-analysis\\\\bmad-agent-tech-writer\",\n    \"rule\": \"SKILL-03\",\n    \"title\": \"SKILL.md Must Have description in Frontmatter\",\n    \"severity\": \"CRITICAL\",\n    \"file\": \"SKILL.md\",\n    \"line\": null,\n    \"detail\": \"Frontmatter is missing the `description` field.\",\n    \"fix\": \"Add `description: <what it does and when to use it>` to the frontmatter.\"\n  },\n  {\n    \"skill\": \"src\\\\bmm-skills\\\\1-analysis\\\\bmad-document-project\",\n    \"rule\": \"SKILL-02\",\n    \"title\": \"SKILL.md Must Have name in Frontmatter\",\n    \"severity\": \"CRITICAL\",\n    \"file\": \"SKILL.md\",\n    \"line\": null,\n    \"detail\": \"Frontmatter is missing the `name` field.\",\n    \"fix\": \"Add `name: <skill-name>` to the frontmatter.\"\n  },\n  {\n    \"skill\": \"src\\\\bmm-skills\\\\1-analysis\\\\bmad-document-project\",\n    \"rule\": \"SKILL-03\",\n    \"title\": \"SKILL.md Must Have description in Frontmatter\",\n    \"severity\": \"CRITICAL\",\n    \"file\": \"SKILL.md\",\n    \"line\": null,\n    \"detail\": \"Frontmatter is missing the `description` field.\",\n    \"fix\": \"Add `description: <what it does and when to use it>` to the frontmatter.\"\n  },\n  {\n    \"skill\": \"src\\\\bmm-skills\\\\1-analysis\\\\bmad-prfaq\",\n    \"rule\": \"SKILL-02\",\n    \"title\": \"SKILL.md Must Have name in Frontmatter\",\n    \"severity\": \"CRITICAL\",\n    \"file\": \"SKILL.md\",\n    \"line\": null,\n    \"detail\": \"Frontmatter is missing the `name` field.\",\n    \"fix\": \"Add `name: <skill-name>` to the frontmatter.\"\n  },\n  {\n    \"skill\": \"src\\\\bmm-skills\\\\1-analysis\\\\bmad-prfaq\",\n    \"rule\": \"SKILL-03\",\n    \"title\": \"SKILL.md Must Have description in Frontmatter\",\n    \"severity\": \"CRITICAL\",\n    \"file\": \"SKILL.md\",\n    \"line\": null,\n    \"detail\": \"Frontmatter is missing the `description` field.\",\n    \"fix\": \"Add `description: <what it does and when to use it>` to the frontmatter.\"\n  },\n  {\n    \"skill\": \"src\\\\bmm-skills\\\\1-analysis\\\\bmad-product-brief\",\n    \"rule\": \"SKILL-02\",\n    \"title\": \"SKILL.md Must Have name in Frontmatter\",\n    \"severity\": \"CRITICAL\",\n    \"file\": \"SKILL.md\",\n    \"line\": null,\n    \"detail\": \"Frontmatter is missing the `name` field.\",\n    \"fix\": \"Add `name: <skill-name>` to the frontmatter.\"\n  },\n  {\n    \"skill\": \"src\\\\bmm-skills\\\\1-analysis\\\\bmad-product-brief\",\n    \"rule\": \"SKILL-03\",\n    \"title\": \"SKILL.md Must Have description in Frontmatter\",\n    \"severity\": \"CRITICAL\",\n    \"file\": \"SKILL.md\",\n    \"line\": null,\n    \"detail\": \"Frontmatter is missing the `description` field.\",\n    \"fix\": \"Add `description: <what it does and when to use it>` to the frontmatter.\"\n  },\n  {\n    \"skill\": \"src\\\\bmm-skills\\\\1-analysis\\\\research\\\\bmad-domain-research\",\n    \"rule\": \"SKILL-02\",\n    \"title\": \"SKILL.md Must Have name in Frontmatter\",\n    \"severity\": \"CRITICAL\",\n    \"file\": \"SKILL.md\",\n    \"line\": null,\n    \"detail\": \"Frontmatter is missing the `name` field.\",\n    \"fix\": \"Add `name: <skill-name>` to the frontmatter.\"\n  },\n  {\n    \"skill\": \"src\\\\bmm-skills\\\\1-analysis\\\\research\\\\bma\n...[truncated]",
+      "stderr": ""
+    },
+    {
+      "framework": "bmad",
+      "id": "verification-gap-detects-missing",
+      "label": "Verification-gap gate catches an omitted requirement",
+      "status": "fail",
+      "expectation": "deterministic-local-cli-capability",
+      "command": "UNAVAILABLE",
+      "cwd": "",
+      "durationMs": 0,
+      "exitCode": null,
+      "timedOut": false,
+      "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate.",
+      "parsed": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "framework": "bmad",
+      "id": "verification-gap-passes-implemented",
+      "label": "Verification-gap gate passes after evidence exists",
+      "status": "fail",
+      "expectation": "deterministic-local-cli-capability",
+      "command": "UNAVAILABLE",
+      "cwd": "",
+      "durationMs": 0,
+      "exitCode": null,
+      "timedOut": false,
+      "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate.",
+      "parsed": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "framework": "bmad",
+      "id": "ux-spine-detects-unmapped",
+      "label": "UX spine gate catches an unmapped design component",
+      "status": "fail",
+      "expectation": "deterministic-local-cli-capability",
+      "command": "UNAVAILABLE",
+      "cwd": "",
+      "durationMs": 0,
+      "exitCode": null,
+      "timedOut": false,
+      "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate.",
+      "parsed": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "framework": "bmad",
+      "id": "ux-spine-passes-mapped",
+      "label": "UX spine gate passes after design maps to experience",
+      "status": "fail",
+      "expectation": "deterministic-local-cli-capability",
+      "command": "UNAVAILABLE",
+      "cwd": "",
+      "durationMs": 0,
+      "exitCode": null,
+      "timedOut": false,
+      "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate.",
+      "parsed": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "framework": "bmad",
+      "id": "docs-staleness-detects-source-only",
+      "label": "Docs staleness gate catches source changes without docs",
+      "status": "fail",
+      "expectation": "deterministic-local-cli-capability",
+      "command": "UNAVAILABLE",
+      "cwd": "",
+      "durationMs": 0,
+      "exitCode": null,
+      "timedOut": false,
+      "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate.",
+      "parsed": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "framework": "bmad",
+      "id": "docs-staleness-passes-with-docs",
+      "label": "Docs staleness gate passes when docs accompany source",
+      "status": "fail",
+      "expectation": "deterministic-local-cli-capability",
+      "command": "UNAVAILABLE",
+      "cwd": "",
+      "durationMs": 0,
+      "exitCode": null,
+      "timedOut": false,
+      "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate.",
+      "parsed": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "framework": "bmad",
+      "id": "runtime-repair-record",
+      "label": "Runtime workflow records repair evidence after a failed check",
+      "status": "fail",
+      "expectation": "deterministic-local-cli-capability",
+      "command": "UNAVAILABLE",
+      "cwd": "",
+      "durationMs": 0,
+      "exitCode": null,
+      "timedOut": false,
+      "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate.",
+      "parsed": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "framework": "bmad",
+      "id": "runtime-repair-packet",
+      "label": "Runtime observation creates a bounded repair packet",
+      "status": "fail",
+      "expectation": "deterministic-local-cli-capability",
+      "command": "UNAVAILABLE",
+      "cwd": "",
+      "durationMs": 0,
+      "exitCode": null,
+      "timedOut": false,
+      "note": "No deterministic local CLI command is exposed by the pinned BMAD installer for this MIDAS gate.",
+      "parsed": null,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

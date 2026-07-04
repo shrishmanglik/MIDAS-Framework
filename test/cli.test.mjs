@@ -53,11 +53,16 @@ test('install creates a .midas workspace and adapters', async () => {
   assert.ok(await fs.stat(path.join(temp, '.midas', 'gateways', 'contracts.json')));
   assert.ok(await fs.stat(path.join(temp, '.midas', 'interface', 'quality.json')));
   assert.ok(await fs.stat(path.join(temp, '.midas', 'knowledge', 'packs.json')));
+  assert.ok(await fs.stat(path.join(temp, '.midas', 'planning')));
   assert.ok(await fs.stat(path.join(temp, '.midas', 'quality', 'scorecard.json')));
+  assert.ok(await fs.stat(path.join(temp, '.midas', 'reports')));
   assert.ok(await fs.stat(path.join(temp, '.midas', 'run-control', 'policy.json')));
   assert.ok(await fs.stat(path.join(temp, '.midas', 'runtime', 'runs')));
   assert.ok(await fs.stat(path.join(temp, '.midas', 'skills', 'terminal-repair', 'SKILL.md')));
   assert.ok(await fs.stat(path.join(temp, '.midas', 'skills', 'work-order', 'SKILL.md')));
+  assert.ok(await fs.stat(path.join(temp, '.midas', 'skills', 'verification-gap', 'SKILL.md')));
+  assert.ok(await fs.stat(path.join(temp, '.midas', 'skills', 'spine-ux', 'SKILL.md')));
+  assert.ok(await fs.stat(path.join(temp, '.midas', 'skills', 'local-planning', 'SKILL.md')));
   assert.ok(await fs.stat(path.join(temp, '.codex', 'skills', 'midas', 'MIDAS.md')));
   assert.ok(await fs.stat(path.join(temp, '.claude', 'skills', 'midas', 'MIDAS.md')));
 });
@@ -121,6 +126,60 @@ test('skills reports generated skill library state', async () => {
   assert.ok(result.skills.some((skill) => skill.id === 'terminal-repair'));
   assert.ok(result.skills.some((skill) => skill.id === 'work-order'));
   assert.ok(result.skills.some((skill) => skill.id === 'verification'));
+  assert.ok(result.skills.some((skill) => skill.id === 'verification-gap'));
+  assert.ok(result.skills.some((skill) => skill.id === 'spine-ux'));
+  assert.ok(result.skills.some((skill) => skill.id === 'local-planning'));
+});
+
+test('plan creates local-first planning artifacts through the CLI', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-plan-cli-'));
+  await run(['install', '--directory', temp, '--modules', 'core,agentic-agile', '--tools', 'codex', '--yes']);
+  const output = await run(['plan', '--directory', temp, '--work-order', 'cli-demo', 'Ship one CLI planning slice']);
+  const result = JSON.parse(output);
+  assert.equal(result.status, 'created');
+  assert.ok(result.files.includes('.midas/planning/cli-demo/PRD.md'));
+});
+
+test('ux-spine validates CLI planning artifacts', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-ux-cli-'));
+  await run(['install', '--directory', temp, '--modules', 'core,agentic-agile', '--tools', 'codex', '--yes']);
+  await run(['plan', '--directory', temp, '--work-order', 'ux-demo', 'Validate UX spine']);
+  const output = await run([
+    'ux-spine',
+    '--directory',
+    temp,
+    '--design',
+    '.midas/planning/ux-demo/DESIGN.md',
+    '--experience',
+    '.midas/planning/ux-demo/EXPERIENCE.md'
+  ]);
+  const result = JSON.parse(output);
+  assert.equal(result.status, 'pass');
+});
+
+test('verify command writes a verification-gap receipt', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-verify-cli-'));
+  await run(['install', '--directory', temp, '--modules', 'core,agentic-agile', '--tools', 'codex', '--yes']);
+  await fs.mkdir(path.join(temp, 'src'), { recursive: true });
+  await fs.writeFile(path.join(temp, 'PRD.md'), '- [ ] REQ-001: Render evidence panel receipt trace');
+  await fs.writeFile(path.join(temp, 'src', 'app.ts'), 'export const panel = "evidence panel receipt trace";');
+  const output = await run(['verify', '--directory', temp, '--spec', 'PRD.md']);
+  const result = JSON.parse(output);
+  assert.equal(result.status, 'pass');
+  assert.equal(await fs.stat(path.join(temp, result.receipt)).then(() => true), true);
+});
+
+test('docs-staleness command passes when docs accompany source changes', async () => {
+  const output = await run(['docs-staleness', '--files', 'lib/cli.mjs,docs/architecture.md']);
+  const result = JSON.parse(output);
+  assert.equal(result.status, 'pass');
+});
+
+test('validate-pack validates default skills through the CLI', async () => {
+  const output = await run(['validate-pack', 'framework/skills/verification-gap', '--strict']);
+  const result = JSON.parse(output);
+  assert.equal(result.status, 'pass');
+  assert.equal(result.mode, 'single-skill');
 });
 
 test('interface reports generated quality contract state', async () => {
@@ -262,7 +321,7 @@ test('run-status and step update runtime state', async () => {
     'planner'
   ]));
   assert.equal(step.status, 'updated');
-  assert.equal(step.currentStep, 'work-order');
+  assert.equal(step.currentStep, 'planning');
 });
 
 test('observe records failed check evidence through the CLI', async () => {

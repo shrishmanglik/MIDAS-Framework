@@ -65,7 +65,7 @@ test('run-status reports latest runtime step state', async () => {
   const status = await getRunStatus({ directory: temp });
   assert.equal(status.status, 'pass');
   assert.equal(status.latest.currentStep, 'context');
-  assert.equal(status.latest.totalSteps, 6);
+  assert.equal(status.latest.totalSteps, 9);
 });
 
 test('step requires known step ids and completion evidence', async () => {
@@ -101,7 +101,7 @@ test('step records evidence, events, and handoff packets', async () => {
   });
   assert.equal(result.status, 'updated');
   assert.equal(result.stepStatus, 'completed');
-  assert.equal(result.currentStep, 'work-order');
+  assert.equal(result.currentStep, 'planning');
   assert.ok(result.handoff.endsWith('.md'));
   const handoff = await fs.readFile(path.join(temp, result.handoff), 'utf8');
   assert.match(handoff, /project context loaded/);

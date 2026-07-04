@@ -23,3 +23,17 @@ test('validator fails on sensitive absolute local path', async () => {
   assert.equal(result.status, 'fail');
   assert.ok(result.failures.some((failure) => failure.id.includes('private-root-path')));
 });
+
+test('validator fails cleanly on partial workspace artifacts', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-partial-workspace-'));
+  await fs.writeFile(path.join(temp, 'package.json'), '{}');
+  await fs.mkdir(path.join(temp, 'bin'));
+  await fs.writeFile(path.join(temp, 'bin', 'midas.mjs'), '');
+  await fs.mkdir(path.join(temp, '.midas', 'reports'), { recursive: true });
+  await fs.writeFile(path.join(temp, '.midas', 'reports', 'verification-gap-receipt.md'), '# Receipt');
+
+  const result = await validateTarget(temp);
+  assert.equal(result.status, 'fail');
+  assert.ok(result.failures.some((failure) => failure.id === 'workspace:.midas/_config/manifest.yaml'));
+  assert.ok(result.checks.some((check) => check.id === 'repo:package.json'));
+});

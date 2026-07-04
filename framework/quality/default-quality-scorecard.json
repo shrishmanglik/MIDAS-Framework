@@ -30,6 +30,7 @@
       "interface-contract",
       "knowledge-pack",
       "run-control",
+      "engineering-discipline",
       "gateway-contract",
       "channel-gateway",
       "release-package"
