@@ -20,6 +20,8 @@ Skill-pack validation is deterministic structure and tool-safety hygiene. Adviso
 
 Flow-component validation is deterministic contract hygiene. It checks typed ports, permission classes, approval gates, evidence, rollback, and tool-exposure metadata; it does not prove runtime safety, approve external actions, or replace security review.
 
+The public-boundary scanner blocks hardcoded literal secret assignments such as quoted API keys, secret keys, private keys, access tokens, and refresh tokens. It should not block ordinary auth schema fields, typed DTOs, or env-var plumbing such as `access_token: string`, `refresh_token: str`, or `api_key=settings.PROVIDER_API_KEY`; those still require normal security review before release.
+
 Before public release, run:
 
 ```bash

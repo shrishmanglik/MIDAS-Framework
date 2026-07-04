@@ -24,6 +24,26 @@ test('validator fails on sensitive absolute local path', async () => {
   assert.ok(result.failures.some((failure) => failure.id.includes('private-root-path')));
 });
 
+test('validator distinguishes auth field declarations from literal secrets', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-secret-boundary-'));
+  await fs.writeFile(path.join(temp, 'package.json'), '{}');
+  await fs.mkdir(path.join(temp, 'bin'));
+  await fs.writeFile(path.join(temp, 'bin', 'midas.mjs'), '');
+  await fs.mkdir(path.join(temp, 'src'));
+  await fs.writeFile(
+    path.join(temp, 'src', 'auth.ts'),
+    'export interface AuthResponse { access_token: string; refresh_token: string; password: string; }\n'
+  );
+
+  let result = await validateTarget(temp);
+  assert.ok(!result.failures.some((failure) => failure.id.includes('secret-assignment')));
+
+  const secretLine = ['const access_', 'token = ', '"hardcoded-token-value";\n'].join('');
+  await fs.writeFile(path.join(temp, 'src', 'bad.ts'), secretLine);
+  result = await validateTarget(temp);
+  assert.ok(result.failures.some((failure) => failure.id.includes('secret-assignment')));
+});
+
 test('validator fails cleanly on partial workspace artifacts', async () => {
   const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-partial-workspace-'));
   await fs.writeFile(path.join(temp, 'package.json'), '{}');
