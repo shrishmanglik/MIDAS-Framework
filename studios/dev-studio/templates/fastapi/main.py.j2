@@ -1,0 +1,63 @@
+{#---
+id: fastapi-main
+tags: [fastapi, python, backend, main, app, entrypoint]
+category: fastapi
+description: "FastAPI application entrypoint with middleware, CORS, and router includes"
+vars:
+  required: [project_name, description, cors_origins]
+  optional: [api_prefix, debug]
+---#}
+"""{{ project_name }} — {{ description }}"""
+
+from contextlib import asynccontextmanager
+from collections.abc import AsyncIterator
+
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
+from app.api.v1.router import api_router
+from app.core.config import settings
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    """Application startup and shutdown events."""
+    # Startup
+    yield
+    # Shutdown
+
+
+app = FastAPI(
+    title="{{ project_name }}",
+    description="{{ description }}",
+    version="1.0.0",
+    lifespan=lifespan,
+)
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins={{ cors_origins }},
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    """Centralized error handler with standardized error response format."""
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error", "code": "INTERNAL_ERROR"},
+    )
+
+
+app.include_router(api_router, prefix="{{ api_prefix | default('/api/v1') }}")
+
+
+@app.get("/health")
+async def health_check() -> dict[str, str]:
+    """Health check endpoint."""
+    return {"status": "ok"}

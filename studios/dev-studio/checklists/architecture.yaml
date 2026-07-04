@@ -1,0 +1,41 @@
+name: architecture
+gates:
+  - name: p0-requirements-covered
+    description: "Every P0 requirement has a corresponding technical solution in the architecture"
+    severity: critical
+
+  - name: api-contracts-complete
+    description: "API contracts are complete -- all endpoints defined with request/response schemas, methods, and status codes"
+    severity: critical
+
+  - name: database-schema-defined
+    description: "Database schema supports all data requirements with proper relationships, keys, and constraints"
+    severity: critical
+
+  - name: auth-model-specified
+    description: "Authentication and authorization model is fully specified including token lifecycle and role strategy"
+    severity: critical
+
+  - name: adr-documented
+    description: "At least one ADR exists for every significant technology or pattern choice"
+    severity: warning
+
+  - name: system-diagram-present
+    description: "System diagram shows all components and their interactions using Mermaid syntax"
+    severity: warning
+
+  - name: cross-cutting-concerns
+    description: "Cross-cutting concerns (logging, errors, validation, rate limiting, CORS) are addressed"
+    severity: warning
+
+  - name: technology-justified
+    description: "No technology is chosen without a documented justification and trade-off analysis"
+    severity: warning
+
+  - name: indexes-planned
+    description: "Schema includes proper indexes for expected query patterns"
+    severity: info
+
+  - name: error-format-standardized
+    description: "Error response format is standardized across all endpoints"
+    severity: info
