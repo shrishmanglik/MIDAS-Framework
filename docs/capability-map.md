@@ -34,5 +34,5 @@ Status: alpha public map
 | Harness inventory | `midas inventory` checks generated adapter files and hashes against `.midas/harness-inventory.json` and installed manifest tools; `midas context` includes harness inventory health in the broader workspace snapshot. | Add adapter freshness timestamps once update channels exist. |
 | Adapter contracts | `midas adapters` validates installed adapter files selected by manifest against machine-readable path, heading, phrase, and size-budget contracts. | Add per-harness optional metadata once public adapter packaging is approved. |
 | Cost control | Not implemented. | Track after run ledger exists. |
-| Governance/release process | Release plan and public boundary. | Add release checklist command. |
-| Community contribution model | Not implemented. | Add contributing and security policy before public launch. |
+| Governance/release process | Release plan, public boundary, and GitHub Actions CI (test + validate + doctor on push/PR across Linux/Windows, Node 20/22). | Add release checklist command. |
+| Community contribution model | CONTRIBUTING, SECURITY, and CODE_OF_CONDUCT published. | Add issue/PR templates and a triage policy. |

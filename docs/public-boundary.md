@@ -14,7 +14,9 @@ MIDAS must not publish:
 - private/internal material,
 - internal approval or revenue systems,
 - generated bitmap/image assets,
-- unsupported claims about adoption, revenue, security, or production readiness.
+- unsupported claims about adoption, revenue, security, or production readiness,
+- local benchmark evidence or comparison reports that have not passed the release-plan claim review (they embed machine-local paths and unapproved superiority wording),
+- product applications or their deployment configs — this repository ships the framework only.
 
 Skill-pack validation is deterministic structure and tool-safety hygiene. Advisory suspicious-body warnings are review cues only; they do not prove author intent, prevent prompt injection, or replace human/security review.
 

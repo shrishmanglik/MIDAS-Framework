@@ -1,9 +1,9 @@
 # MIDAS Framework Open-Source Release Plan
 
-Status: private alpha implementation plan
-Release state: not published
+Status: alpha implementation plan
+Release state: repository public on GitHub; npm package not published; no launch announcement
 Owner: framework maintainers
-Last updated: 2026-06-23
+Last updated: 2026-07-06
 
 ## Release Goal
 

@@ -1,10 +1,23 @@
 # MIDAS Framework
 
-Status: private alpha candidate
-Release state: not published
-Default license target: Apache-2.0, pending final approval
+Status: public alpha (source-visible)
+Package state: not published to npm
+License: Apache-2.0
 
 MIDAS is an open-source framework for setting up disciplined agentic software projects. It gives a project a `.midas/` workspace, portable harness adapters, work-order structure, runtime step state, module manifests, validation checks, and a small CLI for predictable execution.
+
+## Five-Minute Start
+
+```bash
+git clone https://github.com/shrishmanglik/MIDAS-Framework.git
+cd MIDAS-Framework
+npm test                                   # verify your checkout (no dependencies to install)
+node ./bin/midas.mjs doctor                # confirm runtime readiness
+node ./bin/midas.mjs install --directory ../my-project --modules core,software-dev,qa --tools claude-code,codex --yes
+node ./bin/midas.mjs next --directory ../my-project
+```
+
+That creates a `.midas/` workspace in your project with context files, work-order templates, agent profiles, contracts, and harness adapter guidance for your coding agents — then tells you the recommended next action. Everything runs locally; nothing phones home.
 
 The public framework focuses on what developers can use:
 
@@ -110,7 +123,7 @@ The installer creates a local `.midas/` workspace in the target project. It does
 
 The default skill library includes work-order, verification, and terminal-repair guidance. Terminal repair is source-neutral: it teaches agents to use observed command output, exact paths, permissions, line endings, shebangs, data conversion checks, and bounded repair packets.
 
-This folder is designed to become a public open-source repo after review. It intentionally excludes:
+This repository is public. It intentionally excludes:
 
 - private operating-memory systems,
 - private/internal material,
@@ -208,7 +221,7 @@ It does not prove that MIDAS is globally better than BMAD, more adopted, more co
 
 ## Release Posture
 
-This is a private alpha candidate until the release gate passes:
+The source is publicly visible, but the package is a pre-release alpha: no npm publish, no launch announcement, and no version stability guarantees until the release gate passes:
 
 1. license review,
 2. dependency/license review,
