@@ -19,6 +19,33 @@ node ./bin/midas.mjs next --directory ../my-project
 
 That creates a `.midas/` workspace in your project with context files, work-order templates, agent profiles, contracts, and harness adapter guidance for your coding agents — then tells you the recommended next action. Everything runs locally; nothing phones home.
 
+## Calling MIDAS from Agents (MCP)
+
+MIDAS ships a dependency-free MCP stdio server so any MCP-capable client (Claude Code, Cursor, Codex, custom agents) can call MIDAS tools directly:
+
+```jsonc
+// .mcp.json in your project
+{
+  "mcpServers": {
+    "midas": {
+      "command": "node",
+      "args": ["<path-to>/MIDAS-Framework/bin/midas.mjs", "mcp", "--directory", "."]
+    }
+  }
+}
+```
+
+Exposed tools: `midas_next`, `midas_validate`, `midas_install`, `midas_context`, `midas_quick`, `midas_plan`, `midas_verify`, `midas_memory_add`, `midas_memory_search`, `midas_memory_show`, `midas_web_fetch`.
+
+## Memory, Web Access, and the Agent Loop
+
+- **Memory vault** — `.midas/memory/` is a linked markdown vault (Obsidian-style `[[links]]`, an always-current `MEMORY.md` index, deterministic ranked search). `midas memory add | list | search | show | links`.
+- **Web access** — `midas web fetch <url>` fetches live pages with Node's native fetch, extracts readable text and links, refuses private/loopback hosts, and writes SHA-256 evidence receipts under `.midas/reports/web/`. Add `--render` to render JavaScript pages through a locally installed Playwright Chromium (optional; never bundled).
+- **Agent loop** — `midas agent --objective "..." --provider anthropic-api|script|manual` runs a bounded tool loop (max steps, read-only by default, `--allow-writes` and `--allow-web` gates, protected-path denial for env/secret files, full `run.json` + `events.jsonl` evidence per run). The `anthropic-api` provider uses your `ANTHROPIC_API_KEY`; the deterministic core never calls a model.
+- **License scaffold** — `midas license keygen | sign | install | status` provides offline Ed25519 license verification as the primitive for future paid distributions. No payment or hosted-API capability is implemented or claimed.
+
+Desktop computer-use (OpenClaw-style OS control) is intentionally NOT included: it requires native dependencies and a security review that the alpha has not passed. The gateway/run-control contracts are the intended home for that posture when it lands.
+
 The public framework focuses on what developers can use:
 
 - project setup,
@@ -175,6 +202,11 @@ midas observe      Record a check observation and create a bounded repair packet
 midas repair       Alias for observe.
 midas closeout     Close the latest workflow ledger entry with evidence.
 midas pack         Create portable web/agent bundle files.
+midas mcp          Start the MCP stdio server exposing MIDAS tools to agents.
+midas memory       Manage the .midas/memory vault: add, list, search, show, links.
+midas web          Fetch a public URL with text extraction and evidence receipts.
+midas agent        Run a bounded, evidence-recorded agent loop with gated tools.
+midas license      Offline Ed25519 license scaffold: status, install, keygen, sign.
 ```
 
 ## Repository Shape

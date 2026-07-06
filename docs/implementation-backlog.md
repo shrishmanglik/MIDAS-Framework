@@ -45,3 +45,10 @@ Status: alpha backlog
 | MIDAS-039 | P0 | Strict skill-pack validator command. | Skills | Complete: `midas validate-pack` validates single skill folders and skill libraries outside a full workspace install. |
 | MIDAS-040 | P1 | AST/tree-sitter verification adapter. | Verification | Add deeper symbol-level requirement tracing beyond current deterministic token trace. |
 | MIDAS-041 | P1 | Local model planning adapter. | Planning | Add optional Ollama/llama.cpp route that fills planning packet drafts without external web bundles. |
+| MIDAS-042 | P0 | MCP stdio server. | Integration | Complete: `midas mcp` speaks JSON-RPC 2.0 over stdio; initialize/tools-list/tools-call covered by tests. |
+| MIDAS-043 | P0 | Memory vault. | Memory | Complete: `.midas/memory/` linked vault with index, ranked search, and link-graph inspection; tests pass. |
+| MIDAS-044 | P0 | Web access with evidence receipts. | Web | Complete: `midas web fetch` with SSRF guard, extraction, SHA-256 receipts, optional Playwright render; tests pass. |
+| MIDAS-045 | P0 | Bounded agent loop. | Runtime | Complete: `midas agent` with manual/script/anthropic-api providers, approval gates, protected paths, run evidence; tests pass. |
+| MIDAS-046 | P1 | License scaffold. | Governance | Complete: offline Ed25519 keygen/sign/install/verify with expiry; advisory only. |
+| MIDAS-047 | P1 | Desktop computer-use posture. | Runtime | Design-only: define gateway/run-control contracts and dependency review before any OS-control capability ships. |
+| MIDAS-048 | P2 | Hosted/paid API surface. | Distribution | Blocked on business approval: requires hosting, auth, metering, and payment decisions outside the framework alpha. |

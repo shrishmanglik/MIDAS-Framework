@@ -77,6 +77,7 @@ tmp/
 .midas/harness-inventory.json
 .midas/interface/
 .midas/knowledge/
+.midas/memory/
 .midas/planning/
 .midas/project-context.md
 .midas/quality/
