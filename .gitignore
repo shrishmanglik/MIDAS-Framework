@@ -52,7 +52,8 @@ tmp/
 *.tmp
 *.bak
 
-# Old skills backup (not needed in repo)
+# Local harness state
+.claude/settings.local.json
 .claude/skills_old_backup/
 
 # Local MIDAS self-install outputs from running this package against its own checkout.
@@ -66,6 +67,7 @@ tmp/
 .midas/agent-profiles.json
 .midas/authority/
 .midas/benchmarks/receipts.json
+.midas/benchmarks/evidence/
 .midas/channels/
 .midas/checks.json
 .midas/context-snapshot.json

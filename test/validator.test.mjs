@@ -57,3 +57,56 @@ test('validator fails cleanly on partial workspace artifacts', async () => {
   assert.ok(result.failures.some((failure) => failure.id === 'workspace:.midas/_config/manifest.yaml'));
   assert.ok(result.checks.some((check) => check.id === 'repo:package.json'));
 });
+
+test('validator fails on machine-local absolute paths', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-local-path-'));
+  await fs.writeFile(path.join(temp, 'package.json'), '{}');
+  await fs.mkdir(path.join(temp, 'bin'));
+  await fs.writeFile(path.join(temp, 'bin', 'midas.mjs'), '');
+
+  const spacedRoot = ['D:/Some', 'Workspace/notes/'].join(' ');
+  await fs.writeFile(path.join(temp, 'README.md'), `Evidence path: ${spacedRoot}`);
+  let result = await validateTarget(temp);
+  assert.equal(result.status, 'fail');
+  assert.ok(result.failures.some((failure) => failure.id.includes('machine-local-path')));
+
+  const profileRoot = ['C:/Use', 'rs/someone/project/file.txt'].join('');
+  await fs.writeFile(path.join(temp, 'README.md'), `Evidence path: ${profileRoot}`);
+  result = await validateTarget(temp);
+  assert.equal(result.status, 'fail');
+  assert.ok(result.failures.some((failure) => failure.id.includes('machine-local-path')));
+
+  await fs.writeFile(path.join(temp, 'README.md'), 'Neutral path: C:/tools/example.txt and relative ./docs/notes.md');
+  result = await validateTarget(temp);
+  assert.ok(!result.failures.some((failure) => failure.id.includes('machine-local-path')));
+});
+
+test('validator scans committed harness dot-directories', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-dot-dir-'));
+  await fs.writeFile(path.join(temp, 'package.json'), '{}');
+  await fs.mkdir(path.join(temp, 'bin'));
+  await fs.writeFile(path.join(temp, 'bin', 'midas.mjs'), '');
+  await fs.mkdir(path.join(temp, '.claude', 'skills'), { recursive: true });
+
+  const internalPhrase = ['internal', 'framework'].join(' ');
+  await fs.writeFile(
+    path.join(temp, '.claude', 'skills', 'CLAUDE.md'),
+    `This is the company ${internalPhrase} for building software.`
+  );
+  const result = await validateTarget(temp);
+  assert.equal(result.status, 'fail');
+  assert.ok(result.failures.some((failure) => failure.id.includes('private-methodology-reference')));
+});
+
+test('validator still skips unlisted dot-directories and caches', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-dot-skip-'));
+  await fs.writeFile(path.join(temp, 'package.json'), '{}');
+  await fs.mkdir(path.join(temp, 'bin'));
+  await fs.writeFile(path.join(temp, 'bin', 'midas.mjs'), '');
+  await fs.mkdir(path.join(temp, '.cache'), { recursive: true });
+
+  const internalPhrase = ['internal', 'framework'].join(' ');
+  await fs.writeFile(path.join(temp, '.cache', 'notes.md'), `Cached ${internalPhrase} text.`);
+  const result = await validateTarget(temp);
+  assert.ok(!result.failures.some((failure) => failure.id.includes('private-methodology-reference')));
+});
