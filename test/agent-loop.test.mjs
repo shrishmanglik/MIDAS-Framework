@@ -67,3 +67,26 @@ test('agent rejects unknown providers and missing objectives', async () => {
   await assert.rejects(() => runAgentLoop({ directory: temp, objective: 'x', provider: 'skynet' }), /Unknown provider/);
   await assert.rejects(() => runAgentLoop({ directory: temp, objective: '', provider: 'manual' }), /objective/);
 });
+
+test('agent script provider survives malformed and toolless lines', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-agent-malformed-'));
+  const scriptPath = path.join(temp, 'actions.jsonl');
+  await fs.writeFile(scriptPath, [
+    'not json at all',
+    JSON.stringify({ input: { path: 'x' } }),
+    JSON.stringify({ tool: 'list_files', input: {} }),
+    JSON.stringify({ tool: 'finish', input: { summary: 'done despite noise' } })
+  ].join('\n'));
+  const run = await runAgentLoop({ directory: temp, objective: 'survive bad input', provider: 'script', script: scriptPath });
+  assert.equal(run.outcome.status, 'finished');
+  const events = (await fs.readFile(path.join(temp, run.runDir, 'events.jsonl'), 'utf8')).trim().split('\n').map(JSON.parse);
+  assert.ok(events.some((e) => e.type === 'tool-result' && e.ok === false && /Malformed|missing/.test(e.error)));
+});
+
+test('agent maxSteps is capped and objectives are required', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-agent-cap-'));
+  const scriptPath = path.join(temp, 'loop.jsonl');
+  await fs.writeFile(scriptPath, Array.from({ length: 200 }, () => JSON.stringify({ tool: 'list_files', input: {} })).join('\n'));
+  const run = await runAgentLoop({ directory: temp, objective: 'cap check', provider: 'script', script: scriptPath, maxSteps: 999 });
+  assert.ok(run.maxSteps <= 50);
+});

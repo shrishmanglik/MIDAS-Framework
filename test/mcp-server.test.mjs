@@ -70,3 +70,34 @@ test('mcp unknown tool and unknown method are safe errors', async () => {
   const notification = await handleMcpMessage({ jsonrpc: '2.0', method: 'notifications/initialized' });
   assert.equal(notification, null);
 });
+
+test('mcp handler never throws on malformed or hostile frames', async () => {
+  const hostile = [
+    null,
+    42,
+    'a string',
+    [],
+    { jsonrpc: '2.0', id: 7 },                                   // no method
+    { jsonrpc: '2.0', id: 8, method: 'tools/call' },             // no params
+    { jsonrpc: '2.0', id: 9, method: 'tools/call', params: { name: 'midas_next', arguments: null } },
+    { jsonrpc: '2.0', id: 10, method: 'tools/call', params: { arguments: {} } }, // no tool name
+    { jsonrpc: '2.0', id: 11, method: '../../etc/passwd' }
+  ];
+  for (const frame of hostile) {
+    const response = await handleMcpMessage(frame);
+    // Either a well-formed error or a tool-result error, never an exception.
+    if (response !== null) {
+      assert.equal(response.jsonrpc, '2.0');
+      assert.ok('error' in response || 'result' in response);
+    }
+  }
+});
+
+test('mcp tool schemas are all valid JSON-schema objects with required arrays', () => {
+  for (const tool of listMcpTools()) {
+    assert.equal(typeof tool.name, 'string');
+    assert.equal(tool.inputSchema.type, 'object');
+    assert.equal(typeof tool.inputSchema.properties, 'object');
+    assert.ok(Array.isArray(tool.inputSchema.required));
+  }
+});
