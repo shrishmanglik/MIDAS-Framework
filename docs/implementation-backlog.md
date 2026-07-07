@@ -52,3 +52,6 @@ Status: alpha backlog
 | MIDAS-046 | P1 | License scaffold. | Governance | Complete: offline Ed25519 keygen/sign/install/verify with expiry; advisory only. |
 | MIDAS-047 | P1 | Desktop computer-use posture. | Runtime | Design-only: define gateway/run-control contracts and dependency review before any OS-control capability ships. |
 | MIDAS-048 | P2 | Hosted/paid API surface. | Distribution | Blocked on business approval: requires hosting, auth, metering, and payment decisions outside the framework alpha. |
+| MIDAS-049 | P0 | Web fetch SSRF hardening. | Web | Complete: full IPv4/IPv6 private-range classifier, manual per-hop redirect re-validation, DNS-rebinding resolution check, redirect ceiling; adversarial tests cover mapped-IPv6 and metadata-redirect vectors. |
+| MIDAS-050 | P1 | Runtime input-robustness pass. | Runtime | Complete: memory frontmatter-injection sanitization, agent malformed-action tolerance, MCP hostile-frame fuzz coverage. |
+| MIDAS-051 | P0 | Multi-tenant sandbox for hosted API. | Distribution | Design-only: per-tenant filesystem isolation, resource limits, and per-tenant web-fetch quotas/allowlists are required before the MCP/agent surface can be exposed as a hosted multi-tenant service. |
