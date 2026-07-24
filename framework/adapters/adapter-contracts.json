@@ -1,137 +1,139 @@
 {
-  "schemaVersion": "midas.adapter-contracts.v1",
-  "contracts": [
-    {
-      "id": "codex",
-      "kind": "skill",
-      "adapterPath": ".codex/skills/midas/MIDAS.md",
-      "maxChars": 9000,
-      "requiredHeadings": [
-        "# MIDAS codex Adapter",
-        "## Load Order",
-        "## Active Modules",
-        "## Agent Profiles",
-        "## Permission Policy"
-      ],
-      "requiredPhrases": [
-        "Read .midas/project-context.md",
-        "Read .midas/_config/manifest.yaml",
-        "Check .midas/sprint-status.yaml",
-        "midas quick",
-        "Approval Required For",
-        "Protected Content",
-        "Evidence Required"
-      ]
-    },
-    {
-      "id": "claude-code",
-      "kind": "skill",
-      "adapterPath": ".claude/skills/midas/MIDAS.md",
-      "maxChars": 9000,
-      "requiredHeadings": [
-        "# MIDAS claude-code Adapter",
-        "## Load Order",
-        "## Active Modules",
-        "## Agent Profiles",
-        "## Permission Policy"
-      ],
-      "requiredPhrases": [
-        "Read .midas/project-context.md",
-        "Read .midas/_config/manifest.yaml",
-        "Check .midas/sprint-status.yaml",
-        "midas quick",
-        "Approval Required For",
-        "Protected Content",
-        "Evidence Required"
-      ]
-    },
-    {
-      "id": "cursor",
-      "kind": "rules",
-      "adapterPath": ".cursor/rules/midas/MIDAS.md",
-      "maxChars": 9000,
-      "requiredHeadings": [
-        "# MIDAS cursor Adapter",
-        "## Load Order",
-        "## Active Modules",
-        "## Agent Profiles",
-        "## Permission Policy"
-      ],
-      "requiredPhrases": [
-        "Read .midas/project-context.md",
-        "Read .midas/_config/manifest.yaml",
-        "Check .midas/sprint-status.yaml",
-        "midas quick",
-        "Approval Required For",
-        "Protected Content",
-        "Evidence Required"
-      ]
-    },
-    {
-      "id": "opencode",
-      "kind": "adapter",
-      "adapterPath": ".opencode/midas/MIDAS.md",
-      "maxChars": 9000,
-      "requiredHeadings": [
-        "# MIDAS opencode Adapter",
-        "## Load Order",
-        "## Active Modules",
-        "## Agent Profiles",
-        "## Permission Policy"
-      ],
-      "requiredPhrases": [
-        "Read .midas/project-context.md",
-        "Read .midas/_config/manifest.yaml",
-        "Check .midas/sprint-status.yaml",
-        "midas quick",
-        "Approval Required For",
-        "Protected Content",
-        "Evidence Required"
-      ]
-    },
-    {
-      "id": "gemini",
-      "kind": "adapter",
-      "adapterPath": ".gemini/midas/MIDAS.md",
-      "maxChars": 9000,
-      "requiredHeadings": [
-        "# MIDAS gemini Adapter",
-        "## Load Order",
-        "## Active Modules",
-        "## Agent Profiles",
-        "## Permission Policy"
-      ],
-      "requiredPhrases": [
-        "Read .midas/project-context.md",
-        "Read .midas/_config/manifest.yaml",
-        "Check .midas/sprint-status.yaml",
-        "midas quick",
-        "Approval Required For",
-        "Protected Content",
-        "Evidence Required"
-      ]
-    },
-    {
-      "id": "copilot",
-      "kind": "github-copilot",
-      "adapterPath": ".github/copilot/midas/MIDAS.md",
-      "maxChars": 9000,
-      "requiredHeadings": [
-        "# MIDAS copilot Adapter",
-        "## Load Order",
-        "## Active Modules",
-        "## Agent Profiles",
-        "## Permission Policy"
-      ],
-      "requiredPhrases": [
-        "Read .midas/project-context.md",
-        "Read .midas/_config/manifest.yaml",
-        "Check .midas/sprint-status.yaml",
-        "midas quick",
-        "Approval Required For",
-        "Protected Content",
-        "Evidence Required"
-      ]
-    }
-  ]
+    "schemaVersion":  "midas.adapter-contracts.v1",
+    "contracts":  [
+                      {
+                          "id":  "codex",
+                          "kind":  "skill",
+                          "adapterPath":  "AGENTS.md",
+                          "maxChars":  9000,
+                          "requiredHeadings":  [
+                                                   "# MIDAS codex Adapter",
+                                                   "## Load Order",
+                                                   "## Active Modules",
+                                                   "## Agent Profiles",
+                                                   "## Permission Policy"
+                                               ],
+                          "requiredPhrases":  [
+                                                  "Read .midas/project-context.md",
+                                                  "Read .midas/_config/manifest.yaml",
+                                                  "Check .midas/sprint-status.yaml",
+                                                  "midas quick",
+                                                  "Approval Required For",
+                                                  "Protected Content",
+                                                  "Evidence Required"
+                                              ]
+                      },
+                      {
+                          "id":  "claude-code",
+                          "kind":  "skill",
+                          "adapterPath":  ".claude/skills/midas/SKILL.md",
+                          "maxChars":  9000,
+                          "requiredHeadings":  [
+                                                   "# MIDAS claude-code Adapter",
+                                                   "## Load Order",
+                                                   "## Active Modules",
+                                                   "## Agent Profiles",
+                                                   "## Permission Policy"
+                                               ],
+                          "requiredPhrases":  [
+                                                  "Read .midas/project-context.md",
+                                                  "Read .midas/_config/manifest.yaml",
+                                                  "Check .midas/sprint-status.yaml",
+                                                  "midas quick",
+                                                  "Approval Required For",
+                                                  "Protected Content",
+                                                  "Evidence Required",
+                                                  "name: midas",
+                                                  "description:"
+                                              ]
+                      },
+                      {
+                          "id":  "cursor",
+                          "kind":  "rules",
+                          "adapterPath":  ".cursor/rules/midas/MIDAS.md",
+                          "maxChars":  9000,
+                          "requiredHeadings":  [
+                                                   "# MIDAS cursor Adapter",
+                                                   "## Load Order",
+                                                   "## Active Modules",
+                                                   "## Agent Profiles",
+                                                   "## Permission Policy"
+                                               ],
+                          "requiredPhrases":  [
+                                                  "Read .midas/project-context.md",
+                                                  "Read .midas/_config/manifest.yaml",
+                                                  "Check .midas/sprint-status.yaml",
+                                                  "midas quick",
+                                                  "Approval Required For",
+                                                  "Protected Content",
+                                                  "Evidence Required"
+                                              ]
+                      },
+                      {
+                          "id":  "opencode",
+                          "kind":  "adapter",
+                          "adapterPath":  ".opencode/midas/MIDAS.md",
+                          "maxChars":  9000,
+                          "requiredHeadings":  [
+                                                   "# MIDAS opencode Adapter",
+                                                   "## Load Order",
+                                                   "## Active Modules",
+                                                   "## Agent Profiles",
+                                                   "## Permission Policy"
+                                               ],
+                          "requiredPhrases":  [
+                                                  "Read .midas/project-context.md",
+                                                  "Read .midas/_config/manifest.yaml",
+                                                  "Check .midas/sprint-status.yaml",
+                                                  "midas quick",
+                                                  "Approval Required For",
+                                                  "Protected Content",
+                                                  "Evidence Required"
+                                              ]
+                      },
+                      {
+                          "id":  "gemini",
+                          "kind":  "adapter",
+                          "adapterPath":  ".gemini/midas/MIDAS.md",
+                          "maxChars":  9000,
+                          "requiredHeadings":  [
+                                                   "# MIDAS gemini Adapter",
+                                                   "## Load Order",
+                                                   "## Active Modules",
+                                                   "## Agent Profiles",
+                                                   "## Permission Policy"
+                                               ],
+                          "requiredPhrases":  [
+                                                  "Read .midas/project-context.md",
+                                                  "Read .midas/_config/manifest.yaml",
+                                                  "Check .midas/sprint-status.yaml",
+                                                  "midas quick",
+                                                  "Approval Required For",
+                                                  "Protected Content",
+                                                  "Evidence Required"
+                                              ]
+                      },
+                      {
+                          "id":  "copilot",
+                          "kind":  "github-copilot",
+                          "adapterPath":  ".github/copilot/midas/MIDAS.md",
+                          "maxChars":  9000,
+                          "requiredHeadings":  [
+                                                   "# MIDAS copilot Adapter",
+                                                   "## Load Order",
+                                                   "## Active Modules",
+                                                   "## Agent Profiles",
+                                                   "## Permission Policy"
+                                               ],
+                          "requiredPhrases":  [
+                                                  "Read .midas/project-context.md",
+                                                  "Read .midas/_config/manifest.yaml",
+                                                  "Check .midas/sprint-status.yaml",
+                                                  "midas quick",
+                                                  "Approval Required For",
+                                                  "Protected Content",
+                                                  "Evidence Required"
+                                              ]
+                      }
+                  ]
 }

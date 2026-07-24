@@ -38,7 +38,7 @@ test('adapter contracts inspect only installed workspace adapters', async () => 
 test('adapter contracts fail when required adapter phrases are removed', async () => {
   const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-adapter-contract-drift-'));
   await installWorkspace({ directory: temp, modules: 'core', tools: 'codex', yes: true });
-  const adapterFile = path.join(temp, '.codex', 'skills', 'midas', 'MIDAS.md');
+  const adapterFile = path.join(temp, 'AGENTS.md');
   const text = await fs.readFile(adapterFile, 'utf8');
   await fs.writeFile(adapterFile, text.replace('Approval Required For', 'Approval Gate'));
 
