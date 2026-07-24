@@ -63,8 +63,8 @@ test('install creates a .midas workspace and adapters', async () => {
   assert.ok(await fs.stat(path.join(temp, '.midas', 'skills', 'verification-gap', 'SKILL.md')));
   assert.ok(await fs.stat(path.join(temp, '.midas', 'skills', 'spine-ux', 'SKILL.md')));
   assert.ok(await fs.stat(path.join(temp, '.midas', 'skills', 'local-planning', 'SKILL.md')));
-  assert.ok(await fs.stat(path.join(temp, '.codex', 'skills', 'midas', 'MIDAS.md')));
-  assert.ok(await fs.stat(path.join(temp, '.claude', 'skills', 'midas', 'MIDAS.md')));
+  assert.ok(await fs.stat(path.join(temp, 'AGENTS.md')));
+  assert.ok(await fs.stat(path.join(temp, '.claude', 'skills', 'midas', 'SKILL.md')));
 });
 
 test('inventory reports generated adapter state', async () => {

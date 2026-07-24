@@ -15,8 +15,8 @@ const privateTerms = [
 const privateTermsPattern = new RegExp(privateTerms.join('|'), 'i');
 
 const adapterFiles = [
-  '.codex/skills/midas/MIDAS.md',
-  '.claude/skills/midas/MIDAS.md',
+  'AGENTS.md',
+  '.claude/skills/midas/SKILL.md',
   '.cursor/rules/midas/MIDAS.md',
   '.opencode/midas/MIDAS.md',
   '.gemini/midas/MIDAS.md',

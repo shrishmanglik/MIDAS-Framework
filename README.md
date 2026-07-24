@@ -37,6 +37,30 @@ MIDAS ships a dependency-free MCP stdio server so any MCP-capable client (Claude
 
 Exposed tools: `midas_next`, `midas_validate`, `midas_install`, `midas_context`, `midas_quick`, `midas_plan`, `midas_verify`, `midas_memory_add`, `midas_memory_search`, `midas_memory_show`, `midas_web_fetch`.
 
+## Where Adapters Land
+
+`midas install --tools ...` writes tool-native guidance to the path each runtime
+actually loads. A file the tool never reads is inert no matter how correct it is.
+
+| Tool | Generated file | Loader verified |
+|---|---|---|
+| `claude-code` | `.claude/skills/midas/SKILL.md` (YAML frontmatter, discoverable skill) | yes |
+| `codex` | `AGENTS.md` (delimited MIDAS block) | yes |
+| `cursor` | `.cursor/rules/midas/MIDAS.md` | not verified |
+| `opencode` | `.opencode/midas/MIDAS.md` | not verified |
+| `gemini` | `.gemini/midas/MIDAS.md` | not verified |
+| `copilot` | `.github/copilot/midas/MIDAS.md` | not verified |
+
+`AGENTS.md` is shared with your project, so MIDAS writes only between
+`<!-- BEGIN MIDAS ADAPTER -->` and `<!-- END MIDAS ADAPTER -->`. Existing content is
+preserved, and reinstalling replaces the block instead of appending another. Content
+outside the markers is yours and is never validated against MIDAS's size budget.
+
+**"Loader verified" means someone confirmed the runtime loads that path.** The four
+unverified rows follow MIDAS's own convention and may not match those tools' current
+loaders; `midas adapters` checks that the file exists and satisfies the contract, which
+is not the same as proving the tool reads it. Corrections welcome.
+
 ## Memory, Web Access, and the Agent Loop
 
 - **Memory vault** — `.midas/memory/` is a linked markdown vault (Obsidian-style `[[links]]`, an always-current `MEMORY.md` index, deterministic ranked search).
