@@ -39,7 +39,20 @@ Exposed tools: `midas_next`, `midas_validate`, `midas_install`, `midas_context`,
 
 ## Memory, Web Access, and the Agent Loop
 
-- **Memory vault** — `.midas/memory/` is a linked markdown vault (Obsidian-style `[[links]]`, an always-current `MEMORY.md` index, deterministic ranked search). `midas memory add | list | search | show | links`.
+- **Memory vault** — `.midas/memory/` is a linked markdown vault (Obsidian-style `[[links]]`, an always-current `MEMORY.md` index, deterministic ranked search).
+
+  ```bash
+  # --description is required; --name is optional and is derived from the description when omitted.
+  midas memory add --directory ./my-project --name auth-flow \
+    --description "How auth works" --body "Supabase JWT. See [[deploy-notes]]."
+
+  midas memory list   --directory ./my-project
+  midas memory search --directory ./my-project "auth"    # a query is required
+  midas memory show   --directory ./my-project auth-flow # a name is required
+  midas memory links  --directory ./my-project           # link graph + dangling links
+  ```
+
+  Dangling `[[links]]` are reported as markers for entries worth writing, not as errors.
 - **Web access** — `midas web fetch <url>` fetches live pages with Node's native fetch, extracts readable text and links, refuses private/loopback hosts, and writes SHA-256 evidence receipts under `.midas/reports/web/`. Add `--render` to render JavaScript pages through a locally installed Playwright Chromium (optional; never bundled).
 - **Agent loop** — `midas agent --objective "..." --provider anthropic-api|script|manual` runs a bounded tool loop (max steps, read-only by default, `--allow-writes` and `--allow-web` gates, protected-path denial for env/secret files, full `run.json` + `events.jsonl` evidence per run). The `anthropic-api` provider uses your `ANTHROPIC_API_KEY`; the deterministic core never calls a model.
 - **License scaffold** — `midas license keygen | sign | install | status` provides offline Ed25519 license verification as the primitive for future paid distributions. No payment or hosted-API capability is implemented or claimed.
