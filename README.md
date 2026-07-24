@@ -19,6 +19,22 @@ node ./bin/midas.mjs next --directory ../my-project
 
 That creates a `.midas/` workspace in your project with context files, work-order templates, agent profiles, contracts, and harness adapter guidance for your coding agents — then tells you the recommended next action. Everything runs locally; nothing phones home.
 
+### Pinning a version
+
+The package is not published to npm, so consumers install from git. Pin a tag — `main`
+tracks unreleased work and can change under you:
+
+```bash
+# Clone a fixed version
+git clone --branch v0.1.0-alpha.0 https://github.com/shrishmanglik/MIDAS-Framework.git
+
+# Or add it as a dependency at that tag
+npm install github:shrishmanglik/MIDAS-Framework#v0.1.0-alpha.0
+```
+
+Tags are listed under [tags](https://github.com/shrishmanglik/MIDAS-Framework/tags).
+`0.1.0-alpha.0` is an alpha: the CLI surface can still change between tags.
+
 ## Calling MIDAS from Agents (MCP)
 
 MIDAS ships a dependency-free MCP stdio server so any MCP-capable client (Claude Code, Cursor, Codex, custom agents) can call MIDAS tools directly:
