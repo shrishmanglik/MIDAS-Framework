@@ -1,0 +1,25 @@
+MIDAS Framework
+Copyright (c) MIDAS Framework contributors
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This project includes no copied third-party source code, but parts of its design
+derive from the following projects:
+
+1. obra/superpowers (MIT License)
+   Methodology distillation: skill-authoring discipline and workflow patterns were
+   studied and re-expressed for MIDAS. No code copied.
+
+2. wshobson/agents (MIT License)
+   Agent persona structure and role definitions adapted for MIDAS agent profiles.
+
+3. anthropics/skills (Apache License 2.0 subset)
+   Skill-format conventions (SKILL.md frontmatter, resource-directory layout
+   scripts/references/assets/agents, progressive-disclosure practice) follow the
+   conventions of the Apache-2.0-licensed skills in that repository. The
+   proprietary document skills in that repository (docx, pdf, pptx, xlsx —
+   "all rights reserved") are explicitly excluded: nothing in MIDAS is derived
+   from their contents.
+
+4. BMAD-METHOD
+   MIDAS has design ancestry in the BMAD method; see the BMAD repository for its
+   license terms. No BMAD code is bundled here.
