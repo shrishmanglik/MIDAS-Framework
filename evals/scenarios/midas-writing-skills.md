@@ -1,4 +1,4 @@
-﻿---
+---
 skill: midas-writing-skills
 class: pressure
 status: RED-CAPTURED

@@ -1,4 +1,4 @@
-﻿# MIDAS Skill Evals â€” Pressure-Scenario Tier (MB-3 / MW-4 Layer 3)
+# MIDAS Skill Evals â€” Pressure-Scenario Tier (MB-3 / MW-4 Layer 3)
 
 Deterministic tests (`test/`) prove the framework's code works. This tier proves the
 **skills change agent behavior under pressure** â€” the only claim that matters for a
