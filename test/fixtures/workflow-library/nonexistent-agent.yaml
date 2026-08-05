@@ -1,0 +1,22 @@
+id: nonexistent-agent
+name: Nonexistent Agent Fixture
+schemaVersion: midas.workflow.v2
+status: fixture
+purpose: A workflow naming an agent missing from the roster must fail validation.
+steps:
+  - id: plan
+    name: Plan the work
+    output: plan
+    agent: planner
+    handoff:
+      after: []
+      enables: [build]
+  - id: build
+    name: Build the work
+    output: change set
+    agent: quantum-astrologer
+    handoff:
+      after: [plan]
+      enables: []
+rules:
+  - fixture only
