@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "midas.qc-rubric.v1",
+  "description": "Layer-2 persona QC: an LLM judge scores each agent persona per dimension on a 1-5 scale using the anchors below. The judge is a separate session from the author, returns verdict plus quoted evidence, and never edits. A persona passes when every dimension scores at or above passThreshold; any regression from a previously recorded score is a red gate.",
+  "scale": { "min": 1, "max": 5 },
+  "passThreshold": 4,
+  "dimensions": [
+    {
+      "id": "clarity",
+      "description": "The persona reads as one coherent operator: purpose, capabilities, and response approach are specific, concrete, and free of filler that could describe any agent.",
+      "anchors": [
+        { "score": 1, "meaning": "Generic boilerplate; swap the name and the file fits any agent. No concrete domain content." },
+        { "score": 2, "meaning": "Domain named but guidance stays abstract; capabilities listed as nouns without stating how the agent applies them." },
+        { "score": 3, "meaning": "Mostly concrete; a reader can predict the agent's behavior on common tasks, but at least one section is padding or contradicts another." },
+        { "score": 4, "meaning": "Every section is specific and internally consistent; capabilities, traits, and response approach visibly describe the same operator." },
+        { "score": 5, "meaning": "Reads like a tested operating manual: concrete decision rules, named trade-offs, zero filler; a cold reader could role-play the agent accurately." }
+      ],
+      "judgePrompts": [
+        "Replace this persona's name with a random other specialty. How many sentences would become false? Quote three sentences that are specific enough to break, or report that fewer than three exist.",
+        "From the Response Approach section alone, predict this agent's first three actions on a typical task in its domain. Quote the lines that made the prediction possible, or identify where the text left you guessing."
+      ]
+    },
+    {
+      "id": "disambiguation",
+      "description": "The persona states when to dispatch this agent INSTEAD of its nearest neighbors: a vs-X boundary that a router could apply, plus a description trigger that names situations rather than summarizing process.",
+      "anchors": [
+        { "score": 1, "meaning": "No boundary at all; overlaps invisibly with at least one other roster agent." },
+        { "score": 2, "meaning": "Names a neighboring agent but the stated difference is cosmetic; a router given both files would still guess." },
+        { "score": 3, "meaning": "Boundary stated for the closest neighbor but at least one real overlap in the roster is left unaddressed." },
+        { "score": 4, "meaning": "Clear vs-X clauses for the realistic neighbors; the description says when to use it and at least implies when not to." },
+        { "score": 5, "meaning": "A router could dispatch correctly from the description alone: positive trigger, negative scope, and vs-X boundaries all present and mutually consistent." }
+      ],
+      "judgePrompts": [
+        "Name the two roster agents most likely to be confused with this one. For each, quote the line in this persona that resolves the confusion, or report that no such line exists.",
+        "Read only the frontmatter description. Does it name the situations that should trigger dispatch, or does it summarize the agent's internal process? Quote the description and classify each clause as trigger or process-summary."
+      ]
+    },
+    {
+      "id": "doctrine-presence",
+      "description": "MIDAS doctrine is embedded, not appended: deterministic-first, verification-before-done evidence discipline, the reviewer independence invariant, and an explicit Guardrails plus Claim Ceiling section adapted to this agent's domain.",
+      "anchors": [
+        { "score": 1, "meaning": "No doctrine content; the persona could ship claims without evidence and nothing in the file objects." },
+        { "score": 2, "meaning": "Doctrine appears as a pasted generic block, unadapted; guardrails do not mention anything specific to this agent's work." },
+        { "score": 3, "meaning": "Guardrails and Claim Ceiling exist and are partially adapted, but at least one doctrine element (verification evidence, reviewer independence, deterministic-first) is missing or contradicted elsewhere." },
+        { "score": 4, "meaning": "All doctrine elements present and phrased in the agent's own domain terms; no body text undermines them." },
+        { "score": 5, "meaning": "Doctrine is load-bearing: the response approach itself sequences verification and escalation, the Claim Ceiling names the exact claims this agent may and may not make, and guardrails cite this domain's actual failure modes." }
+      ],
+      "judgePrompts": [
+        "Quote this persona's Guardrails and Claim Ceiling sections. For each guardrail, state whether it is adapted to this agent's specific domain or could be pasted into any persona unchanged.",
+        "Find the strongest claim this persona would let the agent make about its own finished work. Quote the text that caps that claim with required evidence, or report that the cap is missing."
+      ]
+    },
+    {
+      "id": "actionability",
+      "description": "The persona converts to behavior: a workflow position with named handoffs, a stepwise response approach an executor could follow without the author's context, and escalation conditions stated as checkable facts rather than vibes.",
+      "anchors": [
+        { "score": 1, "meaning": "Descriptive only; nothing in the file tells the agent what to do first, next, or when to stop." },
+        { "score": 2, "meaning": "A response approach exists but steps are abstract ('analyze, then improve'); no handoffs, no stop conditions." },
+        { "score": 3, "meaning": "Steps are concrete enough to start work, but handoffs or escalation conditions are vague enough that two readers would act differently." },
+        { "score": 4, "meaning": "Stepwise approach, named upstream/downstream handoffs, and at least one explicit stop-or-escalate condition an executor can check." },
+        { "score": 5, "meaning": "A low-context executor could run the persona as a procedure: ordered steps with per-step outputs, machine-checkable escalation triggers, and handoffs that name the receiving agent and what it must be given." }
+      ],
+      "judgePrompts": [
+        "Simulate being handed a typical task with only this persona as instructions. Walk the response approach step by step and report the first step where you would not know what concretely to do; quote it.",
+        "List every handoff and escalation condition in the persona. For each, state whether an executor could verify it mechanically (yes/no) and quote the wording that decides it."
+      ]
+    }
+  ]
+}
