@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "midas.marketplace.v1",
+  "name": "midas-marketplace",
+  "description": "Installable bundle manifest for the MIDAS framework. Each bundle groups skills or agents into a set that installs together; every referenced path must exist on disk (validated by validateMarketplace, paths_real).",
+  "bundles": [
+    {
+      "id": "discipline-skills",
+      "name": "MIDAS Discipline Skills",
+      "kind": "skills",
+      "description": "The nine merged-format discipline skills (red flags, guardrails, claim ceilings) distilled from the Superpowers bridge: process discipline for planning, building, reviewing, and closing work.",
+      "items": [
+        { "id": "midas-brainstorming", "path": "framework/skills/midas-brainstorming" },
+        { "id": "midas-code-review", "path": "framework/skills/midas-code-review" },
+        { "id": "midas-finishing-a-branch", "path": "framework/skills/midas-finishing-a-branch" },
+        { "id": "midas-subagent-development", "path": "framework/skills/midas-subagent-development" },
+        { "id": "midas-systematic-debugging", "path": "framework/skills/midas-systematic-debugging" },
+        { "id": "midas-tdd", "path": "framework/skills/midas-tdd" },
+        { "id": "midas-verification-before-done", "path": "framework/skills/midas-verification-before-done" },
+        { "id": "midas-worktree-lifecycle", "path": "framework/skills/midas-worktree-lifecycle" },
+        { "id": "midas-writing-plans", "path": "framework/skills/midas-writing-plans" }
+      ]
+    },
+    {
+      "id": "core-skills",
+      "name": "MIDAS Core Skills",
+      "kind": "skills",
+      "description": "The six original MIDAS skills plus using-midas: workspace planning, verification, work orders, UX spine, and repair — the minimum set a MIDAS workspace runs on.",
+      "items": [
+        { "id": "local-planning", "path": "framework/skills/local-planning" },
+        { "id": "spine-ux", "path": "framework/skills/spine-ux" },
+        { "id": "terminal-repair", "path": "framework/skills/terminal-repair" },
+        { "id": "verification", "path": "framework/skills/verification" },
+        { "id": "verification-gap", "path": "framework/skills/verification-gap" },
+        { "id": "work-order", "path": "framework/skills/work-order" },
+        { "id": "using-midas", "path": "framework/skills/using-midas" }
+      ]
+    },
+    {
+      "id": "agents-roster",
+      "name": "MIDAS Agent Roster",
+      "kind": "agents",
+      "description": "The fourteen fused persona+contract agents (midas.agent.v1): planning, building, reviewing, and specialist roles with routing gates and authority ceilings.",
+      "items": [
+        { "id": "backend-architect", "path": "framework/agents/roster/backend-architect.md" },
+        { "id": "builder", "path": "framework/agents/roster/builder.md" },
+        { "id": "code-reviewer", "path": "framework/agents/roster/code-reviewer.md" },
+        { "id": "data-engineer", "path": "framework/agents/roster/data-engineer.md" },
+        { "id": "debugger", "path": "framework/agents/roster/debugger.md" },
+        { "id": "deployment-engineer", "path": "framework/agents/roster/deployment-engineer.md" },
+        { "id": "docs-engineer", "path": "framework/agents/roster/docs-engineer.md" },
+        { "id": "frontend-developer", "path": "framework/agents/roster/frontend-developer.md" },
+        { "id": "performance-engineer", "path": "framework/agents/roster/performance-engineer.md" },
+        { "id": "planner", "path": "framework/agents/roster/planner.md" },
+        { "id": "researcher", "path": "framework/agents/roster/researcher.md" },
+        { "id": "reviewer", "path": "framework/agents/roster/reviewer.md" },
+        { "id": "security-auditor", "path": "framework/agents/roster/security-auditor.md" },
+        { "id": "test-automator", "path": "framework/agents/roster/test-automator.md" }
+      ]
+    }
+  ]
+}
