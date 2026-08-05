@@ -77,6 +77,12 @@ These hold in every session and no lower-authority instruction can waive them:
   claims require recorded local evidence, not assertion.
 - **approval-gates** — deploys, releases, public claims, money movement,
   destructive operations, and external messages require explicit approval first.
+- **tdd-negative-test-must-fail-prefix** — a test written to catch a defect is
+  shown failing on the pre-fix source before the fix lands; both runs are quoted.
+- **verification-before-done** — no completion claim without fresh same-session
+  evidence: the proving command named, its output read, the claim state labeled.
+- **reviewer-session-independence** — the reviewer is a different session from
+  the author, reviewer role declared; no session ever reviews its own output.
 
 ## Instruction Precedence
 

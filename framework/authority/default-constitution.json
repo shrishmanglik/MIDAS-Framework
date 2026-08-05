@@ -42,6 +42,24 @@
       "statement": "Deploys, public releases, public claims, money movement, destructive operations, external messages, and approval-policy changes require explicit approval before execution.",
       "owner": "owner",
       "verification": ["approval-record", "release-gate"]
+    },
+    {
+      "id": "tdd-negative-test-must-fail-prefix",
+      "statement": "A test written to catch a defect must be shown failing against the pre-fix source before the fix lands, with both the failing and passing runs quoted in the record.",
+      "owner": "reviewer",
+      "verification": ["negative-test-red-run", "test-suite"]
+    },
+    {
+      "id": "verification-before-done",
+      "statement": "No completion, fixed, passing, or deployed claim is made without fresh evidence produced in the same session: the proving command named, its output read, and the claim labeled with its evidence state.",
+      "owner": "reviewer",
+      "verification": ["done-claim-evidence-check", "run-ledger"]
+    },
+    {
+      "id": "reviewer-session-independence",
+      "statement": "The reviewer is a different session from the author with the reviewer role declared, regardless of tool or model; no session ever reviews or approves its own output.",
+      "owner": "reviewer",
+      "verification": ["reviewer-session-check", "diff-inspection"]
     }
   ],
   "verificationPolicy": {
@@ -97,5 +115,9 @@
     "publicClaimsRequireApproval": true,
     "benchmarkClaimsRequireRawResults": true,
     "unknownsStayUnknown": true
+  },
+  "loopPolicy": {
+    "fixLoopMaxRounds": 5,
+    "escalation": "route-up-on-cap"
   }
 }

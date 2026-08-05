@@ -7,6 +7,7 @@ import { installWorkspace } from '../lib/installer.mjs';
 import {
   collectSkillResources,
   inspectSkillLibrary,
+  lintSkillChecklist,
   parseSkillMarkdown,
   validateSkillRecord
 } from '../lib/skill-library.mjs';
@@ -26,6 +27,34 @@ test('default MIDAS skill library passes', async () => {
   assert.ok(result.skills.some((skill) => skill.id === 'terminal-repair'));
   assert.ok(result.skills.some((skill) => skill.id === 'work-order'));
   assert.ok(result.skills.some((skill) => skill.id === 'verification'));
+  assert.ok(result.skills.some((skill) => skill.id === 'midas-writing-skills'));
+});
+
+test('default library surfaces checklist presence for discipline skills and work-order', async () => {
+  const result = await inspectSkillLibrary(path.resolve('.'));
+  assert.equal(result.status, 'pass', JSON.stringify(result.failures, null, 2));
+  const withChecklists = [
+    'midas-brainstorming',
+    'midas-code-review',
+    'midas-finishing-a-branch',
+    'midas-subagent-development',
+    'midas-systematic-debugging',
+    'midas-tdd',
+    'midas-verification-before-done',
+    'midas-worktree-lifecycle',
+    'midas-writing-plans',
+    'midas-writing-skills',
+    'work-order'
+  ];
+  for (const id of withChecklists) {
+    const skill = result.skills.find((entry) => entry.id === id);
+    assert.ok(skill, `missing skill: ${id}`);
+    assert.equal(skill.hasChecklist, true, `expected checklist beside ${id}`);
+    assert.ok(skill.checklistItems >= 3 && skill.checklistItems <= 40, `${id} checklist item count out of budget: ${skill.checklistItems}`);
+  }
+  const noChecklist = result.skills.find((entry) => entry.id === 'terminal-repair');
+  assert.equal(noChecklist.hasChecklist, false);
+  assert.equal(noChecklist.checklistItems, null);
 });
 
 test('skill parser requires frontmatter', () => {
@@ -345,6 +374,109 @@ test('inspectSkillLibrary interop mode aggregates strict gaps without failing th
   assert.ok(interop.strictGaps.some((gap) => gap.id === 'skill:minimal-skill:license'));
 });
 
+const checklistSkillText = `---
+name: gated-skill
+description: Runs a gated pipeline. Use when testing checklist lint. Not for ungated work.
+license: Apache-2.0
+allowed-tools: Read
+---
+# Gated
+
+Follow the gates.
+`;
+
+test('a well-formed checklist beside SKILL.md lints clean and surfaces in the record', () => {
+  const checklist = `# Gates
+
+- [ ] The failing run is quoted in the record
+- [ ] The passing run is quoted in the record
+- [x] The suite is green with counts read from output
+- [ ] The diff stat matches the intended edit list
+`;
+  const result = validateSkillRecord({
+    directoryName: 'gated-skill',
+    relativeFile: 'gated-skill/SKILL.md',
+    text: checklistSkillText,
+    checklist: { relativeFile: 'gated-skill/checklist.md', text: checklist }
+  });
+  assert.equal(result.status, 'pass', JSON.stringify(result.failures, null, 2));
+  assert.equal(result.skill.hasChecklist, true);
+  assert.equal(result.skill.checklistItems, 4);
+});
+
+test('checklist lint fails on too few items, empty items, and malformed checkboxes', () => {
+  const tooFew = lintSkillChecklist('- [ ] one\n- [ ] two\n', 'gated-skill');
+  assert.equal(tooFew.itemCount, 2);
+  assert.ok(tooFew.failures.some((failure) => failure.id === 'skill:gated-skill:checklist-count'));
+
+  const emptyItem = lintSkillChecklist('- [ ] one\n- [ ]\n- [ ] three\n- [ ] four\n', 'gated-skill');
+  assert.ok(emptyItem.failures.some((failure) => failure.id === 'skill:gated-skill:checklist-empty-item'));
+
+  const malformed = lintSkillChecklist('- [] broken box\n- [ ] one\n- [ ] two\n- [ ] three\n', 'gated-skill');
+  assert.ok(malformed.failures.some((failure) => failure.id === 'skill:gated-skill:checklist-malformed'));
+
+  const tooMany = lintSkillChecklist(Array.from({ length: 41 }, (_, index) => `- [ ] item ${index + 1}`).join('\n'), 'gated-skill');
+  assert.equal(tooMany.itemCount, 41);
+  assert.ok(tooMany.failures.some((failure) => failure.id === 'skill:gated-skill:checklist-count'));
+
+  const noBoxes = lintSkillChecklist('# Just prose\n\nNothing checkable here.\n', 'gated-skill');
+  assert.equal(noBoxes.itemCount, 0);
+  assert.ok(noBoxes.failures.some((failure) => failure.id === 'skill:gated-skill:checklist-count'));
+});
+
+test('a broken checklist fails the whole skill record', () => {
+  const result = validateSkillRecord({
+    directoryName: 'gated-skill',
+    relativeFile: 'gated-skill/SKILL.md',
+    text: checklistSkillText,
+    checklist: { relativeFile: 'gated-skill/checklist.md', text: '- [ ] only one item\n' }
+  });
+  assert.equal(result.status, 'fail');
+  assert.ok(result.failures.some((failure) => failure.id === 'skill:gated-skill:checklist-count'));
+});
+
+test('inspectSkillLibrary lints a checklist.md found beside SKILL.md', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-skill-checklist-'));
+  const dir = path.join(temp, 'framework', 'skills', 'gated-skill');
+  await fs.mkdir(dir, { recursive: true });
+  await fs.writeFile(path.join(dir, 'SKILL.md'), checklistSkillText);
+  await fs.writeFile(path.join(dir, 'checklist.md'), '- [ ] one\n- [ ]\n- [ ] three\n');
+  const result = await inspectSkillLibrary(temp);
+  assert.equal(result.status, 'fail');
+  assert.ok(result.failures.some((failure) => failure.id === 'skill:gated-skill:checklist-empty-item'));
+  assert.equal(result.skills[0].hasChecklist, true);
+});
+
+test('a description that narrates process steps warns; a trigger-first description does not', () => {
+  const narrated = validateSkillRecord({
+    directoryName: 'noisy-skill',
+    relativeFile: 'noisy-skill/SKILL.md',
+    text: `---
+name: noisy-skill
+description: First gather the inputs and then run step 1 through step 4 of the pipeline. Use when converting exports.
+license: Apache-2.0
+---
+Body.
+`
+  });
+  assert.equal(narrated.status, 'pass');
+  assert.ok(narrated.warnings.some((warning) => warning.id === 'skill:noisy-skill:description-process'));
+
+  const triggerFirst = validateSkillRecord({
+    directoryName: 'quiet-skill',
+    relativeFile: 'quiet-skill/SKILL.md',
+    text: `---
+name: quiet-skill
+description: Converts CSV exports into clean JSON records. Use when an export needs conversion. Not for XML.
+license: Apache-2.0
+---
+Body.
+`
+  });
+  assert.equal(triggerFirst.status, 'pass');
+  assert.ok(!triggerFirst.warnings.some((warning) => warning.id === 'skill:quiet-skill:description-process'));
+});
+
 test('installed workspace includes passing skills', async () => {
   const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-skills-'));
   await installWorkspace({
@@ -361,4 +493,6 @@ test('installed workspace includes passing skills', async () => {
   assert.deepEqual(structuralWarnings, []);
   assert.ok(await fs.stat(path.join(temp, '.midas', 'skills', 'terminal-repair', 'SKILL.md')));
   assert.ok(await fs.stat(path.join(temp, '.midas', 'skills', 'work-order', 'SKILL.md')));
+  assert.ok(await fs.stat(path.join(temp, '.midas', 'skills', 'work-order', 'checklist.md')));
+  assert.ok(await fs.stat(path.join(temp, '.midas', 'skills', 'midas-tdd', 'checklist.md')));
 });
