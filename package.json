@@ -20,6 +20,7 @@
     "bin/",
     "docs/",
     "framework/",
+    "hooks/",
     "lib/",
     "README.md",
     "LICENSE",
