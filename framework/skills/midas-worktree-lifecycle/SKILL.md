@@ -76,6 +76,9 @@ close.
 | "Cleanup can wait until someone notices" | Untracked worktrees compound into fleet-wide sprawl — dozens of orphans have been found weeks stale. The loan is recorded at creation. |
 | "The audit script says the tree is clean, safe to delete" | Truncated output and capped timeouts both read as "clean" while checking nothing. Prove the audit saw the whole tree before acting on its verdict. |
 | "Another session is in this repo, but we won't collide" | Parallel writers in one tree collide through the index, not through intentions. Read the other session's changes, coordinate, or move to a separate worktree. |
+| "Dozens of stale worktrees — they're probably empty shells by now" | Audited fleets have found the MAJORITY of "probably empty" worktrees holding commits on no remote, and a fifth of them dirty. Probably-empty is a guess about the exact trees where guessing destroys work; the audit is the only evidence that counts. |
+| "This branch shows merged, so its worktree must be clean" | The visibly merged ones have carried the MOST dirty files — post-merge fixups pile up exactly where attention stopped. Merge status describes the branch, not the tree; audit before removal, no exceptions for the obvious ones. |
+| "Disk is critical — deleting worktrees is the fastest space win" | Caches and rebuildable artifacts free space at zero risk; a worktree can hold the only copy of unique work. Reclaim from the rebuildable surfaces (or another volume) first, and let worktrees exit only through rescue-then-remove. |
 
 ## Guardrails
 

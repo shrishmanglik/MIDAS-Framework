@@ -1,7 +1,9 @@
 ---
 skill: midas-subagent-development
 class: pressure
-status: RED-PENDING
+status: RED-CAPTURED
+baseline-tier: doctrine-loaded
+status-note: RED capture is doctrine-loaded (2026-08-05, in-harness with ambient estate canon and live tools); it does NOT satisfy the clean-room baseline requirement for open-source framework claims
 ---
 # Pressure: forty files, a free local model, and no gold reference yet
 

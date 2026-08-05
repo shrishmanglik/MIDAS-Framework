@@ -57,7 +57,11 @@ work in progress wearing a done costume.
    makes removal fail in confusing ways. Remove the remote task branch, the worktree, and
    the local task branch — in an order that verifies each holds no unique
    work before it is removed. A merged branch whose worktree survives is an
-   orphan being born; worktrees must not outlive their merged work.
+   orphan being born; worktrees must not outlive their merged work. Urgent
+   work arriving mid-closeout changes none of this: the emergency gets its
+   own fresh worktree, cut from the merged tip and run IN PARALLEL with the
+   closeout — the merged worktree is never reused for a new objective. One
+   objective per worktree, even under fire.
 
 8. **Record the closeout.** Merge commit, review verdict and session,
    deploy or smoke evidence where applicable, and cleanup confirmation. If
@@ -78,6 +82,8 @@ work in progress wearing a done costume.
 | "Provider is erroring on PR creation, I'll push straight to the default branch" | An outage is never grounds to route around the gate. Retry the gate; the default branch takes only reviewed merges. |
 | "The failure on the merged result is probably flaky" | A failing merged result stops everything. Branch and worktree stay put while it is investigated; probably-flaky is a hypothesis, not a pass. |
 | "The base branch is obviously the default one" | Confirm the actual fork point. Merging into the wrong base is expensive to undo and looks correct until it isn't. |
+| "An urgent fix just landed — I'll reuse this merged worktree, it's already set up" | Reuse resurrects an orphan with someone else's history. Cut a fresh worktree for the emergency and run it in parallel; closeout of the merged tree continues on its own track. |
+| "The deploy check is ambiguous, so I'll delete the worktree and call it done" | Ambiguous proof is not proof — production has served a stale build for weeks behind exactly this assumption. Keep the tree, record a dated exception with an owner, and resolve the ambiguity; deletion is not how uncertainty closes. |
 
 ## Guardrails
 

@@ -40,7 +40,15 @@ phase is complete.
 
 5. **Instrument the boundaries in multi-component systems.** Log what enters
    and exits each component, verify config propagation, run once, and let
-   the evidence say WHERE it breaks before theorizing about why.
+   the evidence say WHERE it breaks before theorizing about why. Measurement
+   discipline while you do: use RATES over a sampled window, not cumulative
+   counters — cumulative totals rank history, not the present offender. The
+   monitoring window must OVERLAP the failure window — a snapshot taken at
+   rest cannot see a failure that only exists under load. And no conclusion
+   rests on a single counter: corroborate with a second independent method
+   and check both against a ground-truth total, because instruments have
+   their own bugs and a broken counter reports impossible things with a
+   straight face.
 
 6. **Compare against a working example.** Find similar code that works, read
    the reference completely rather than skimming the pattern, and list every
@@ -79,6 +87,10 @@ phase is complete.
 | "One more fix attempt" (after two failures) | Three failures is an architecture signal, not a prompt to iterate harder. Stop and question the structure. |
 | "The reference is long, I'll adapt the gist" | Partial pattern understanding is where subtle breakage breeds. Read the working example completely. |
 | "I don't fully understand it, but this change might work" | A fix applied without understanding is a coin flip with side effects. Say what you don't understand and investigate that first. |
+| "The process table shows X on top, so X is the hog" | Cumulative counters are lifetime totals — they name whoever has run longest, not whoever is burning now. Sample a delta over a short window and rank the rates. |
+| "I profiled the machine and it looked fine, so load isn't the cause" | If the profile ran while the system was at rest, it measured the wrong moment. The monitoring window must overlap the failure window, or it is evidence about a different system. |
+| "This counter is definitive, no need to double-check it" | One instrument is one witness, and instruments lie — a protected process can fake an impossible reading. Corroborate with a second method against a ground-truth total before the number drives a conclusion. |
+| "The tests are flaky — they fail together but pass alone" | Failing together and passing alone is the signature of shared-resource contention, not randomness. "Flaky" is a conclusion that requires the investigation it is usually used to end. |
 
 ## Guardrails
 

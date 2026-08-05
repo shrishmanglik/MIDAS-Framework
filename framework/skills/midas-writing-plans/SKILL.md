@@ -16,9 +16,15 @@ interpret is a draft, not a plan.
 
 ## The Process
 
-1. **Confirm the spec is approved.** No approved spec, no plan — route back
-   to brainstorming. A plan built on an unapproved spec inherits every one of
-   its unexamined assumptions.
+1. **Verify authorization before generating anything.** Two gates, in order.
+   First, confirm the work itself is authorized: read the scope record, the
+   ADR, the status marker — a scope doc marked frozen or a missing decision
+   record kills the plan before Task 1, however complete the spec looks.
+   Second, confirm the spec is approved. No authorization, no plan; no
+   approved spec, no plan — route back to brainstorming. And a plan destined
+   for an unattended executor must OPEN with an authorization-check step
+   that names the exact record to verify and HALTs the run if it is absent
+   or revoked — the executor cannot ask, so the plan asks for it.
 
 2. **Check scope.** If the spec spans independent subsystems, propose one plan
    per subsystem, each producing working, testable software on its own.
@@ -26,7 +32,12 @@ interpret is a draft, not a plan.
 3. **Map the file structure first.** Before writing tasks, list every file the
    plan will create or modify and what each is responsible for. One clear
    responsibility per file. In existing codebases, follow the established
-   patterns; do not restructure what the task does not require.
+   patterns; do not restructure what the task does not require. Where a
+   plausible lookalike sits beside a file the plan depends on — a stale
+   template, a near-named copy, an old version — the plan names the exact
+   right path AND names the lookalike as forbidden; a low-context executor
+   given only "the template file" will pick the wrong one often enough to
+   matter.
 
 4. **Write a plan header** carrying: the goal in one sentence, the approach in
    two or three, the tech involved, and a Global Constraints block with every
@@ -84,6 +95,8 @@ interpret is a draft, not a plan.
 | "I'll fix naming drift during execution" | A function named two ways in one plan is a bug shipped twice. Consistency is checked now, when it costs one edit. |
 | "The plan is long, so it must be thorough" | Length is not coverage. The three review passes measure a plan; page count measures typing. |
 | "I'll leave the library choice to the executor" | Choices left open at execution time get made by the least-informed party in the chain. The plan decides; the executor transcribes. |
+| "There's a work order, so the work is authorized" | An instruction to plan is not an authorization to build. Check the scope record and the ADR — a freeze marker or a missing decision kills the plan now, at the cost of one read, instead of overnight at the cost of the whole run. |
+| "The executor will find the right template file" | Where a lookalike exists, a low-context executor picks it — and an unattended run cannot notice. Name the exact path, forbid the lookalike by name. |
 
 ## Guardrails
 
@@ -109,6 +122,9 @@ interpret is a draft, not a plan.
 
 Halt and escalate to the requester when:
 
+- The authorization record is missing, frozen, or contradicts the request —
+  planning stops at the gate; "someone probably approved it" is not a
+  record.
 - A spec requirement cannot be planned without a decision the spec does not
   make — present the fork, do not pick silently.
 - Coverage review finds a spec requirement no task can implement as specced.
