@@ -1,4 +1,4 @@
-# MIDAS Architecture
+﻿# MIDAS Architecture
 
 Status: alpha public architecture
 
@@ -87,7 +87,7 @@ Benchmark-receipt validation is a deterministic evidence-shape check. It does no
 
 MIDAS skill packs are small `SKILL.md` instruction folders generated into `.midas/skills/`. `midas skills` validates required frontmatter, directory/name consistency, trigger-ready descriptions, license declarations, compatibility bounds, body size, local reference paths, and unsafe pre-approved tool hints. It also emits advisory warnings for suspicious body language that appears to weaken approvals, human review, verification, or gates.
 
-The public alpha ships three default skills: work-order, verification, and terminal-repair. They are framework guidance packs, not hidden system prompts, and they stay subordinate to project source, work orders, and human approval. Body-language warnings are review cues only; they do not prove semantic safety or claim to prevent prompt injection.
+The public alpha ships six default skills: work-order, verification, verification-gap, terminal-repair, local-planning, and spine-ux. They are framework guidance packs, not hidden system prompts, and they stay subordinate to project source, work orders, and human approval. Body-language warnings are review cues only; they do not prove semantic safety or claim to prevent prompt injection.
 
 ## Interface Quality
 
