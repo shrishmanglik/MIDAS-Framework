@@ -1,0 +1,26 @@
+id: bad-gate
+name: Bad Gate Fixture
+schemaVersion: midas.workflow.v2
+status: fixture
+purpose: A malformed readiness gate must fail validation.
+steps:
+  - id: ready-check
+    name: Broken readiness check
+    output: verdict
+    agent: reviewer
+    handoff:
+      after: []
+      enables: [ship]
+    gate:
+      type: vibes
+      verdicts: [PASS, MAYBE]
+      failBlocks: false
+  - id: ship
+    name: Ship it
+    output: deploy evidence
+    agent: deployment-engineer
+    handoff:
+      after: [ready-check]
+      enables: []
+rules:
+  - fixture only

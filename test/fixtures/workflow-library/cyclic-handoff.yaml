@@ -1,0 +1,29 @@
+id: cyclic-handoff
+name: Cyclic Handoff Fixture
+schemaVersion: midas.workflow.v2
+status: fixture
+purpose: A handoff cycle must fail validation.
+steps:
+  - id: alpha
+    name: Alpha step
+    output: alpha output
+    agent: planner
+    handoff:
+      after: [gamma]
+      enables: [beta]
+  - id: beta
+    name: Beta step
+    output: beta output
+    agent: builder
+    handoff:
+      after: [alpha]
+      enables: [gamma]
+  - id: gamma
+    name: Gamma step
+    output: gamma output
+    agent: reviewer
+    handoff:
+      after: [beta]
+      enables: [alpha]
+rules:
+  - fixture only
