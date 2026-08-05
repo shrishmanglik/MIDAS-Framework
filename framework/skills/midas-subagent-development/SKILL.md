@@ -30,12 +30,19 @@ delegation — it is diffusion of responsibility.
 
 3. **Route each dispatch by the model-tier gate.** An open or local tier
    model may take a task ONLY when both hold: (a) a gold-standard reference
-   for the task's shape exists, produced by the frontier tier, and (b) a
-   deterministic check will verify the output afterwards. Missing either,
-   route the task up. A cheap model on unvalidated novel work is not a cost
-   saving; it is unreviewed output with a delay fuse. The gate is evaluated
-   per task, not per session — yesterday's routing decision proves nothing
-   about today's task shape.
+   for the task's shape exists, produced by the frontier tier — built from
+   the HARDEST instance in the batch, not the simplest, because an easy
+   exemplar makes the easy case the ceiling — and (b) a deterministic check
+   will verify the output afterwards, a check that has been shown to FAIL a
+   deliberately broken copy before its passes count for anything. Missing
+   either, route the task up. A cheap model on unvalidated novel work is not
+   a cost saving; it is unreviewed output with a delay fuse. The gate is
+   evaluated per task, not per session — yesterday's routing decision proves
+   nothing about today's task shape. And it gates per artifact, not per
+   batch: each output passes its check individually; a batch-level pass can
+   hide the one file that failed. When a cheap-tier output fails its check,
+   one re-dispatch naming the exact failing check — then escalate the task
+   up a tier; the cheap tier never iterates blind.
 
 4. **Handle the worker's report by status.** Done: proceed to review. Done
    with concerns: read the concerns first; correctness concerns are resolved
@@ -84,6 +91,9 @@ delegation — it is diffusion of responsibility.
 | "Ledger bookkeeping slows me down" | The ledger is what survives compaction. Controllers without one have re-dispatched entire completed task sequences. |
 | "I'll paste the session history so the worker has full context" | Full context is the controller's job; the worker's power comes from having only its task. History pastes bloat dispatches and blur the brief's authority. |
 | "Round 4 with the same model, it nearly got there" | Nearly-there three times is the definition of stuck. Rounds 4-5 change the eyes and the tier, or they change nothing. |
+| "The benchmark says the cheap tier hits 93%, so the validator is optional here" | That measurement was itself produced under gold-reference-plus-validator conditions. Citing it to drop those conditions spends the measurement's credibility to avoid its preconditions — the number does not exist outside the setup that produced it. |
+| "I'll build the gold reference from the simplest case to get moving" | The exemplar is the ceiling. Seed from the hardest instance so replication only gets easier; a simplest-case reference certifies exactly the cases that never needed help. |
+| "The validator passed everything on the first run, great" | A check never seen to fail has never been shown to check anything. Break a copy on purpose and watch the validator catch it — only then do its passes mean pass. |
 
 ## Guardrails
 

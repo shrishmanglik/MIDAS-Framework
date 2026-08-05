@@ -36,8 +36,13 @@ eliminate: it converts hope into a record that later sessions treat as fact.
    that took no time, zero findings from an audit that exited instantly, zero
    diffs after an edit you made — each is more likely a measurement failure
    than a clean result. Truncated output, capped timeouts, and piped
-   summarizers all read as "clean" while measuring nothing. Investigate the
-   instrument before celebrating the number.
+   summarizers all read as "clean" while measuring nothing. Three specifics:
+   compare wall-clock against the check's own baseline (a 0.9-second "pass"
+   from a suite that took 70 seconds yesterday did not run its tests); a
+   pipeline's exit code is the LAST stage's (`suite | tail` reports tail's
+   success, whatever the suite did); a timeout-killed command exits 124 and
+   prints nothing — silence under a cap reads identically to clean. Check
+   the code, the duration, and the instrument before celebrating the number.
 
 5. **Run controls twice.** For any check that guards something important, run
    it once against a case that must pass and once against a case that must
@@ -79,6 +84,10 @@ eliminate: it converts hope into a record that later sessions treat as fact.
 | "It's a tiny change, the full check is overkill" | Small diffs with big blast radii are how regressions ship. Scope the check to the blast radius, not the diff size. |
 | "I'm tired and it's almost certainly fine" | Fatigue raises the error rate exactly when the shortcut tempts most. The gate does not scale with energy. |
 | "I phrased it as 'looks good' not 'done', so no verification needed" | The rule covers every paraphrase and implication of success. Different words, same claim, same evidence requirement. |
+| "It finished fast AND exited 0 — doubly green" | A run an order of magnitude faster than its own baseline duration did not do the work. Duration is evidence about the instrument; compare it before trusting the exit. |
+| "The pipeline exited 0, so the command passed" | A pipe's exit code is its last stage's. The summarizer succeeding says nothing about the command it summarized — re-run unpiped and read the counts. |
+| "The capped audit printed nothing, so no findings" | A timeout kill exits 124 and prints nothing — indistinguishable from clean by silence alone. Prove the audit completed before crediting its emptiness. |
+| "The dashboard shows green, that settles it" | A status pill is another instrument's claim, and it can reflect a cached or skipped stage. The build log is the evidence; the pill is an invitation to read it. |
 
 ## Guardrails
 
@@ -103,6 +112,10 @@ eliminate: it converts hope into a record that later sessions treat as fact.
   and the spec routinely contains more.
 - Counts are stated as counts: "34/34 pass" is evidence, "all tests pass"
   with no numbers is a mood.
+- Under time pressure the honest statuses are "verified — go", "verified —
+  no-go as-is", or "not verified — verifying now, N minutes". A hedged
+  "green as far as I can see" silently downgrades the claim and hands the
+  recipient a verification duty they hold less information to perform.
 - A regression guard earns its name through the red-green cycle: shown to
   fail on the unguarded code, shown to pass on the guarded code, both runs
   in the record.

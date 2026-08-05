@@ -21,7 +21,12 @@ never examined. This skill exists so that examination happens first, every time.
 
 2. **Run the interrogation set.** Before proposing anything, ask yourself 5-7
    questions about this specific request — and each question must be one whose
-   answer could change what you do next. Useful shapes:
+   answer could change what you do next. Question #1 is fixed, because it has
+   the highest kill rate per minute spent:
+   - **Does this already exist?** In the tree, in a merged branch, in a live
+     surface? Requests routinely name features that already shipped; five
+     minutes of checking has turned "obvious, just build it" into "already
+     live" more than once. Check before any other question is worth asking.
    - What does this request assume is true that I have not verified?
    - What would make this the wrong thing to build even if built perfectly?
    - What does the requester think is simple here that is actually load-bearing?
@@ -80,6 +85,8 @@ never examined. This skill exists so that examination happens first, every time.
 | "The spec review found nothing, so it's good" | A self-review that finds nothing on the first pass usually looked for nothing. Run the placeholder and ambiguity scans literally. |
 | "I'll present the whole spec at once, chunking is slow" | A monolithic spec gets a monolithic "looks fine". Chunks force real reads and catch contradictions while they are one edit deep. |
 | "Nobody answered my question, so I'll assume and continue" | An unanswered question becomes a recorded assumption at most, never a silent default. Name it, flag it, mark the spec provisional. |
+| "I'll list my assumptions in the PR description so they're reviewable" | Reviewable assumptions are still unasked questions — review arrives after the hours are spent, which is the expensive side of the gap. The question costs 30 seconds now; the assumption costs the build when review catches it. |
+| "It's obviously new functionality, no need to check the tree" | The cheapest interrogation answer on record: the feature already existed, live, merged weeks prior. "Obvious" describes the feeling, not the tree — run question #1 first. |
 
 ## Guardrails
 

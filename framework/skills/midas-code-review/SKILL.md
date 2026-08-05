@@ -81,6 +81,8 @@ becomes theatre performed over an unexamined diff.
 | "I fixed all the findings, marking them resolved" | Resolution is the reviewer's ruling, scoped to the fix diff. Self-resolved findings are unreviewed changes. |
 | "HEAD~1 is close enough for the diff base" | It truncates multi-commit work invisibly. The recorded base or nothing. |
 | "I was wrong to push back, better explain myself at length" | State the correction factually — what you checked, what it showed — and move on. Extended apology is theatre in the other direction. |
+| "Merge now, revert if review finds something" | A revert restores the code, not the world: a fired webhook, a charged card, a sent email do not un-happen. On side-effectful surfaces — payments above all — review happens before the effects exist, because afterwards is too late by definition. |
+| "The deploy window closes tonight, so self-review will have to do this once" | Self-review under deadline is confirmation-seeking with a clock. Missing the window is a fork at the requester's authority level — surface it and let them rule; the gate is never quietly cut to make a date. |
 
 ## Guardrails
 
@@ -109,6 +111,10 @@ Halt and escalate to the requester when:
 
 - No independent session is available to review — the work waits; it does
   not self-certify.
+- The gate collides with an external deadline (a closing deploy window, a
+  demo) — that collision is a fork at the requester's authority level,
+  surfaced while there is still time to rule, never resolved by the author
+  waiving the gate.
 - Author and reviewer deadlock after one fix-and-re-review round on a
   blocking finding.
 - Review surfaces a defect in the spec or plan itself, not the

@@ -10,9 +10,11 @@ allowed-tools: Read
 ## Purpose
 
 Write the test first, watch it fail, then write the minimum code that makes it
-pass. A test you never watched fail proves nothing — it may pass for reasons
-unrelated to the behavior it names, and you will not find out until production
-does.
+pass. A test you have only seen pass is unverified — it can lie three distinct
+ways: it checks the wrong condition, it mocks around the very path it claims
+to cover, or it is vacuously true and passes on any input. Watching it fail on
+the code it guards is the only evidence that rules out all three — and you
+will not get that evidence from production until it is too late.
 
 ## The Iron Law
 
@@ -71,6 +73,7 @@ glanced at. Deleted. Then the cycle restarts from the test.
 | "Keep the code as reference while I write tests" | You will adapt it, which is testing after with extra steps. Delete means delete. |
 | "Deleting hours of work is wasteful" | The hours are spent either way — sunk cost. Keeping code you cannot trust is the actual waste. |
 | "The regression test passes, so the fix works" | Green alone is half the proof. Show it red on pre-fix source or it detects nothing. |
+| "It's green, what more could a test say" | A test seen only green can be lying three ways: wrong condition, mocked-around path, or vacuous truth. Red-then-green is the one observation that eliminates all three — which is the entire point of a regression test on a severe bug. |
 | "TDD is dogma; I'm being pragmatic" | The pragmatic path is the one that catches the bug before commit. Guess-and-ship debugging in production is slower. |
 | "This case is different because…" | The sentence that starts this way is the rationalization the rule exists to stop. |
 | "Exploration code doesn't need tests" | Exploring is fine; keeping is not. Throw the exploration away and rebuild it test-first. |
