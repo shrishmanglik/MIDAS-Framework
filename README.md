@@ -1,39 +1,43 @@
 # MIDAS Framework
 
-Status: public alpha (source-visible)
-Package state: not published to npm
-License: Apache-2.0
+> Public alpha. Apache-2.0. Source available on GitHub. Not published to npm.
 
-MIDAS is an open-source framework for setting up disciplined agentic software projects. It gives a project a `.midas/` workspace, portable harness adapters, work-order structure, runtime step state, module manifests, validation checks, and a small CLI for predictable execution.
+MIDAS is a dependency-free Node.js CLI that adds an evidence-led operating layer to an existing software project. It creates scoped work orders, project context, agent permissions, runtime state, and validators under `.midas/`, then writes guidance where supported coding agents actually load it.
 
-## Five-Minute Start
+It does not replace your coding agent, connect accounts, read secrets, or make the deterministic core depend on a model API.
+
+## Start in 90 seconds
+
+Requires Git and Node.js 20.12 or newer. Use the pinned alpha tag because `main` carries unreleased work.
 
 ```bash
-git clone https://github.com/shrishmanglik/MIDAS-Framework.git
+git clone --branch v0.1.0-alpha.0 https://github.com/shrishmanglik/MIDAS-Framework.git
 cd MIDAS-Framework
-npm test                                   # verify your checkout (no dependencies to install)
-node ./bin/midas.mjs doctor                # confirm runtime readiness
+npm test
+node ./bin/midas.mjs doctor
 node ./bin/midas.mjs install --directory ../my-project --modules core,software-dev,qa --tools claude-code,codex --yes
 node ./bin/midas.mjs next --directory ../my-project
 ```
 
-That creates a `.midas/` workspace in your project with context files, work-order templates, agent profiles, contracts, and harness adapter guidance for your coding agents — then tells you the recommended next action. Everything runs locally; nothing phones home.
+The install command changes only the target project. It creates:
 
-### Pinning a version
+- `.midas/` project context, work orders, run state, checks, and evidence directories
+- agent, authority, workflow, quality, and public-claim contracts
+- a Claude Code skill at `.claude/skills/midas/SKILL.md`
+- a delimited MIDAS block inside the target project's `AGENTS.md` for Codex
 
-The package is not published to npm, so consumers install from git. Pin a tag — `main`
-tracks unreleased work and can change under you:
+`midas next` then reports the next concrete action for that workspace. The install path is local. Nothing phones home.
 
-```bash
-# Clone a fixed version
-git clone --branch v0.1.0-alpha.0 https://github.com/shrishmanglik/MIDAS-Framework.git
+## What it is for
 
-# Or add it as a dependency at that tag
-npm install github:shrishmanglik/MIDAS-Framework#v0.1.0-alpha.0
-```
+| Need | MIDAS surface |
+|---|---|
+| Give agents the same project context and boundaries | generated context, authority contracts, and harness adapters |
+| Keep work small and reviewable | scoped work orders, workflow state, handoffs, and run ledgers |
+| Prevent completion claims from outrunning evidence | validators, verification-gap receipts, and public-boundary checks |
+| Expose the workflow to agent tools | dependency-free MCP stdio server |
 
-Tags are listed under [tags](https://github.com/shrishmanglik/MIDAS-Framework/tags).
-`0.1.0-alpha.0` is an alpha: the CLI surface can still change between tags.
+This is alpha software with no known production users. The CLI can change between tags. It is not a security guarantee, an autonomous desktop agent, or evidence that MIDAS outperforms another framework.
 
 ## Calling MIDAS from Agents (MCP)
 
@@ -79,7 +83,7 @@ is not the same as proving the tool reads it. Corrections welcome.
 
 ## Memory, Web Access, and the Agent Loop
 
-- **Memory vault** — `.midas/memory/` is a linked markdown vault (Obsidian-style `[[links]]`, an always-current `MEMORY.md` index, deterministic ranked search).
+- **Memory vault:** `.midas/memory/` is a linked markdown vault (Obsidian-style `[[links]]`, an always-current `MEMORY.md` index, deterministic ranked search).
 
   ```bash
   # --description is required; --name is optional and is derived from the description when omitted.
@@ -93,78 +97,13 @@ is not the same as proving the tool reads it. Corrections welcome.
   ```
 
   Dangling `[[links]]` are reported as markers for entries worth writing, not as errors.
-- **Web access** — `midas web fetch <url>` fetches live pages with Node's native fetch, extracts readable text and links, refuses private/loopback hosts, and writes SHA-256 evidence receipts under `.midas/reports/web/`. Add `--render` to render JavaScript pages through a locally installed Playwright Chromium (optional; never bundled).
-- **Agent loop** — `midas agent --objective "..." --provider anthropic-api|script|manual` runs a bounded tool loop (max steps, read-only by default, `--allow-writes` and `--allow-web` gates, protected-path denial for env/secret files, full `run.json` + `events.jsonl` evidence per run). The `anthropic-api` provider uses your `ANTHROPIC_API_KEY`; the deterministic core never calls a model.
-- **License scaffold** — `midas license keygen | sign | install | status` provides offline Ed25519 license verification as the primitive for future paid distributions. No payment or hosted-API capability is implemented or claimed.
+- **Web access:** `midas web fetch <url>` fetches live pages with Node's native fetch, extracts readable text and links, refuses private/loopback hosts, and writes SHA-256 evidence receipts under `.midas/reports/web/`. Add `--render` to render JavaScript pages through a locally installed Playwright Chromium (optional; never bundled).
+- **Agent loop:** `midas agent --objective "..." --provider anthropic-api|script|manual` runs a bounded tool loop (max steps, read-only by default, `--allow-writes` and `--allow-web` gates, protected-path denial for env/secret files, full `run.json` + `events.jsonl` evidence per run). The `anthropic-api` provider uses your `ANTHROPIC_API_KEY`; the deterministic core never calls a model.
+- **License scaffold:** `midas license keygen | sign | install | status` provides offline Ed25519 license verification as the primitive for future paid distributions. No payment or hosted-API capability is implemented or claimed.
 
 Desktop computer-use (OpenClaw-style OS control) is intentionally NOT included: it requires native dependencies and a security review that the alpha has not passed. The gateway/run-control contracts are the intended home for that posture when it lands.
 
-The public framework focuses on what developers can use:
-
-- project setup,
-- context files,
-- work orders,
-- module manifests,
-- authority contracts,
-- benchmark evidence receipts,
-- interface quality contracts,
-- component quality scorecards,
-- flow component contracts,
-- knowledge pack policies,
-- run-control profiles,
-- runtime run state,
-- observation-driven repair packets,
-- gateway contracts,
-- channel gateway contracts,
-- harness adapters,
-- validation,
-- portable bundles,
-- and release-ready documentation.
-
-It keeps public docs limited to user-facing framework behavior.
-
-## Quick Start
-
-From this folder:
-
-```bash
-npm test
-node ./bin/midas.mjs list-tools
-node ./bin/midas.mjs modules
-node ./bin/midas.mjs install --directory ./tmp/example --modules core,software-dev,qa --tools codex,claude-code --yes
-node ./bin/midas.mjs agents --directory ./tmp/example
-node ./bin/midas.mjs authority --directory ./tmp/example
-node ./bin/midas.mjs benchmarks --directory ./tmp/example
-node ./bin/midas.mjs benchmark-bmad --directory . --bmad-directory ../BMAD-METHOD
-node ./bin/midas.mjs skills --directory ./tmp/example
-node ./bin/midas.mjs interface --directory ./tmp/example
-node ./bin/midas.mjs quality --directory ./tmp/example
-node ./bin/midas.mjs flows --directory ./tmp/example
-node ./bin/midas.mjs gateways --directory ./tmp/example
-node ./bin/midas.mjs knowledge --directory ./tmp/example
-node ./bin/midas.mjs run-controls --directory ./tmp/example
-node ./bin/midas.mjs channels --directory ./tmp/example
-node ./bin/midas.mjs adapters --directory ./tmp/example
-node ./bin/midas.mjs inventory --directory ./tmp/example
-node ./bin/midas.mjs context --directory ./tmp/example
-node ./bin/midas.mjs context --directory ./tmp/example --write
-node ./bin/midas.mjs plan --directory ./tmp/example --work-order demo "Ship one verified slice"
-node ./bin/midas.mjs ux-spine --directory ./tmp/example --design .midas/planning/demo/DESIGN.md --experience .midas/planning/demo/EXPERIENCE.md
-node ./bin/midas.mjs verify --directory ./tmp/example --spec .midas/planning/demo/PRD.md
-node ./bin/midas.mjs docs-staleness --directory . --files "lib/cli.mjs,docs/architecture.md"
-node ./bin/midas.mjs validate-pack ./framework/skills/verification-gap --strict
-node ./bin/midas.mjs run-workflow software-delivery --directory ./tmp/example --objective "Ship one verified slice"
-node ./bin/midas.mjs run-status --directory ./tmp/example
-node ./bin/midas.mjs step --directory ./tmp/example --step context --status completed --evidence "context loaded" --handoff planner
-node ./bin/midas.mjs observe --directory ./tmp/example --step verification --check tests --status failed --summary "expected output mismatch"
-node ./bin/midas.mjs closeout --directory ./tmp/example --status completed --evidence "tests passed" --risks "none" --next-action "Pick the next scoped work order"
-node ./bin/midas.mjs validate ./tmp/example
-node ./bin/midas.mjs validate ./tmp/example --run-checks
-node ./bin/midas.mjs next --directory ./tmp/example
-node ./bin/midas.mjs quick --directory ./tmp/example "Add the next project work order"
-```
-
-The installer creates a local `.midas/` workspace in the target project. It does not install third-party agents, connect accounts, read secrets, or run external code.
+The command reference below carries the full executable surface. The system model and current implementation boundary live in [`docs/architecture.md`](docs/architecture.md) and [`docs/capability-map.md`](docs/capability-map.md).
 
 ## Core Concepts
 
