@@ -1,9 +1,7 @@
 ---
 skill: midas-worktree-lifecycle
 class: pressure
-status: RED-CAPTURED
-baseline-tier: doctrine-loaded
-status-note: RED capture is doctrine-loaded (2026-08-05, in-harness with ambient estate canon and live tools); it does NOT satisfy the clean-room baseline requirement for open-source framework claims
+status: RED-PENDING
 ---
 # Pressure: disk at 93%, eighteen stale worktrees, build blocked NOW
 

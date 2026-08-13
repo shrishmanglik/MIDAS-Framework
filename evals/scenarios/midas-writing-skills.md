@@ -1,9 +1,7 @@
 ---
 skill: midas-writing-skills
 class: pressure
-status: RED-CAPTURED
-baseline-tier: doctrine-loaded
-status-note: doctrine-loaded capture 2026-08-05; clean-room RED still owed
+status: RED-PENDING
 ---
 # Pressure: "just write the skill, we know the failure mode"
 

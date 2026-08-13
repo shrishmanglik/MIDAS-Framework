@@ -20,6 +20,7 @@ test('.skill roundtrip: manifest hash matches the packaged SKILL.md', async () =
   assert.equal(manifest.schemaVersion, skillPackageSchemaVersion);
   assert.equal(manifest.name, 'verification-gap');
   assert.equal(manifest.sha256, packed.sha256);
+  assert.equal(Object.keys(manifest.fileSha256).length, manifest.files.length);
 
   const skillEntry = entries.find((entry) => entry.name === 'skill/SKILL.md');
   assert.ok(skillEntry, 'archive must contain skill/SKILL.md');
@@ -61,5 +62,64 @@ test('verifySkillPackage fails a tampered archive', async () => {
   const verification = await verifySkillPackage(out);
   assert.equal(verification.status, 'fail');
   assert.ok(verification.failures.some((failure) => failure.id === 'skill-package:sha256'));
+  await fs.rm(temp, { recursive: true, force: true });
+});
+
+test('verifySkillPackage fails when a packaged checklist is tampered', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-pack-resource-tamper-'));
+  const out = path.join(temp, 'tampered-resource.skill');
+  await packSkill({ skillDir: path.resolve('framework/skills/midas-tdd'), out });
+  const bytes = await fs.readFile(out);
+  const marker = Buffer.from('TDD gate checklist');
+  const index = bytes.indexOf(marker, bytes.indexOf(Buffer.from('skill/checklist.md')));
+  assert.ok(index > 0, 'expected to find checklist content to tamper with');
+  bytes[index] = bytes[index] === 0x43 ? 0x63 : 0x43;
+  await fs.writeFile(out, bytes);
+  const verification = await verifySkillPackage(out);
+  assert.equal(verification.status, 'fail');
+  assert.ok(verification.failures.some((failure) => failure.id === 'skill-package:file-sha256'));
+  await fs.rm(temp, { recursive: true, force: true });
+});
+
+test('verifySkillPackage rejects undeclared archive entries', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-pack-undeclared-'));
+  const out = path.join(temp, 'undeclared.skill');
+  await packSkill({ skillDir: path.resolve('framework/skills/midas-tdd'), out });
+  const bytes = await fs.readFile(out);
+  const declared = Buffer.from('skill/checklist.md');
+  const replacement = Buffer.from('skill/checklist.xy');
+  const index = bytes.indexOf(declared);
+  assert.ok(index > 0, 'expected manifest declaration for checklist');
+  replacement.copy(bytes, index);
+  await fs.writeFile(out, bytes);
+  const verification = await verifySkillPackage(out);
+  assert.equal(verification.status, 'fail');
+  assert.ok(verification.failures.some((failure) => failure.id === 'skill-package:undeclared-entry'));
+  await fs.rm(temp, { recursive: true, force: true });
+});
+
+test('verifySkillPackage rejects duplicate archive entries', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-pack-duplicate-'));
+  const out = path.join(temp, 'duplicate.skill');
+  await packSkill({ skillDir: path.resolve('framework/skills/midas-tdd'), out });
+  const bytes = await fs.readFile(out);
+  const headerIndex = bytes.lastIndexOf(Buffer.from('skill/checklist.md'));
+  assert.ok(headerIndex > 0, 'expected checklist archive header');
+  bytes.fill(0, headerIndex, headerIndex + 100);
+  Buffer.from('skill/SKILL.md').copy(bytes, headerIndex);
+  await fs.writeFile(out, bytes);
+  const verification = await verifySkillPackage(out);
+  assert.equal(verification.status, 'fail');
+  assert.ok(verification.failures.some((failure) => failure.id === 'skill-package:duplicate-entry'));
+  await fs.rm(temp, { recursive: true, force: true });
+});
+
+test('verifySkillPackage rejects a truncated archive', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-pack-truncated-'));
+  const out = path.join(temp, 'truncated.skill');
+  await packSkill({ skillDir: sourceSkill, out });
+  const bytes = await fs.readFile(out);
+  await fs.writeFile(out, bytes.subarray(0, bytes.length - 1));
+  await assert.rejects(() => verifySkillPackage(out), /end-of-archive marker/);
   await fs.rm(temp, { recursive: true, force: true });
 });
