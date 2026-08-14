@@ -19,6 +19,17 @@ node ./bin/midas.mjs install --directory ../my-project --modules core,software-d
 node ./bin/midas.mjs next --directory ../my-project
 ```
 
+Or install that same pinned tag into an existing project:
+
+```bash
+npm install --save-dev github:shrishmanglik/MIDAS-Framework#v0.1.0-alpha.0
+npx midas doctor
+npx midas install --directory . --modules core,software-dev,qa --tools claude-code,codex --yes
+npx midas next --directory .
+```
+
+The legacy `v1.0.0-skills` tag predates this package line. It is not a stable release of the current CLI and should not be used in place of `v0.1.0-alpha.0`.
+
 The install command changes only the target project. It creates:
 
 - `.midas/` project context, work orders, run state, checks, and evidence directories
@@ -181,6 +192,7 @@ midas modules      Print available MIDAS modules.
 midas doctor       Validate CLI/runtime readiness.
 midas validate     Validate a MIDAS repo or installed workspace.
 midas validate-pack Validate a single SKILL.md or skill library.
+midas customize    Resolve one skill's default, team, and user customization layers.
 midas plan         Create local-first PRD, DESIGN, EXPERIENCE, and handoff files.
 midas verify       Run a verification-gap traceability check from spec to evidence.
 midas ux-spine     Validate DESIGN.md component structure against EXPERIENCE.md flows.
