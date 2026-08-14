@@ -148,3 +148,28 @@ test('verifySkillPackage rejects manifest-declared traversal paths', async () =>
   assert.ok(verification.failures.some((failure) => failure.id === 'skill-package:unsafe-path'));
   await fs.rm(temp, { recursive: true, force: true });
 });
+
+test('verifySkillPackage rejects Windows drive-relative paths', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-pack-drive-relative-'));
+  const out = path.join(temp, 'drive-relative.skill');
+  await packSkill({ skillDir: path.resolve('framework/skills/midas-tdd'), out });
+  const bytes = await fs.readFile(out);
+  const declared = Buffer.from('skill/checklist.md');
+  const driveRelative = Buffer.from('C:evil/outside.xxx');
+  assert.equal(driveRelative.length, declared.length, 'fixture replacement must preserve archive offsets');
+
+  let replacements = 0;
+  let index = bytes.indexOf(declared);
+  while (index >= 0) {
+    driveRelative.copy(bytes, index);
+    replacements += 1;
+    index = bytes.indexOf(declared, index + driveRelative.length);
+  }
+  assert.equal(replacements, 3, 'expected manifest files, fileSha256, and archive header paths');
+  await fs.writeFile(out, bytes);
+
+  const verification = await verifySkillPackage(out);
+  assert.equal(verification.status, 'fail');
+  assert.ok(verification.failures.some((failure) => failure.id === 'skill-package:unsafe-path'));
+  await fs.rm(temp, { recursive: true, force: true });
+});
