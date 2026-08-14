@@ -114,7 +114,7 @@ is not the same as proving the tool reads it. Corrections welcome.
 
 Desktop computer-use (OpenClaw-style OS control) is intentionally NOT included: it requires native dependencies and a security review that the alpha has not passed. The gateway/run-control contracts are the intended home for that posture when it lands.
 
-The command reference below carries the full executable surface. The system model and current implementation boundary live in [`docs/architecture.md`](docs/architecture.md) and [`docs/capability-map.md`](docs/capability-map.md).
+The command reference below covers the public CLI on this branch. Rows marked unreleased are not available from the pinned alpha tag. The system model and implementation boundary live in [`docs/architecture.md`](docs/architecture.md) and [`docs/capability-map.md`](docs/capability-map.md).
 
 ## Core Concepts
 
@@ -192,7 +192,8 @@ midas modules      Print available MIDAS modules.
 midas doctor       Validate CLI/runtime readiness.
 midas validate     Validate a MIDAS repo or installed workspace.
 midas validate-pack Validate a single SKILL.md or skill library.
-midas customize    Resolve one skill's default, team, and user customization layers.
+midas discipline   Inspect MIDAS engineering discipline rules.
+midas customize    Resolve one skill's customization layers. Unreleased; not in v0.1.0-alpha.0.
 midas plan         Create local-first PRD, DESIGN, EXPERIENCE, and handoff files.
 midas verify       Run a verification-gap traceability check from spec to evidence.
 midas ux-spine     Validate DESIGN.md component structure against EXPERIENCE.md flows.
