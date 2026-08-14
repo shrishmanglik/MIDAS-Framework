@@ -1,0 +1,68 @@
+id: full-stack-feature
+name: Full-Stack Feature Workflow
+schemaVersion: midas.workflow.v2
+status: alpha
+purpose: Deliver one full-stack feature slice across API, data, UI, tests, security, deployment, and performance evidence.
+steps:
+  - id: api-design
+    name: Design service boundaries and API contracts
+    output: API contract, service boundary decisions, and integration constraints
+    agent: backend-architect
+    model-tier: frontier
+    handoff:
+      after: []
+      enables: [data-layer]
+  - id: data-layer
+    name: Model data and build the persistence layer
+    output: schema, migrations, and data-access evidence
+    agent: data-engineer
+    model-tier: frontier
+    handoff:
+      after: [api-design]
+      enables: [ui-build]
+  - id: ui-build
+    name: Build the user-facing feature surface
+    output: UI implementation mapped to the API contract
+    agent: frontend-developer
+    model-tier: frontier
+    handoff:
+      after: [data-layer]
+      enables: [test-coverage]
+  - id: test-coverage
+    name: Automate feature test coverage
+    output: passing automated tests across API, data, and UI paths
+    agent: test-automator
+    model-tier: frontier
+    handoff:
+      after: [ui-build]
+      enables: [security-review]
+  - id: security-review
+    name: Audit the feature for security exposure
+    output: security findings with severity or a clean audit receipt
+    agent: security-auditor
+    model-tier: frontier
+    handoff:
+      after: [test-coverage]
+      enables: [deployment]
+  - id: deployment
+    name: Ship the feature through the deployment pipeline
+    output: deploy evidence with rollback path recorded
+    agent: deployment-engineer
+    model-tier: frontier
+    handoff:
+      after: [security-review]
+      enables: [performance-validation]
+  - id: performance-validation
+    name: Validate performance under realistic load
+    output: performance evidence against agreed budgets
+    agent: performance-engineer
+    model-tier: frontier
+    handoff:
+      after: [deployment]
+      enables: []
+rules:
+  - one feature slice per run
+  - API contract before persistence, persistence before UI
+  - security findings block deployment until dispositioned
+  - deployment requires a recorded rollback path
+  - evidence before claims

@@ -65,7 +65,7 @@ test('run-status reports latest runtime step state', async () => {
   const status = await getRunStatus({ directory: temp });
   assert.equal(status.status, 'pass');
   assert.equal(status.latest.currentStep, 'context');
-  assert.equal(status.latest.totalSteps, 9);
+  assert.equal(status.latest.totalSteps, 10);
 });
 
 test('step requires known step ids and completion evidence', async () => {

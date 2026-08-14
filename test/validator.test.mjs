@@ -110,3 +110,23 @@ test('validator still skips unlisted dot-directories and caches', async () => {
   const result = await validateTarget(temp);
   assert.ok(!result.failures.some((failure) => failure.id.includes('private-methodology-reference')));
 });
+
+test('validator rejects internal work identifiers and organization-only references', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-internal-work-reference-'));
+  await fs.writeFile(path.join(temp, 'package.json'), '{}');
+  await fs.mkdir(path.join(temp, 'bin'));
+  await fs.writeFile(path.join(temp, 'bin', 'midas.mjs'), '');
+
+  const internalReferences = [
+    ['MIDAS', 'BRIDGE', '004'].join('-'),
+    ['MS', '1'].join('-'),
+    ['MD', '4'].join('-'),
+    ['dev', 'studio'].join('-'),
+    ['operating', 'estate'].join(' ')
+  ].join('\n');
+  await fs.writeFile(path.join(temp, 'README.md'), internalReferences);
+
+  const result = await validateTarget(temp);
+  assert.equal(result.status, 'fail');
+  assert.ok(result.failures.some((failure) => failure.id.includes('internal-work-reference')));
+});

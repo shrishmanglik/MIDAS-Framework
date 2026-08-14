@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "midas.review-lenses.v1",
+  "description": "Adversarial review lenses consumed by midas-code-review. A lens is one question asked of a diff. Lenses are selected per change class, never all at once: selection above three lenses is permitted only when multiple change classes each demand distinct lenses, and the selection records why.",
+  "changeClasses": ["payment", "auth", "schema", "ui", "infra", "docs"],
+  "maxLensesPerClass": 3,
+  "lenses": [
+    {
+      "id": "edge-cases",
+      "name": "Edge-Case Hunter",
+      "question": "What input, state, or timing did the author not think about, and what does the code do when it arrives?",
+      "applicability": ["payment", "auth", "schema"],
+      "redFlags": [
+        "Boundary values (zero, empty, max, negative) untested",
+        "Error paths that assume the happy path already succeeded",
+        "Concurrency or reentry unconsidered on shared state",
+        "Unicode, locale, or timezone assumptions baked into parsing",
+        "Silent fallbacks that hide the unexpected case instead of surfacing it"
+      ],
+      "evidenceRequired": "A named list of boundary and failure cases with the test or trace proving each is handled — or an explicit record that it is not."
+    },
+    {
+      "id": "security",
+      "name": "Hostile-User Lens",
+      "question": "If this change shipped to a hostile user today, what is the worst they could do with it?",
+      "applicability": ["payment", "auth", "infra"],
+      "redFlags": [
+        "Input reaching a sink (query, shell, path, URL) without validation",
+        "Authorization checked client-side only, or not per-object",
+        "Secrets or tokens logged, committed, or echoed in errors",
+        "New dependency or network surface added without review",
+        "Error messages leaking internal structure to callers"
+      ],
+      "evidenceRequired": "The trust boundary named, the inputs crossing it enumerated, and the check (test or code path) shown for each crossing."
+    },
+    {
+      "id": "spec-compliance",
+      "name": "Contract Reader",
+      "question": "Does the change do exactly what the governing spec or contract says — no more, no less?",
+      "applicability": ["schema", "ui", "docs"],
+      "redFlags": [
+        "Behavior present that no requirement asked for",
+        "A requirement silently narrowed or reinterpreted to fit the code",
+        "Docs or schema drifting from the implemented behavior",
+        "Contract fields renamed or repurposed without a version bump"
+      ],
+      "evidenceRequired": "The governing spec quoted next to the diff hunk that satisfies it, requirement by requirement."
+    },
+    {
+      "id": "regression",
+      "name": "What-Broke Lens",
+      "question": "What that worked before this change could stop working because of it?",
+      "applicability": ["auth", "schema", "ui", "infra"],
+      "redFlags": [
+        "Shared helper modified with call sites unchecked",
+        "A test deleted or loosened to make the suite pass",
+        "Default value or ordering changed in passing",
+        "Migration shipped without a rollback path"
+      ],
+      "evidenceRequired": "The full pre-existing suite run green on the change, plus a usage search for every modified shared surface."
+    },
+    {
+      "id": "claim-integrity",
+      "name": "Receipt Auditor",
+      "question": "Is every claim this change makes or enables — in code, copy, or docs — backed by a receipt?",
+      "applicability": ["payment"],
+      "redFlags": [
+        "Metrics or counts stated without a source",
+        "Intent worded as live capability",
+        "A 'verified' label with no quoted command output behind it",
+        "Pricing or entitlement copy diverging from the enforced behavior"
+      ],
+      "evidenceRequired": "Each user-visible or reviewer-visible claim mapped to its evidence: the command, output, or enforced code path that makes it true."
+    },
+    {
+      "id": "performance",
+      "name": "Hot-Path Accountant",
+      "question": "Where does this change spend time or memory that it did not before, and at what scale does that hurt?",
+      "applicability": ["ui", "infra"],
+      "redFlags": [
+        "Work moved inside a loop or render path",
+        "Unbounded collection growth, or a cache without eviction",
+        "N+1 I/O introduced where one batch call would do",
+        "Blocking call added on a hot path"
+      ],
+      "evidenceRequired": "A measurement — timing, profile, or complexity argument with realistic input sizes — for the affected path, before and after."
+    }
+  ]
+}
