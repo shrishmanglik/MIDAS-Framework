@@ -123,3 +123,28 @@ test('verifySkillPackage rejects a truncated archive', async () => {
   await assert.rejects(() => verifySkillPackage(out), /end-of-archive marker/);
   await fs.rm(temp, { recursive: true, force: true });
 });
+
+test('verifySkillPackage rejects manifest-declared traversal paths', async () => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-pack-traversal-'));
+  const out = path.join(temp, 'traversal.skill');
+  await packSkill({ skillDir: path.resolve('framework/skills/midas-tdd'), out });
+  const bytes = await fs.readFile(out);
+  const declared = Buffer.from('skill/checklist.md');
+  const traversal = Buffer.from('../outside-file.xx');
+  assert.equal(traversal.length, declared.length, 'fixture replacement must preserve archive offsets');
+
+  let replacements = 0;
+  let index = bytes.indexOf(declared);
+  while (index >= 0) {
+    traversal.copy(bytes, index);
+    replacements += 1;
+    index = bytes.indexOf(declared, index + traversal.length);
+  }
+  assert.equal(replacements, 3, 'expected manifest files, fileSha256, and archive header paths');
+  await fs.writeFile(out, bytes);
+
+  const verification = await verifySkillPackage(out);
+  assert.equal(verification.status, 'fail');
+  assert.ok(verification.failures.some((failure) => failure.id === 'skill-package:unsafe-path'));
+  await fs.rm(temp, { recursive: true, force: true });
+});

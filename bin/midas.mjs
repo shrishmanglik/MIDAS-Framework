@@ -26,7 +26,7 @@ function parseArgs(args) {
 }
 
 /**
- * bin-level subcommands (MIDAS-BRIDGE-004 wave-2):
+ * bin-level workflow subcommands:
  *
  * midas next [workorder]   With a work-order file argument (positional or
  *                          --work-order), polls the midas.autorun.v1 state

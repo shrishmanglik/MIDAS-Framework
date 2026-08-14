@@ -13,7 +13,7 @@ The normative Agent Skills specification is published at **agentskills.io**. The
 `spec/` directory in the `anthropics/skills` source repository is a redirect stub, not
 the spec text — conformance claims must resolve against the live site, not the repo.
 
-**TODO (owner: dev-studio MIDAS-bridge lane, MS-1 closeout):** fetch the live
+**TODO (owner: public benchmark maintainers):** fetch the live
 agentskills.io specification from a network-verified session, record its version and
 retrieval date here, and re-verify the table below against that text. Until that stamp
 lands, the "official spec minimum" column reflects the 2026-08-05 comparative inventory

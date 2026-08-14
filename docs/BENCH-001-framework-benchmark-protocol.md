@@ -7,14 +7,13 @@ paired evidence, claim ceilings mandatory.
 
 ## The validity rule this protocol exists to respect
 
-**2026-08-05 finding (recorded in `evals/README.md`):** baselines executed inside an
-operating estate inherit ambient project doctrine and tool access — 9/9 in-harness
-"no-skill" baselines chose the disciplined option while citing the estate's own canon.
-Therefore: **all BENCH-001 conditions run CLEAN-ROOM** — fresh environment, no project
-canon beyond the condition's own framework install, pinned model and params, scenario/
-task delivered verbatim. In-harness runs are exploratory only and never produce
-receipts. A benchmark that flatters its author's environment is the adjacent check
-wearing a lab coat.
+Baseline runs can inherit ambient project instructions and tool access. This repository
+currently carries no public receipt quantifying that effect. Therefore: **all BENCH-001
+conditions run CLEAN-ROOM** — fresh environment, no project instructions beyond the
+condition's own framework install, pinned model and params, scenario/task delivered
+verbatim. Runs outside that clean room are exploratory only and never produce receipts.
+A benchmark that flatters its author's environment is the adjacent check wearing a lab
+coat.
 
 ## Conditions (paired, same model + params across a run)
 
@@ -53,9 +52,9 @@ Drawn from real incidents; each has a fixture repo and a machine-checkable score
 
 ## Execution & receipts
 
-Runner: Codex CLI or containerized Claude Code sessions outside the estate (the bridge
-chat or the founder executes; the estate CEO session never scores its own runs —
-reviewer-independence applies to benchmarks). Each (condition × task × model) run emits
+Runner: Codex CLI or containerized Claude Code sessions in a clean-room repository (the
+benchmark operator executes; the system under test never scores its own runs — reviewer
+independence applies to benchmarks). Each (condition × task × model) run emits
 a receipt per `framework/benchmarks/` schema: environment hash, install manifest, model
 + params, task fixture hash, transcript path, deterministic score, scorer version.
 Paired table only across identical (task, model) cells. Minimum 3 runs per cell before

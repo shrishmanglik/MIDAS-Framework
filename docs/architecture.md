@@ -1,4 +1,4 @@
-﻿# MIDAS Architecture
+# MIDAS Architecture
 
 Status: alpha public architecture
 
