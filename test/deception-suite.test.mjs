@@ -16,6 +16,16 @@ async function build(fixture) {
   return temp;
 }
 
+// A fixture may place the project in a subdirectory and point the gate at evidence outside it,
+// which is how the evidence-injection deception works.
+function optionsFor(fixture, temp) {
+  return {
+    directory: fixture.directory ? path.join(temp, fixture.directory) : temp,
+    spec: fixture.spec ?? 'PRD.md',
+    ...(fixture.evidenceFiles ? { evidenceFiles: fixture.evidenceFiles } : {})
+  };
+}
+
 // Each fixture is its own test so a regression names the exact deception that got through, rather
 // than reporting that "the suite" failed.
 for (const fixture of fixtures) {
@@ -24,7 +34,7 @@ for (const fixture of fixtures) {
   if (fixture.expect === 'must-not-pass') {
     test(`deception refused: ${label}`, async () => {
       const temp = await build(fixture);
-      const result = await verifyCompletionGap({ directory: temp, spec: 'PRD.md' });
+      const result = await verifyCompletionGap(optionsFor(fixture, temp));
       assert.notEqual(
         result.status,
         'pass',
@@ -36,7 +46,7 @@ for (const fixture of fixtures) {
   if (fixture.expect === 'must-pass') {
     test(`honest work accepted: ${label}`, async () => {
       const temp = await build(fixture);
-      const result = await verifyCompletionGap({ directory: temp, spec: 'PRD.md' });
+      const result = await verifyCompletionGap(optionsFor(fixture, temp));
       assert.equal(
         result.status,
         'pass',
@@ -52,7 +62,7 @@ for (const fixture of fixtures) {
     // quietly passing for the wrong reason.
     test(`known limit still stands: ${label}`, async () => {
       const temp = await build(fixture);
-      const result = await verifyCompletionGap({ directory: temp, spec: 'PRD.md' });
+      const result = await verifyCompletionGap(optionsFor(fixture, temp));
       assert.equal(
         result.status,
         'pass',

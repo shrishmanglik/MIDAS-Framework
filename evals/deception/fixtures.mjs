@@ -53,7 +53,9 @@ const REAL_TEST = [
 // Requirement vocabulary, used by the fixtures that fake evidence by carrying the words.
 const WORDS = 'reconcile the carrier file against the payroll extract and flag mismatches';
 
-export const fixtures = [
+import { round2 } from './fixtures-round-2.mjs';
+
+const round1 = [
   // ---------------------------------------------------------------- A. prose is not evidence
   {
     id: 'DEC-001', category: 'prose', expect: 'must-not-pass',
@@ -307,5 +309,9 @@ export const fixtures = [
     }
   }
 ];
+
+// Round two carries the sixteen deceptions an independent reviewer got through round one, the
+// honest project shapes round one wrongly refused, and the fixtures that isolate each mechanism.
+export const fixtures = [...round1, ...round2];
 
 export const categories = [...new Set(fixtures.map((fixture) => fixture.category))];
