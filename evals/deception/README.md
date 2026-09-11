@@ -35,17 +35,17 @@ Reproduce it; do not quote this table without running it.
 
 | | |
 |---|---|
-| Fixture deceptions refused | **58 / 58** |
-| Honest project shapes accepted | **40 / 40** |
-| Mechanisms independently pinned | **27** |
-| Mutants killed by this suite | **23 / 23** |
+| Fixture deceptions refused | **59 / 59** |
+| Honest project shapes accepted | **42 / 42** |
+| Mechanisms independently pinned | **30** |
+| Mutants killed by this suite | **22 killed, 3 subsumed, 0 survived** |
 | Known limits, documented below | **3** |
 
 Two commands, and the second is the one that matters:
 
 ```
-npm run selftest:adversarial   # 102 tests: does the gate get these fixtures right?
-npm run selftest:mutants       # 23 mutants: can this suite detect its own defences being removed?
+npm run selftest:adversarial   # 105 tests: does the gate get these fixtures right?
+npm run selftest:mutants       # 25 mutants: can this suite detect its own defences being removed?
 ```
 
 **Read that first row precisely.** It says 46 of the 46 fixtures in this suite, and it does not say
@@ -117,6 +117,26 @@ reproduced here before anything was changed:
   is one whitespace-free "name". Source files are now measured on code tokens; identifier-shaped
   strings may supplement a file that already shows the requirement in code, and can never carry it
   alone.
+
+The scanner lane found two more, and one of them reversed a decision I had just made and written a
+fixture for. I had kept a rule exempting `//` from comment stripping when it followed a colon, so
+that `http://` survived, and I pinned it with a fixture proving it did work. It is a **critical false
+pass**: `default://<the requirement sentence>` is valid JavaScript, and the exemption emitted that
+prose into the code view where it supplied every token the gate needed. Five idiomatic forms trigger
+it. It protected nothing, because a URL in real code is already inside a string or an existing
+comment by the time that line runs. The exemption is gone and the fixture is inverted to pin its
+removal. I kept it because I could construct a case where it helped and never checked whether it
+also did harm.
+
+The second was the whole-file poison returning through a different character: `return /`/.test(s)`
+is ordinary JavaScript, the backtick inside the unrecognised regex opened a template literal, and
+template literals were exempt from the newline bail because they legitimately span lines - so it
+swallowed the rest of the file. The fix is a containment rule rather than another pattern: **a
+literal that never closes means the scanner has lost its place, so it gives up at the end of its own
+line.** Any scanner this thin will mis-lex somewhere; what matters is that a mis-lex costs one line.
+That rule now subsumes three mechanisms that used to be load-bearing on their own, which is why the
+matrix reports 22 killed and 3 subsumed rather than 25 killed - a mechanism defended twice cannot be
+killed alone, and saying so is more honest than deleting the mutant.
 
 Fixing the first found the mirror-image defect in the same list: a suite written entirely in
 `assert.equal(...)` was not recognised as a test at all, because the pattern required the paren to

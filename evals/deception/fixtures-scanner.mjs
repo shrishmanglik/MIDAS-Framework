@@ -412,20 +412,105 @@ export const scannerFixtures = [
     }
   },
   {
-    id: 'SCAN-URL-IN-JSX', category: 'scanner', expect: 'must-pass',
-    mechanism: 'a URL is not a line comment',
-    description: 'A bare URL as JSX link text, which is ordinary React and is not a string literal in any profile, with the implementation after it on the same line. Once every language parses its own strings correctly, this is the shape that still reaches the guard.',
+    // INVERTED, not deleted. This fixture was written to pin the `://` exemption that stopped `//`
+    // after a colon being read as a comment. An independent reviewer then demonstrated that the
+    // exemption is a critical FALSE PASS - `default://<the requirement sentence>` is valid
+    // JavaScript and handed the gate every token it needed - and that it protected nothing, because
+    // a URL in real code is already inside a string or an existing comment. So the fixture now pins
+    // the removal instead of the mechanism. I kept that guard because I could construct a case
+    // where it helped, and never checked whether it also did harm.
+    id: 'SCAN-COLON-COMMENT', category: 'scanner', expect: 'must-not-pass',
+    mechanism: 'a comment after a colon is still a comment',
+    description: 'The requirement restated in a comment written as `default://<prose>` with no space, which is valid JavaScript. Passes if `//` after a colon is exempted from comment stripping.',
     files: {
       'PRD.md': SPEC_ONE,
-      // Packed onto one line on purpose. Blanking runs forward to the end of the line, so only
-      // something AFTER the URL can show whether the guard did any work.
-      'src/Panel.jsx':
-        'export function Panel() { return <a href="#">http://carrier.example/payroll</a>; } ' +
-        `export function ${IDENT}(rows, extract) { return rows.filter((row) => !extract.includes(row)); }`,
+      'src/thing.mjs': [
+        'export function alpha(input) {',
+        '  switch (input.kind) {',
+        `    default://${WORDS}`,
+        '    return input;',
+        '  }',
+        '}'
+      ].join('\n'),
+      'test/thing.test.mjs': [
+        "import assert from 'node:assert/strict';",
+        "import test from 'node:test';",
+        "import { alpha } from '../src/thing.mjs';",
+        '',
+        `test('${WORDS}', () => {`,
+        `  const ${IDENT} = alpha({ kind: 2 });`,
+        `  assert.equal(${IDENT}.kind, 2);`,
+        '});'
+      ].join('\n')
+    }
+  },
+  {
+    id: 'SCAN-URL-IN-JSX', category: 'scanner', expect: 'must-pass',
+    mechanism: 'a mis-lex costs at most one line',
+    description: 'A bare URL as JSX link text, which is ordinary React and is not a string literal in any profile. Removing the colon exemption means the rest of that line is read as a comment, so the cost must stay confined to the line the URL is on.',
+    files: {
+      'PRD.md': SPEC_ONE,
+      'src/Panel.jsx': [
+        'export function Panel() {',
+        '  return <a href="#">http://carrier.example/payroll</a>;',
+        '}',
+        '',
+        `export function ${IDENT}(rows, extract) {`,
+        '  return rows.filter((row) => !extract.includes(row));',
+        '}'
+      ].join('\n'),
       'test/panel.test.mjs': [
         "import assert from 'node:assert/strict';",
         "import test from 'node:test';",
         `import { ${IDENT} } from '../src/Panel.jsx';`,
+        '',
+        `test('${WORDS}', () => {`,
+        `  assert.deepEqual(${IDENT}([1], []), [1]);`,
+        '});'
+      ].join('\n')
+    }
+  },
+  {
+    id: 'SCAN-BACKTICK-POISON', category: 'scanner', expect: 'must-pass',
+    mechanism: 'unterminated literals are contained to one line',
+    description: 'A regex literal containing a backtick, in a keyword position. The backtick opened a template literal that swallowed the rest of the file: the same whole-file poison as the original apostrophe bug, reached through a different character.',
+    files: {
+      'PRD.md': SPEC_ONE,
+      'src/reconcile.mjs': [
+        'export function quotesBacktick(s) { return /`/.test(s); }',
+        '',
+        `export function ${IDENT}(rows, extract) {`,
+        '  return rows.filter((row) => !extract.includes(row));',
+        '}'
+      ].join('\n'),
+      'test/reconcile.test.mjs': [
+        "import assert from 'node:assert/strict';",
+        "import test from 'node:test';",
+        `import { ${IDENT} } from '../src/reconcile.mjs';`,
+        '',
+        `test('${WORDS}', () => {`,
+        `  assert.deepEqual(${IDENT}([1], []), [1]);`,
+        '});'
+      ].join('\n')
+    }
+  },
+  {
+    id: 'SCAN-UNCLOSED-TEMPLATE', category: 'scanner', expect: 'must-pass',
+    mechanism: 'unterminated literals are contained to one line',
+    description: 'A genuinely unclosed template literal above the implementation. The scanner has lost its place, and must give up at the end of that line rather than blanking everything below it.',
+    files: {
+      'PRD.md': SPEC_ONE,
+      'src/reconcile.mjs': [
+        'const banner = `unclosed;',
+        '',
+        `export function ${IDENT}(rows, extract) {`,
+        '  return rows.filter((row) => !extract.includes(row));',
+        '}'
+      ].join('\n'),
+      'test/reconcile.test.mjs': [
+        "import assert from 'node:assert/strict';",
+        "import test from 'node:test';",
+        `import { ${IDENT} } from '../src/reconcile.mjs';`,
         '',
         `test('${WORDS}', () => {`,
         `  assert.deepEqual(${IDENT}([1], []), [1]);`,

@@ -42,13 +42,12 @@ const MUTANTS = [
   ['string-scanning-off',
    'const quote = profile.quotes.find((q) => starts(q, i));',
    'const quote = undefined;'],
-  ['regex-literal-handling-off',
-   "if (profile.regex && text[i] === '/' && REGEX_PRECEDERS.has(lastSignificant)) {",
-   "if (false && text[i] === '/') {"],
+  ['regex-literal-handling-off', "if (profile.regex && text[i] === '/' &&", "if (false &&"],
   ['regex-preceders-blind',
    'REGEX_PRECEDERS.has(lastSignificant)', 'true'],
   ['regex-preceders-include-angle',
-   "'-', '*', '%', '>', '~', '^',", "'-', '*', '%', '<', '>', '~', '^',"],
+   "'-', '*', '%', '>', '~', '^',", "'-', '*', '%', '<', '>', '~', '^',", 'containment: a JSX closing tag mis-lexed as a regex costs at most the rest of its line'],
+
   ['wordstrings-admit-prose',
    'if (inner.length > 1 && !/\\s/.test(inner)) wordStrings.push(inner);',
    'if (inner.length > 1) wordStrings.push(inner);'],
@@ -56,11 +55,19 @@ const MUTANTS = [
    'if (inner.length > 1 && !/\\s/.test(inner)) wordStrings.push(inner);',
    'if (false) wordStrings.push(inner);'],
   ['unterminated-string-runs-on',
-   "if (quote.length === 1 && quote !== '`' && text[j] === '\\n') break;", ';'],
+   "if (quote.length === 1 && quote !== '`' && text[j] === '\\n') break;", ';', 'containment: the newline bail is now an optimisation; the give-up rule enforces the same bound'],
+
   ['blankout-eats-newlines',
    "out += source[i] === '\\n' ? '\\n' : ' ';", "out += ' ';"],
-  ['url-in-string-guard-off',
-   "if (!(line === '//' && text[i - 1] === ':')) {", 'if (true) {'],
+  // Restores the removed `://` exemption. The suite must go red: it was a critical false pass.
+  ['colon-comment-exemption-restored',
+   'if (line) {', "if (line && !(line === '//' && text[i - 1] === ':')) {"],
+  ['unterminated-literal-containment-off',
+   'if (!closed) {', 'if (false) {'],
+  ['keyword-regex-preceders-off',
+   'REGEX_PRECEDERS.has(lastSignificant) || KEYWORD_PRECEDERS.has(trailingWord(out))',
+   'REGEX_PRECEDERS.has(lastSignificant)', 'containment: this still mis-lexes without it, but the damage stops at the end of the line'],
+
   ['py-line-comment-wrong',
    "py:     { line: ['#'], block: []", "py:     { line: ['//'], block: []"],
   ['py-triple-quotes-off',
@@ -101,10 +108,27 @@ function count(output) {
   return match ? Number(match[1]) : -1;
 }
 
+// This script mutates the live file it is measuring, so a hard kill between writing a mutant and
+// restoring would leave the repository holding deliberately broken code. The backup is written
+// beside the target BEFORE the first mutation and removed only on a clean finish, so an interrupted
+// run is visible and self-healing rather than silent. A previous run that died is restored here.
+const BACKUP = `${TARGET}.pristine`;
+if (fs.existsSync(BACKUP)) {
+  fs.copyFileSync(BACKUP, TARGET);
+  console.error(`Restored ${path.basename(TARGET)} from a previous interrupted run.`);
+}
+
 const pristine = fs.readFileSync(TARGET, 'utf8');
 const rows = [];
 
-process.on('exit', () => fs.writeFileSync(TARGET, pristine));
+fs.writeFileSync(BACKUP, pristine);
+const restore = () => {
+  try { fs.writeFileSync(TARGET, pristine); fs.rmSync(BACKUP, { force: true }); } catch { /* best effort */ }
+};
+process.on('exit', restore);
+for (const signal of ['SIGINT', 'SIGTERM', 'SIGHUP', 'SIGBREAK']) {
+  process.on(signal, () => { restore(); process.exit(130); });
+}
 
 // Prove the clean control passes before believing anything about the mutants. A fixture that is
 // already failing makes EVERY mutant look killed, which is how this instrument would report a
@@ -117,14 +141,14 @@ if (baseline !== 0) {
   process.exit(2);
 }
 
-for (const [name, from, to] of MUTANTS) {
+for (const [name, from, to, subsumedBy] of MUTANTS) {
   const occurrences = pristine.split(from).length - 1;
   if (occurrences !== 1) {
     rows.push({ name, anchor: occurrences });
     continue;
   }
   fs.writeFileSync(TARGET, pristine.replace(from, to));
-  rows.push({ name, suite: failures(SUITE), contract: failures(CONTRACT) });
+  rows.push({ name, subsumedBy, suite: failures(SUITE), contract: failures(CONTRACT) });
   fs.writeFileSync(TARGET, pristine);
 }
 
@@ -140,14 +164,22 @@ for (const row of rows) {
     continue;
   }
   const killed = row.suite > 0;
-  if (!killed) survived += 1;
+  // A mutant marked `subsumedBy` names a mechanism a SECOND mechanism also defends, so removing it
+  // alone produces no wrong verdict and no honest fixture can kill it. That is defence in depth
+  // rather than an untested mechanism. It is reported rather than counted as a failure - and it is
+  // written down, because the difference between the two is exactly what a green score papers over.
+  if (!killed && !row.subsumedBy) survived += 1;
   const verdict = killed ? 'killed by the Deception Suite'
+    : row.subsumedBy ? `survives, subsumed - ${row.subsumedBy}`
     : row.contract > 0 ? 'SURVIVED the suite; only the contract tests caught it'
     : 'SURVIVED BOTH';
   console.log(`${row.name.padEnd(width)}  ${`${row.suite} fail`.padEnd(9)} ${`${row.contract} fail`.padEnd(9)} ${verdict}`);
 }
 
+fs.rmSync(BACKUP, { force: true });
+
+const subsumed = rows.filter((row) => row.subsumedBy && !(row.suite > 0)).length;
 const applied = rows.length - broken;
-console.log(`\n${applied} mutants applied | ${applied - survived} killed by the Deception Suite | ${survived} survived`);
+console.log(`\n${applied} applied | ${applied - survived - subsumed} killed | ${subsumed} subsumed by another mechanism | ${survived} survived`);
 if (broken > 0) console.log(`${broken} anchors no longer match and mutated nothing`);
 process.exitCode = survived > 0 || broken > 0 ? 1 : 0;
