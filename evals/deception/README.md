@@ -35,17 +35,17 @@ Reproduce it; do not quote this table without running it.
 
 | | |
 |---|---|
-| Fixture deceptions refused | **56 / 56** |
+| Fixture deceptions refused | **58 / 58** |
 | Honest project shapes accepted | **40 / 40** |
-| Mechanisms independently pinned | **25** |
-| Mutants killed by this suite | **22 / 22** |
+| Mechanisms independently pinned | **27** |
+| Mutants killed by this suite | **23 / 23** |
 | Known limits, documented below | **3** |
 
 Two commands, and the second is the one that matters:
 
 ```
-npm run selftest:adversarial   # 100 tests: does the gate get these fixtures right?
-npm run selftest:mutants       # 22 mutants: can this suite detect its own defences being removed?
+npm run selftest:adversarial   # 102 tests: does the gate get these fixtures right?
+npm run selftest:mutants       # 23 mutants: can this suite detect its own defences being removed?
 ```
 
 **Read that first row precisely.** It says 46 of the 46 fixtures in this suite, and it does not say
@@ -102,6 +102,36 @@ Building the fixtures found three defects in the gate that the fixtures were onl
 4. The same empty-self-test pass survived the first fix in C# and Java, because C-family methods
    declare a return type and no keyword, so the keyword rule never fired on them. Measured on both
    `[Test]` and `@Test` before the second fix.
+
+## What a third review found
+
+Three independent lanes attacked the scanner, tried to smuggle deceptions past it end to end, and
+built honest projects to see what it wrongly refuses. Two returned BLOCK. The two worst were
+reproduced here before anything was changed:
+
+- **A project with no test file at all returned `pass`**, and the receipt named the implementation
+  as its own test evidence. `\b(?:test|it|describe)\s*\(` matched `CARRIER.test(row)`, an ordinary
+  regex method call in production code. Fixed with a lookbehind, and pinned.
+- **The requirement sentence written with dots instead of spaces passed as an implementation.** The
+  `wordStrings` rule admits any string with no whitespace as a name, and a sentence joined by dots
+  is one whitespace-free "name". Source files are now measured on code tokens; identifier-shaped
+  strings may supplement a file that already shows the requirement in code, and can never carry it
+  alone.
+
+Fixing the first found the mirror-image defect in the same list: a suite written entirely in
+`assert.equal(...)` was not recognised as a test at all, because the pattern required the paren to
+follow the identifier directly. Namespaced assertions now count, and a bare `assert(payload)`
+invariant in production code no longer does.
+
+**Not yet fixed, ranked, all from that review and all reproduced by its author:** six languages the
+gate cannot read at all (Elixir, Clojure, Haskell, Perl, Dart, Objective-C) where the receipt says
+"implement or waive" rather than "cannot read"; Ruby heredoc bodies read as code; template-literal
+and f-string interpolations blanked along with the literal, hiding calls made inside them; C#
+verbatim strings `@"C:\path\"` mis-scanned because backslash is treated as an escape; JS class and
+object method names extracted with the first character removed; a test that defines its own copy of
+the symbol counted as exercising the implementation; a file of nothing but constant declarations
+donating a symbol; a single-token requirement that can never be traced because the donor floor is
+two; and E2E-only suites reported as `implemented-untested`, which reads as "you wrote no tests".
 
 ## What a second review found, and what is still open
 

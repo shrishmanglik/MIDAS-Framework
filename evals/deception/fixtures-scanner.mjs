@@ -141,6 +141,57 @@ export const scannerFixtures = [
     }
   },
 
+  // ------------------------------------------------- a string is not where a requirement is built
+  {
+    id: 'SCAN-STRING-SMUGGLING', category: 'scanner', expect: 'must-not-pass',
+    mechanism: 'string tokens cannot carry a source match alone',
+    description: 'The requirement sentence written with dots instead of spaces, which makes the whole sentence one whitespace-free "name" and admits it as vocabulary. An independent reviewer got eight false passes through this door.',
+    files: {
+      'PRD.md': SPEC_ONE,
+      'src/app.mjs': [
+        `export const MESSAGE_KEY = "${WORDS.split(' ').join('.')}";`,
+        'export function lookup() { return MESSAGE_KEY; }'
+      ].join('\n'),
+      'test/app.test.mjs': [
+        "import assert from 'node:assert/strict';",
+        "import test from 'node:test';",
+        "import { lookup, MESSAGE_KEY } from '../src/app.mjs';",
+        '',
+        `test('${WORDS}', () => {`,
+        // The vocabulary is in an identifier, so the TEST side of the trace is satisfied by code
+        // and the only thing left deciding the verdict is whether the dotted string counts as the
+        // implementation. Without that, the fixture is refused for the wrong reason and pins nothing.
+        `  const ${IDENT} = lookup();`,
+        `  assert.equal(${IDENT}, MESSAGE_KEY);`,
+        '});'
+      ].join('\n')
+    }
+  },
+  {
+    id: 'SCAN-PROSE-SUPPLEMENT', category: 'scanner', expect: 'must-not-pass',
+    mechanism: 'identifier-shaped strings only',
+    description: 'A source file with just enough code vocabulary to unlock the string supplement, whose remaining requirement words live in a prose sentence inside a string literal.',
+    files: {
+      'PRD.md': SPEC_ONE,
+      'src/a.mjs': [
+        'export function reconcileCarrier(rows) {',
+        '  const note = "payroll extract file flag mismatches for this run";',
+        '  return rows.length + note.length;',
+        '}'
+      ].join('\n'),
+      'test/a.test.mjs': [
+        "import assert from 'node:assert/strict';",
+        "import test from 'node:test';",
+        "import { reconcileCarrier } from '../src/a.mjs';",
+        '',
+        `test('${WORDS}', () => {`,
+        '  const payrollExtractFileFlagMismatches = reconcileCarrier([1]);',
+        '  assert.equal(typeof payrollExtractFileFlagMismatches, "number");',
+        '});'
+      ].join('\n')
+    }
+  },
+
   // ------------------------------------------------------ a mention next to a paren is not a test
   {
     id: 'SCAN-NEWLINES', category: 'scanner', expect: 'must-not-pass',
