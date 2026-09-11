@@ -54,6 +54,8 @@ const REAL_TEST = [
 const WORDS = 'reconcile the carrier file against the payroll extract and flag mismatches';
 
 import { round2 } from './fixtures-round-2.mjs';
+import { scannerFixtures } from './fixtures-scanner.mjs';
+import { shapes } from './honest-shapes.mjs';
 
 const round1 = [
   // ---------------------------------------------------------------- A. prose is not evidence
@@ -312,6 +314,16 @@ const round1 = [
 
 // Round two carries the sixteen deceptions an independent reviewer got through round one, the
 // honest project shapes round one wrongly refused, and the fixtures that isolate each mechanism.
-export const fixtures = [...round1, ...round2];
+// Real project shapes across languages and test frameworks, each one honest work that MUST be
+// accepted. They carry as much weight as the deceptions: the gate has to be usable.
+const honest = shapes.map((shape) => ({
+  id: `HON-${shape.id.toUpperCase()}`,
+  category: 'honest-shape',
+  expect: 'must-pass',
+  description: `honest project: ${shape.id}`,
+  files: shape.files
+}));
+
+export const fixtures = [...round1, ...round2, ...scannerFixtures, ...honest];
 
 export const categories = [...new Set(fixtures.map((fixture) => fixture.category))];

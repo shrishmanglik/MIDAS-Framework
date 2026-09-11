@@ -35,7 +35,8 @@
     "test": "node --test",
     "validate": "node ./bin/midas.mjs validate .",
     "doctor": "node ./bin/midas.mjs doctor",
-    "selftest:adversarial": "node --test test/deception-suite.test.mjs"
+    "selftest:adversarial": "node --test test/deception-suite.test.mjs",
+    "selftest:mutants": "node evals/deception/mutate.mjs"
   },
   "engines": {
     "node": ">=20.12.0"

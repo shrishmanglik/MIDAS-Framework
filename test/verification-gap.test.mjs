@@ -122,10 +122,16 @@ test('string literals restating a requirement, with no test, no longer pass', as
   });
   const result = await verifyCompletionGap({ directory: temp, spec: 'PRD.md' });
   assert.equal(result.status, 'fail');
+  // TIGHTENED 2026-09-10 by the scanner rewrite, and the assertion is inverted rather than deleted.
+  // This fixture's whole "implementation" is two prose string literals restating the requirements.
+  // It used to report `implemented-untested`, which conceded that something had been implemented.
+  // The scanner excludes prose strings from a file's vocabulary, so the honest verdict is `gap`:
+  // nothing implements this. Identifier-shaped strings are still counted, so a dictionary key like
+  // "flagged" remains real evidence; a sentence in quotes does not.
   assert.deepEqual(
     result.requirements.map((requirement) => requirement.status),
-    ['implemented-untested', 'implemented-untested'],
-    'source matched, so this is not a gap; it is untested, and untested does not pass'
+    ['gap', 'gap'],
+    'a sentence in quotes is not an implementation, so this is a gap and not merely untested'
   );
 });
 
