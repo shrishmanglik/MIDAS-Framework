@@ -35,17 +35,17 @@ Reproduce it; do not quote this table without running it.
 
 | | |
 |---|---|
-| Fixture deceptions refused | **59 / 59** |
-| Honest project shapes accepted | **42 / 42** |
-| Mechanisms independently pinned | **30** |
-| Mutants killed by this suite | **22 killed, 3 subsumed, 0 survived** |
+| Fixture deceptions refused | **61 / 61** |
+| Honest project shapes accepted | **48 / 48** |
+| Mechanisms independently pinned | **32** |
+| Mutants killed by this suite | **25 killed, 4 subsumed, 0 survived** |
 | Known limits, documented below | **3** |
 
 Two commands, and the second is the one that matters:
 
 ```
-npm run selftest:adversarial   # 105 tests: does the gate get these fixtures right?
-npm run selftest:mutants       # 25 mutants: can this suite detect its own defences being removed?
+npm run selftest:adversarial   # 113 tests: does the gate get these fixtures right?
+npm run selftest:mutants       # 29 mutants: can this suite detect its own defences being removed?
 ```
 
 **Read that first row precisely.** It says 46 of the 46 fixtures in this suite, and it does not say
@@ -102,6 +102,67 @@ Building the fixtures found three defects in the gate that the fixtures were onl
 4. The same empty-self-test pass survived the first fix in C# and Java, because C-family methods
    declare a return type and no keyword, so the keyword rule never fired on them. Measured on both
    `[Test]` and `@Test` before the second fix.
+
+## Unread is not unwritten
+
+Six languages - Elixir, Clojure, Haskell, Perl, Dart and Objective-C - were not in the readable
+list, so a complete, genuinely tested project in any of them produced `evidenceFiles: 0` and a
+receipt instructing the author to "implement or explicitly waive" work that was finished. Refusing
+to read a language is a defensible limit. Reporting unread code as unwritten is a confident claim
+about the world made from having looked at nothing, and it was the worst false refusal here.
+
+**A language needs three things, not one.** The extension makes files readable; without an EXPORT
+shape there is no symbol for a test to exercise, and without a TEST convention the file holding the
+tests is not recognised as one. Two of the three still refuses every project in that language,
+silently. Each of the six carries all three and a fixture that fails if any is dropped. Adding them
+surfaced four defects that were not about those languages at all:
+
+- **kebab-case was not a naming convention.** tokenize split camelCase and snake_case and left
+  `reconcile-carrier-payroll` as one meaningless token, and the symbol filter accepted only
+  JavaScript identifiers, so every Clojure symbol was discarded before it could be donated.
+- **Only C-shaped calls counted.** Haskell applies by juxtaposition, Lisp puts the operator inside
+  the parenthesis, and Objective-C sends `[obj name:arg]`. None of them look like `name(`.
+- **`shouldBe` has no word boundary after `should`**, so the assertion vocabulary missed every hspec
+  assertion ever written.
+- **Objective-C method declarations counted as their own exercise**, the same defect already fixed
+  for Rust, Python, C# and Java, in the one shape that has neither a keyword nor parentheses.
+
+The seventh language, whatever it is, now gets a named `NO-READABLE-SOURCE` gap that says which
+extensions were passed over, rather than a verdict about the work.
+
+`.m` is Objective-C to one population and MATLAB to another, and they disagree about `%`: comment in
+one, modulo in the other. That extension is resolved by content rather than by name.
+
+## The acceptance rate
+
+A reviewer built 37 honest, complete, genuinely tested projects and measured **17 accepted, 46%**.
+A gate that refuses half of real work gets switched off, and then it protects nothing.
+
+Measured after the fixes, and both numbers carry how they were obtained, because one is self-graded:
+
+- **19 of 20 (95%)** on a corpus reconstructed here from the reviewer's descriptions. I built it, so
+  it is evidence about the fixes rather than an independent result.
+- **7 of 7** on the reviewer's own project directories that survived on disk, including the two they
+  reported as refused. Their full 37 went with the agent's scratch space.
+
+The one remaining refusal is a SQL repository whose function is named `loadUnmatched` and whose only
+connection to the requirement is the table names inside a query string. **That refusal is correct.**
+Nothing in the code names the requirement, and accepting it would be identical to accepting the
+smuggling deception, which is the same file with dishonest intent.
+
+The change that moved the number most was the source vocabulary threshold, which demanded a file
+repeat four of the requirement's eight words. Real code names three and gets on with it. Lowering a
+gate to make things pass is the move that makes a gate meaningless, so the boundary is now mutated
+in both directions: `source-threshold-lowered-to-two` must turn the suite red, and SCAN-THIN-OVERLAP
+sits exactly on it - an unrelated module sharing the two most generic words in the requirement, with
+a real test that calls it and a title restating the requirement in full.
+
+The other half was test titles. `test('reconciles the carrier file against the payroll extract')` is
+where most suites put the requirement's words, and blanking it as prose refused honest work in bulk.
+Strings now count on the TEST side and nowhere else: a title can corroborate a trace, but it can
+never create one, because the test still has to exercise a symbol donated by a source file that
+carried the requirement in its own code. The mechanism that used to let strings into SOURCE
+vocabulary is deleted rather than bounded.
 
 ## What a third review found
 

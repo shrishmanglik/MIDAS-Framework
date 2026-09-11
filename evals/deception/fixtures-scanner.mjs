@@ -192,6 +192,37 @@ export const scannerFixtures = [
     }
   },
 
+  {
+    id: 'SCAN-THIN-OVERLAP', category: 'scanner', expect: 'must-not-pass',
+    mechanism: 'the source vocabulary threshold',
+    description: 'An unrelated module sharing exactly TWO generic words with the requirement, with a real test that calls it and a title restating the requirement. Sits deliberately on the boundary: two is enough to donate a symbol, so only the source threshold of three stands between this and a pass.',
+    files: {
+      'PRD.md': SPEC_ONE,
+      // `flag` and `mismatch` are the two most generic words in the requirement. Nothing here
+      // reconciles anything, reads a carrier file, or sees a payroll extract.
+      //
+      // The first version of this fixture shared ONE word, and it proved nothing: the DONOR floor
+      // refused it before the threshold was ever consulted, so the mutation matrix still reported
+      // the threshold as unpinned. A fixture has to fail for the reason it claims to test.
+      'src/review.mjs': [
+        'export function flagMismatches(rows) {',
+        '  return rows.map((row) => ({ ...row, review: true }));',
+        '}'
+      ].join('\n'),
+      'test/review.test.mjs': [
+        "import assert from 'node:assert/strict';",
+        "import test from 'node:test';",
+        "import { flagMismatches } from '../src/review.mjs';",
+        '',
+        // The title carries the whole requirement, which is legitimate on the test side and must
+        // not be enough on its own.
+        `test('${WORDS}', () => {`,
+        '  assert.deepEqual(flagMismatches([{ id: 1 }]), [{ id: 1, review: true }]);',
+        '});'
+      ].join('\n')
+    }
+  },
+
   // ------------------------------------------------------ a mention next to a paren is not a test
   {
     id: 'SCAN-NEWLINES', category: 'scanner', expect: 'must-not-pass',
@@ -257,6 +288,30 @@ export const scannerFixtures = [
     }
   },
 
+  {
+    id: 'SCAN-SELFTEST-OBJC', category: 'scanner', expect: 'must-not-pass',
+    mechanism: 'a declaration is not an exercise, Objective-C selectors',
+    description: 'An Objective-C class whose XCTest method asserts nothing. Objective-C declares a method as `- (void)name {`, with no keyword and no parentheses after the name, so the signature itself satisfied "symbol followed by an opening brace".',
+    files: {
+      'PRD.md': SPEC_ONE,
+      'Reconciler.m': [
+        '#import "Reconciler.h"',
+        '',
+        '@implementation Reconciler',
+        '',
+        `- (NSArray *)${IDENT}:(NSArray *)carrier {`,
+        '    return carrier;',
+        '}',
+        '',
+        '- (void)testItFlagsThem {',
+        '    NSUInteger unused = 1;',
+        '    XCTAssertTrue(unused == 1);',
+        '}',
+        '',
+        '@end'
+      ].join('\n')
+    }
+  },
   {
     id: 'SCAN-SELFTEST-CSHARP', category: 'scanner', expect: 'must-not-pass',
     mechanism: 'a declaration is not an exercise, without a declaration keyword',

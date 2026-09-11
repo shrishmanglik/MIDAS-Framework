@@ -32,7 +32,8 @@ const MUTANTS = [
   ['nested-block-comments',
    `nested: NEST, quotes: ['"""', '"', "'"]`, `nested: false, quotes: ['"""', '"', "'"]`],
   ['rust-nested-block-comments',
-   `nested: NEST, quotes: ['"']`, `nested: false, quotes: ['"']`],
+   `rust:   { line: ['//'], block: [['/*', '*/']], nested: NEST`,
+   `rust:   { line: ['//'], block: [['/*', '*/']], nested: false`],
   ['block-comments-off',
    'const block = profile.block.find(([open]) => starts(open, i));',
    'const block = undefined;'],
@@ -48,12 +49,11 @@ const MUTANTS = [
   ['regex-preceders-include-angle',
    "'-', '*', '%', '>', '~', '^',", "'-', '*', '%', '<', '>', '~', '^',", 'containment: a JSX closing tag mis-lexed as a regex costs at most the rest of its line'],
 
-  ['wordstrings-admit-prose',
-   'if (inner.length > 1 && !/\\s/.test(inner)) wordStrings.push(inner);',
-   'if (inner.length > 1) wordStrings.push(inner);'],
-  ['wordstrings-dropped-entirely',
-   'if (inner.length > 1 && !/\\s/.test(inner)) wordStrings.push(inner);',
-   'if (false) wordStrings.push(inner);'],
+  // The two `wordstrings-*` mutants that stood here targeted a mechanism that no longer exists.
+  // Identifier-shaped strings were admitted as SOURCE vocabulary to stop an honest Python dict
+  // being refused; that was the route eight false passes took, and it is gone rather than bounded.
+  // Deleting the mutants is correct here precisely because the code they measured is deleted too -
+  // a mutant for absent code would report a permanent survivor and teach everyone to ignore the row.
   ['unterminated-string-runs-on',
    "if (quote.length === 1 && quote !== '`' && text[j] === '\\n') break;", ';', 'containment: the newline bail is now an optimisation; the give-up rule enforces the same bound'],
 
@@ -71,7 +71,8 @@ const MUTANTS = [
   ['py-line-comment-wrong',
    "py:     { line: ['#'], block: []", "py:     { line: ['//'], block: []"],
   ['py-triple-quotes-off',
-   `quotes: ['"""', "'''", '"', "'"]`, `quotes: ['"', "'"]`],
+   `py:     { line: ['#'], block: [], nested: false, quotes: ['"""', "'''", '"', "'"]`,
+   `py:     { line: ['#'], block: [], nested: false, quotes: ['"', "'"]`],
   ['ruby-block-comments-off',
    "ruby:   { line: ['#'], block: [['=begin', '=end']]", "ruby:   { line: ['#'], block: []"],
   ['php-hash-comment-off',
@@ -81,16 +82,39 @@ const MUTANTS = [
    `go:     { line: ['//'], block: [['/*', '*/']], nested: false, quotes: ['"', "'"]`],
   ['rust-profile-off', "'.rs': 'rust',", "'.rs': 'nested',"],
   ['every-language-is-c',
-   "const profile = SYNTAX_PROFILES[EXTENSION_SYNTAX[extension] ?? 'cfam'];",
+   'const profile = SYNTAX_PROFILES[profileFor(extension, text)];',
    "const profile = SYNTAX_PROFILES['cfam'];"],
+  // One representative language, to prove the six are pinned at all three levels rather than just
+  // listed. Removing the extension must turn the suite red.
+  ['elixir-unreadable', "  '.ex', '.exs',", "  '.exs',"],
+  ['elixir-export-shape-off', 'def(?:p|macro)?', 'defNOTAKEYWORD',
+   'the shared python/ruby `def` rule already matches Elixir `def`; only `defp` and `defmacro` are ' +
+   'unique to this pattern, and neither names an exported symbol a test can call'],
+  ['objc-matlab-sniff-off',
+   "  if (extension === '.m') return OBJC_MARKERS.test(text) ? 'objc' : 'matlab';",
+   "  if (extension === '.m') return 'matlab';"],
+  // The source threshold was lowered from 0.45 to 0.34 on 2026-09-11 because it was refusing real
+  // code that names three of a requirement's eight words. Lowering a gate to make things pass is
+  // exactly the move that makes a gate meaningless, so the boundary is mutated in both directions:
+  // if the suite stays green with the threshold near zero, nothing is pinning it and the number is
+  // a preference rather than a control.
+  // Raising the floor from 3 to 1 changed nothing, because ceil(8 * 0.34) is already 3 for this
+  // requirement: the mutation could not alter a single answer, and a mutant that cannot change an
+  // answer proves nothing about the rule it claims to test. This one actually lowers the bar to 2,
+  // which is exactly where SCAN-THIN-OVERLAP sits.
+  ['source-threshold-lowered-to-two',
+   'Math.max(3, Math.ceil(tokens.length * 0.34))', 'Math.max(2, Math.ceil(tokens.length * 0.2))'],
+  ['source-threshold-ratio-collapsed',
+   'Math.max(3, Math.ceil(tokens.length * 0.34))', 'Math.max(1, Math.ceil(tokens.length * 0.05))'],
+  // Source vocabulary must come from code alone. Pointing it at the test-side set, which includes
+  // every string, is exactly the smuggling route that was closed.
   ['string-tokens-count-as-source',
-   'const local = inCode.length >= STRING_SUPPLEMENT_FLOOR\n      ? tokens.filter((token) => item.tokens.has(token))\n      : inCode;',
-   'const local = tokens.filter((token) => item.tokens.has(token));'],
+   'const local = tokens.filter((token) => item.codeTokens.has(token));',
+   'const local = tokens.filter((token) => item.allTokens.has(token));'],
   ['declaration-counts-as-exercise',
-   'const bare = withoutDeclarations(code, symbol);', 'const bare = code;'],
-  ['c-family-declaration-counts-as-exercise',
-   '.replace(typed, (match) => match.replace(new RegExp(escaped, \'g\'), \' \'.repeat(symbol.length)));',
-   ';']
+   'bare = withoutDeclarations(item.code, symbol);', 'bare = item.code;'],
+  ['objc-declaration-counts-as-exercise', '.replace(selector,', '.replace(/(?!)/g,'],
+  ['c-family-declaration-counts-as-exercise', '.replace(typed,', '.replace(/(?!)/g,']
 ];
 
 function failures(testFile) {

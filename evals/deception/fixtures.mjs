@@ -55,6 +55,7 @@ const WORDS = 'reconcile the carrier file against the payroll extract and flag m
 
 import { round2 } from './fixtures-round-2.mjs';
 import { scannerFixtures } from './fixtures-scanner.mjs';
+import { languageShapes } from './fixtures-languages.mjs';
 import { shapes } from './honest-shapes.mjs';
 
 const round1 = [
@@ -316,7 +317,7 @@ const round1 = [
 // honest project shapes round one wrongly refused, and the fixtures that isolate each mechanism.
 // Real project shapes across languages and test frameworks, each one honest work that MUST be
 // accepted. They carry as much weight as the deceptions: the gate has to be usable.
-const honest = shapes.map((shape) => ({
+const honest = [...shapes, ...languageShapes].map((shape) => ({
   id: `HON-${shape.id.toUpperCase()}`,
   category: 'honest-shape',
   expect: 'must-pass',
