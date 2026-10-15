@@ -12,7 +12,7 @@
 // to the question that mattered. 82/82 measured the fixtures, not the scanner.
 //
 // Every fixture below is constructed so exactly ONE scanner mechanism stands between it and the
-// wrong verdict. Disabling that mechanism must turn this suite red. `node evals/deception/mutate.mjs`
+// wrong verdict. Disabling that mechanism must turn this suite red. `node test/deception/mutate.mjs`
 // re-runs the matrix and is the only evidence that this file does its job.
 //
 // Two mechanisms are deliberately NOT pinned by a fixture, and saying so is the point of writing it
