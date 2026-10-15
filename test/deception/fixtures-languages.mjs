@@ -186,5 +186,10 @@ export const languageShapes = [
         '@end'
       ].join('\n')
     }
-  }
+  },
+  { id: 'haskell-hspec-without-signature', files: {
+    'PRD.md': SPEC,
+    'src/Reconcile.hs': 'module Reconcile (reconcileCarrierPayroll) where\n\nreconcileCarrierPayroll carrier payroll =\n  let mismatches = filter (`notElem` payroll) carrier\n  in (mismatches, length mismatches)\n',
+    'test/ReconcileSpec.hs': 'module ReconcileSpec (spec) where\nimport Test.Hspec\nimport Reconcile (reconcileCarrierPayroll)\n\nspec :: Spec\nspec = describe "the carrier file and payroll extract" $\n  it "flags mismatches" $\n    fst (reconcileCarrierPayroll [1] []) `shouldBe` [1]\n'
+  } }
 ];

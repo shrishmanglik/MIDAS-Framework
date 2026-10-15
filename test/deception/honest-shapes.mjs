@@ -112,5 +112,13 @@ export const shapes = [
 
   { id: 'impl-under-spec-dir', files: { 'PRD.md': SPEC,
     'spec/reconcile.mjs': 'export function reconcileCarrierPayroll(carrier, payroll) {\n  const mismatches = carrier.filter((m) => !payroll.includes(m));\n  return { mismatches, flagged: mismatches.length };\n}\n',
-    'test/reconcile.test.mjs': "import assert from 'node:assert/strict';\nimport test from 'node:test';\nimport { reconcileCarrierPayroll } from '../spec/reconcile.mjs';\n\ntest('reconcile carrier file payroll extract flag mismatches', () => {\n  assert.equal(reconcileCarrierPayroll([1], []).flagged, 1);\n});\n" } }
+    'test/reconcile.test.mjs': "import assert from 'node:assert/strict';\nimport test from 'node:test';\nimport { reconcileCarrierPayroll } from '../spec/reconcile.mjs';\n\ntest('reconcile carrier file payroll extract flag mismatches', () => {\n  assert.equal(reconcileCarrierPayroll([1], []).flagged, 1);\n});\n" } },
+  { id: 'pytest-async-module', files: { 'PRD.md': SPEC,
+    'src/reconcile.py': 'def reconcile_carrier_payroll(carrier, payroll):\n    mismatches = [m for m in carrier if m not in payroll]\n    return {"mismatches": mismatches, "flagged": len(mismatches)}\n',
+    'tests/test_reconcile.py': 'import pytest\nfrom src.reconcile import reconcile_carrier_payroll\n\n@pytest.mark.asyncio\nasync def test_reconcile_carrier_payroll():\n    out = reconcile_carrier_payroll([1], [])\n    assert out["flagged"] == 1\n' } },
+  ...['vue', 'svelte'].map((extension) => ({ id: `${extension}-script-implementation`, files: {
+    'PRD.md': SPEC,
+    [`src/Reconcile.${extension}`]: '<script>\nexport function reconcileCarrierPayroll(carrier, payroll) {\n  const mismatches = carrier.filter((row) => !payroll.includes(row));\n  return { mismatches, flagged: mismatches.length };\n}\n</script>\n<p>Reconciliation</p>',
+    'test/reconcile.test.mjs': `import { reconcileCarrierPayroll } from '../src/Reconcile.${extension}';\nimport test from 'node:test';\nimport assert from 'node:assert/strict';\ntest('reconcile carrier file payroll extract flag mismatches', () => {\n  assert.equal(reconcileCarrierPayroll([1], []).flagged, 1);\n});\n`
+  } }))
 ];

@@ -56,6 +56,17 @@ for (const fixture of fixtures) {
     });
   }
 
+  if (fixture.expect === 'unreadable') {
+    test(`unread language identified: ${label}`, async () => {
+      const temp = await build(fixture);
+      const result = await verifyCompletionGap(optionsFor(fixture, temp));
+      assert.equal(result.status, 'fail');
+      assert.ok(result.gaps.some((gap) => gap.id === 'NO-READABLE-SOURCE'),
+        `Unread MATLAB must be distinguished from unwritten work: ${JSON.stringify(result.gaps)}`);
+      assert.equal(result.evidenceFiles, 0);
+    });
+  }
+
   if (fixture.expect === 'known-limit') {
     // Pinned deliberately. If one of these ever starts being caught, that is a genuine capability
     // gain and the fixture should be promoted to must-not-pass in the same change, not left here
@@ -78,7 +89,7 @@ test('the suite reports its own score, and every fixture declares an expectation
   const expectations = new Set(fixtures.map((fixture) => fixture.expect));
   for (const value of expectations) {
     assert.ok(
-      ['must-not-pass', 'must-pass', 'known-limit'].includes(value),
+      ['must-not-pass', 'must-pass', 'known-limit', 'unreadable'].includes(value),
       `unknown expectation: ${value}`
     );
   }

@@ -601,5 +601,36 @@ export const scannerFixtures = [
         '}'
       ].join('\n')
     }
+  },
+  {
+    id: 'HON-MATLAB-UNREADABLE', category: 'honest-unread', expect: 'unreadable',
+    mechanism: 'unsupported MATLAB is unread, not unwritten',
+    description: 'An implemented and tested MATLAB project must identify its unread source language.',
+    files: {
+      'PRD.md': SPEC_ONE,
+      'reconcileCarrierPayroll.m': 'function result = reconcileCarrierPayroll(carrier, payroll)\n% Return rows missing from the payroll extract.\nmismatches = carrier(~ismember(carrier, payroll));\nresult = struct("mismatches", mismatches, "flagged", numel(mismatches));\nend\n',
+      'test/testReconcileCarrierPayroll.m': 'function tests = testReconcileCarrierPayroll\ntests = functiontests(localfunctions);\nend\nfunction testFlagsMismatches(testCase)\nout = reconcileCarrierPayroll([1], []);\nverifyEqual(testCase, out.flagged, 1);\nend\n'
+    }
+  },
+  {
+    id: 'SCAN-VUE-SVELTE-TEMPLATE-SMUGGLING', category: 'scanner', expect: 'must-not-pass',
+    mechanism: 'SFC templates are not implementation vocabulary',
+    description: 'Vue and Svelte templates restate the requirement, but their tested scripts only export unrelated placeholders.',
+    files: {
+      'PRD.md': SPEC_ONE,
+      'src/Fake.vue': `<template><p>${WORDS}</p><template><span>${WORDS}</span></template></template>\n<script>export function placeholder() { return 1; }</script>\n<style>.reconcileCarrierPayroll { color: red; }</style>`,
+      'src/Fake.svelte': `<p>${WORDS}</p>\n<script>export function placeholder() { return 1; }</script>\n<style>.reconcileCarrierPayroll { color: red; }</style>`,
+      'test/fake.test.mjs': `import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { placeholder } from '../src/Fake.vue';\nimport * as svelte from '../src/Fake.svelte';\ntest('${WORDS}', () => {\n  assert.equal(placeholder(), 1);\n  assert.equal(svelte.placeholder(), 1);\n});`
+    }
+  },
+  {
+    id: 'SCAN-ASSERTION-BARE-SYMBOL', category: 'scanner', expect: 'must-not-pass',
+    mechanism: 'assertions contain the subject expression',
+    description: 'An unrelated assertion followed by a bare subject reference on the same line exercises nothing.',
+    files: {
+      'PRD.md': SPEC_ONE,
+      'src/reconcile.mjs': `export function ${IDENT}(carrier, payroll) { const mismatches = carrier.filter((row) => !payroll.includes(row)); return { mismatches, flagged: mismatches.length }; }`,
+      'test/reconcile.test.mjs': `import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { ${IDENT} } from '../src/reconcile.mjs';\ntest('${WORDS}', () => {\n  assert.equal(1, 1); ${IDENT};\n});`
+    }
   }
 ];
