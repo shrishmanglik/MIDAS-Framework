@@ -61,8 +61,10 @@ Nothing else counts, and the exclusions are deliberate:
 ## Languages this check can read
 
 JavaScript, TypeScript, JSX and TSX, Vue, Svelte, Python, Go, Ruby, Java, Kotlin, Rust, C#, PHP,
-Swift, Scala and C/C++. A language outside that list is not read at all and its requirements report
-`gap`. Adding one means adding its comment style, its export shape and its test convention in
+Swift, Scala, C/C++, Elixir, Clojure, Haskell, Perl, Dart and Objective-C. MATLAB is not read:
+non-Objective-C `.m` files are reported as unread. A project with only unsupported source reports
+`NO-READABLE-SOURCE`, rather than a claim that its implementation is missing.
+Adding a language means adding its comment style, its export shape and its test convention in
 `lib/verification-gap.mjs`; a language listed without all three silently refuses every project
 written in it, which has happened and is the reason this section exists.
 

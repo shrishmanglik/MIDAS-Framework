@@ -35,6 +35,17 @@ const SUITE = path.join('test', 'deception-suite.test.mjs');
 const CONTRACT = path.join('test', 'verification-gap.test.mjs');
 
 const MUTANTS = [
+  ['async-pytest-off',
+   String.raw`/^\s*(?:async\s+)?def\s+test_\w+\s*\(/m`,
+   String.raw`/^\s*def\s+test_\w+\s*\(/m`],
+  ['haskell-equations-off',
+   "syntax === 'haskell' ? [...exportPatterns, HASKELL_EQUATION] : exportPatterns", 'exportPatterns'],
+  ['matlab-counts-as-readable',
+   "if (extension === '.m' && !OBJC_MARKERS.test(text)) {", 'if (false) {'],
+  ['sfc-markup-counts-as-code', 'text = scriptOnly(text);', ';'],
+  ['assertion-line-cooccurrence-restored',
+   'function assertionReferences(line, escaped) {',
+   'function assertionReferences(line, escaped) { return new RegExp(escaped).test(line);'],
   ['nested-block-comments',
    `nested: NEST, quotes: ['"""', '"', "'"]`, `nested: false, quotes: ['"""', '"', "'"]`],
   ['rust-nested-block-comments',
@@ -210,6 +221,6 @@ fs.rmSync(BACKUP, { force: true });
 
 const subsumed = rows.filter((row) => row.subsumedBy && !(row.suite > 0)).length;
 const applied = rows.length - broken;
-console.log(`\n${applied} applied | ${applied - survived - subsumed} killed | ${subsumed} subsumed by another mechanism | ${survived} survived`);
+console.log(`\n${applied} applied | ${applied - survived - subsumed} killed | ${subsumed} subsumed by another mechanism | ${survived} survived | ${broken} broken`);
 if (broken > 0) console.log(`${broken} anchors no longer match and mutated nothing`);
 process.exitCode = survived > 0 || broken > 0 ? 1 : 0;

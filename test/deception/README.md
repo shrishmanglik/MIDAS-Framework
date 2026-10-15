@@ -35,20 +35,21 @@ Reproduce it; do not quote this table without running it.
 
 | | |
 |---|---|
-| Fixture deceptions refused | **61 / 61** |
-| Honest project shapes accepted | **48 / 48** |
-| Mechanisms independently pinned | **32** |
-| Mutants killed by this suite | **25 killed, 4 subsumed, 0 survived** |
+| Fixture deceptions refused | **64 / 64** |
+| Honest project shapes accepted | **52 / 52** |
+| Unsupported-language fixtures identified | **1 / 1** |
+| Mechanism labels represented in fixtures | **32** |
+| Mutants killed by this suite | **30 killed, 4 subsumed, 0 survived** |
 | Known limits, documented below | **3** |
 
 Two commands, and the second is the one that matters:
 
 ```
-npm run selftest:adversarial   # 113 tests: does the gate get these fixtures right?
-npm run selftest:mutants       # 29 mutants: can this suite detect its own defences being removed?
+npm run selftest:adversarial   # 121 tests: does the gate get these fixtures right?
+npm run selftest:mutants       # 34 mutants: can this suite detect its own defences being removed?
 ```
 
-**Read that first row precisely.** It says 46 of the 46 fixtures in this suite, and it does not say
+**Read that first row precisely.** It says 64 of the 64 fixtures in this suite, and it does not say
 the gate catches every deception. Two independent reviewers have each got new ones through after
 each round was declared finished, and the honest expectation is that a third would too.
 
@@ -56,7 +57,7 @@ The honest fixtures matter as much as the attacks. Round one reported "3/3 hones
 from three fixtures that were the same implementation measured three times. Round two reported
 "8/8" from eight variants of one project, with a test whose title restated the requirement verbatim,
 which is where the match came from. A reviewer then built 49 realistic projects and the gate
-accepted **11**. The 32 shapes here vary language, test framework, test location, function versus
+accepted **11**. The 52 shapes here vary language, test framework, test location, function versus
 method, and whether the code uses the spec's vocabulary or its own: pytest, parametrize, unittest,
 Django, Jest, vitest, mocha and chai, Go table-driven, Rust inline `#[cfg(test)]`, JUnit 5, xUnit,
 RSpec, minitest, PHPUnit, Swift XCTest, Kotlin, GoogleTest, Catch2, monorepo, class method, async,
@@ -131,7 +132,8 @@ The seventh language, whatever it is, now gets a named `NO-READABLE-SOURCE` gap 
 extensions were passed over, rather than a verdict about the work.
 
 `.m` is Objective-C to one population and MATLAB to another, and they disagree about `%`: comment in
-one, modulo in the other. That extension is resolved by content rather than by name.
+one, modulo in the other. Only files with Objective-C markers are read as source. MATLAB is outside the supported
+language conventions and produces `NO-READABLE-SOURCE` when no readable implementation remains.
 
 ## The acceptance rate
 
@@ -204,7 +206,7 @@ Fixing the first found the mirror-image defect in the same list: a suite written
 follow the identifier directly. Namespaced assertions now count, and a bare `assert(payload)`
 invariant in production code no longer does.
 
-**Not yet fixed, ranked, all from that review and all reproduced by its author:** six languages the
+**Historical open list at that review, reproduced by its author:** six languages the
 gate cannot read at all (Elixir, Clojure, Haskell, Perl, Dart, Objective-C) where the receipt says
 "implement or waive" rather than "cannot read"; Ruby heredoc bodies read as code; template-literal
 and f-string interpolations blanked along with the literal, hiding calls made inside them; C#
@@ -230,21 +232,24 @@ left-to-right scanner tracking comment depth and string state, with a per-langua
 Nested block comments in Kotlin, Swift, Scala and Rust are tracked to depth, and `SCAN-NESTED` and
 `SCAN-NESTED-RUST` fail if that tracking is removed.
 
-**Still open, and listed because a suite that hides its open findings is worthless.** A JSX or Vue
+**Still open, and listed because a suite that hides its open findings is worthless.** A JSX
 component whose only content is the requirement text as displayed markup can still count as an
 implementation: markup inside a `.jsx` file is neither a comment nor a string, so the scanner has no
 grounds to blank it, and separating displayed text from code needs a parser rather than a scanner.
 Rust raw strings with unbalanced inner quotes (`r#"a "b"#`) are not parsed as raw strings; the URL
 guard is what stops the damage, and `SCAN-URL-IN-JSX` is what stops the guard being removed. Swift multiline
 `"""` strings are parsed, but Rust `r#""#` and C++ `R"()"` raw-string delimiters are not, so a
-quote inside one is taken at face value.
+quote inside one is taken at face value. Vue and Svelte are now handled separately: only
+`<script>` bodies contribute code vocabulary; template and style regions do not. Honest script
+implementations are paired with the template-vocabulary attack.
 
 ## Adding a fixture
 
 Add it to `fixtures.mjs`, `fixtures-round-2.mjs` or `fixtures-scanner.mjs` with an `id`, a `category`, a one-line
 `description`, the `files` it creates, and an `expect` of `must-not-pass`, `must-pass` or
 `known-limit`. A `known-limit` must also carry a `limit` field explaining why it cannot be detected;
-the suite fails without it. A fixture may set `directory`, `spec` and `evidenceFiles` to exercise
+the suite fails without it. An honest unsupported-language fixture uses `unreadable` and must report `NO-READABLE-SOURCE`.
+A fixture may set `directory`, `spec` and `evidenceFiles` to exercise
 the CLI's own options.
 
 **If you find a deception this gate accepts, that is worth more than a feature request.** Open an
@@ -255,5 +260,21 @@ issue with the fixture.
 This suite measures one thing: whether a deterministic, file-reading traceability check can be
 fooled by a given fixture. It does not measure whether MIDAS improves agent behaviour, it does not
 execute your tests, and it is not a comparison against any other tool. The known-limit list is
-maintained honestly and is **not** claimed to be complete: it is what has been found so far, by the
-author and by one adversarial reviewer.
+maintained honestly and is **not** claimed to be complete: it is what has been found so far by builders and adversarial reviewers.
+
+## Regression proof and safe collection
+
+The score above comes from the fixture census printed by `npm run selftest:adversarial` and the
+summary printed by `npm run selftest:mutants`. The current run has 121 passing tests and
+34 applied mutations. The matrix reports broken anchors separately and exits nonzero for
+any surviving mutant or broken anchor.
+
+The boundary regressions cover async pytest, unsigned Haskell, unread MATLAB, SFC template prose
+and assertion-expression scope. Each defence has a named mutant. A further C# fixture keeps
+newline preservation independently measurable after assertion-expression scope stopped the older
+newline deception by another route. Existing fixture expectations are unchanged.
+
+`mutate.mjs` intentionally rewrites the source under test. Run it explicitly and sequentially,
+never alongside another suite in the same checkout. Bare `node --test` discovers helpers under
+`test/`, so the matrix exits with a notice before reading or writing source whenever
+`NODE_TEST_CONTEXT` is present. The other helper modules only export fixture data.

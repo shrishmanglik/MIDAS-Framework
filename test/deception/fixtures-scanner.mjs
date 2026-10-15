@@ -632,5 +632,23 @@ export const scannerFixtures = [
       'src/reconcile.mjs': `export function ${IDENT}(carrier, payroll) { const mismatches = carrier.filter((row) => !payroll.includes(row)); return { mismatches, flagged: mismatches.length }; }`,
       'test/reconcile.test.mjs': `import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { ${IDENT} } from '../src/reconcile.mjs';\ntest('${WORDS}', () => {\n  assert.equal(1, 1); ${IDENT};\n});`
     }
+  },
+  {
+    id: 'SCAN-NEWLINES-DECLARATION', category: 'scanner', expect: 'must-not-pass',
+    mechanism: 'newline preservation through blanking',
+    description: 'A valid C# block comment separates a class opening from a method declaration. Losing its newlines hides the declaration from the exercise exclusion.',
+    files: {
+      'PRD.md': SPEC_ONE,
+      'src/Reconciler.cs': [
+        'public class Reconciler { /* Notes before the implementation.',
+        'The method still starts on its own line after this comment.',
+        `*/ public int ${IDENT}(int[] carrier, int[] payroll) {`,
+        '  return carrier.Length - payroll.Length;',
+        '}',
+        '[Test]',
+        'public void NothingIsCheckedHere() {}',
+        '}'
+      ].join('\n')
+    }
   }
 ];

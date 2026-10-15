@@ -99,4 +99,11 @@ test('the suite reports its own score, and every fixture declares an expectation
     fixtures.filter((fixture) => fixture.expect === 'must-pass').length >= 3,
     'a suite with no honest fixtures would reward a gate that refuses everything'
   );
+  console.log(`Fixture census: ${JSON.stringify({
+    deceptions: fixtures.filter((fixture) => fixture.expect === 'must-not-pass').length,
+    honest: fixtures.filter((fixture) => fixture.expect === 'must-pass').length,
+    unreadable: fixtures.filter((fixture) => fixture.expect === 'unreadable').length,
+    knownLimits: fixtures.filter((fixture) => fixture.expect === 'known-limit').length,
+    mechanismLabels: new Set(fixtures.map((fixture) => fixture.mechanism).filter(Boolean)).size
+  })}`);
 });
