@@ -161,11 +161,30 @@ test('verify command writes a verification-gap receipt', async () => {
   const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'midas-verify-cli-'));
   await run(['install', '--directory', temp, '--modules', 'core,agentic-agile', '--tools', 'codex', '--yes']);
   await fs.mkdir(path.join(temp, 'src'), { recursive: true });
+  await fs.mkdir(path.join(temp, 'test'), { recursive: true });
   await fs.writeFile(path.join(temp, 'PRD.md'), '- [ ] REQ-001: Render evidence panel receipt trace');
-  await fs.writeFile(path.join(temp, 'src', 'app.ts'), 'export const panel = "evidence panel receipt trace";');
+  // This fixture used to be a single string literal restating the requirement, with no test. That
+  // passed, which is exactly the defect the verification gate now refuses. A passing fixture has to
+  // be an implementation plus something that would fail if the implementation broke.
+  await fs.writeFile(path.join(temp, 'src', 'app.mjs'), [
+    'export function renderEvidencePanel(receipt) {',
+    '  return { panel: "evidence", trace: receipt.trace ?? [] };',
+    '}'
+  ].join('\n'));
+  await fs.writeFile(path.join(temp, 'test', 'app.test.mjs'), [
+    "import assert from 'node:assert/strict';",
+    "import test from 'node:test';",
+    "import { renderEvidencePanel } from '../src/app.mjs';",
+    '',
+    "test('render evidence panel receipt trace', () => {",
+    "  assert.deepEqual(renderEvidencePanel({ trace: ['a'] }).trace, ['a']);",
+    '});'
+  ].join('\n'));
   const output = await run(['verify', '--directory', temp, '--spec', 'PRD.md']);
   const result = JSON.parse(output);
   assert.equal(result.status, 'pass');
+  assert.equal(result.requirements[0].status, 'traced');
+  assert.deepEqual(result.requirements[0].testFiles, ['test/app.test.mjs']);
   assert.equal(await fs.stat(path.join(temp, result.receipt)).then(() => true), true);
 });
 
