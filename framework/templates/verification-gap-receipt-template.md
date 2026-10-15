@@ -36,7 +36,7 @@ This is a deterministic traceability check over file contents. It does not execu
 cannot prove a matching test asserts the right thing, that it is not skipped at runtime, or that the
 implementation it calls does anything. It does not prove runtime correctness, UI quality, security,
 accessibility, provider readiness or release state. Known deceptions it cannot detect are listed in
-`evals/deception/README.md`; that list is maintained deliberately and is not claimed to be complete.
+`test/deception/README.md`; that list is maintained deliberately and is not claimed to be complete.
 
 ## Required Follow-Up
 

@@ -9,7 +9,7 @@
 // mechanism in lib/verification-gap.mjs, and the Deception Suite must turn red. A mutant that
 // SURVIVES names a mechanism nothing tests.
 //
-//   node evals/deception/mutate.mjs
+//   node test/deception/mutate.mjs
 //
 // Exit code is non-zero when any mutant survives, so this can gate a release.
 //
@@ -21,6 +21,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
 import { execFileSync } from 'node:child_process';
+
+// The default test runner discovers this file; only an explicit run may mutate source.
+if (process.env.NODE_TEST_CONTEXT !== undefined) {
+  console.log('Mutation matrix skipped under the Node test runner.');
+  process.exit(0);
+}
 
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..', '..');

@@ -74,6 +74,6 @@ skipped at runtime, or that the implementation it calls does anything at all. It
 runtime correctness, UI quality, accessibility, security, provider readiness, production deployment,
 or public release state.
 
-Deceptions this check is known to accept are listed in `evals/deception/README.md` and are
+Deceptions this check is known to accept are listed in `test/deception/README.md` and are
 reproducible with `npm run selftest:adversarial`. That list is maintained deliberately and is **not**
 claimed to be complete: it is what has been found so far, by the author and by adversarial reviewers.

@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { fixtures } from '../evals/deception/fixtures.mjs';
+import { fixtures } from '../test/deception/fixtures.mjs';
 import { verifyCompletionGap } from '../lib/verification-gap.mjs';
 
 async function build(fixture) {
@@ -67,7 +67,7 @@ for (const fixture of fixtures) {
         result.status,
         'pass',
         `This deception is documented as undetectable by a static tracer and it was just caught. ` +
-        `Promote ${fixture.id} to must-not-pass and update evals/deception/README.md.`
+        `Promote ${fixture.id} to must-not-pass and update test/deception/README.md.`
       );
       assert.ok(fixture.limit, `${fixture.id} must document WHY it cannot be caught`);
     });
